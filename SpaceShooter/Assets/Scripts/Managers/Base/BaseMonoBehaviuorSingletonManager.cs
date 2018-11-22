@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseSingletonManager<T> where T : class
+public class BaseMonoBehaviourSingletonManager<T> : MonoBehaviour where T : MonoBehaviour
 {
 	#region FIELDS
 
@@ -20,6 +21,11 @@ public abstract class BaseSingletonManager<T> where T : class
 	#endregion
 
 	#region METHODS
+
+	protected virtual void Awake()
+	{
+		SingletonInitialization();
+	}
 
 	private void SingletonInitialization()
 	{

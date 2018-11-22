@@ -10,23 +10,35 @@ public class PlayerManager : BaseSingletonManager<PlayerManager>
 
 	#region PROPERTIES
 
-	public PlayerMovementController MovementController {
-		get;
-		private set;
-	} = new PlayerMovementController();
-
-	public PlayerShootingController ShootingController {
-		get;
-		private set;
-	} = new PlayerShootingController();
+	[SerializeField]
+	private PlayerMovementController playerMovementController;
+	[SerializeField]
+	private PlayerShootingController playerShootingController;
 
 	#endregion
 
 	#region METHODS
 
+	public PlayerMovementController PlayerMovementController => playerMovementController;
+	public PlayerShootingController PlayerShootingController => playerShootingController;
+
 	public void Initialize()
 	{
-		
+		PlayerMovementController.Initialize();
+		PlayerShootingController.Initialize();
+	}
+
+	private void InitializeMovement()
+	{
+		//KeyboardManager.Instance.KeyInputs.Add(new KeyInput(KeyCode.A, KeyInput.InputMode.KEY_HOLD, ));
+		//KeyboardManager.Instance.KeyInputs.Add(new KeyInput());
+		//KeyboardManager.Instance.KeyInputs.Add(new KeyInput());
+		//KeyboardManager.Instance.KeyInputs.Add(new KeyInput());
+	}
+
+	private void InitializeShooting()
+	{
+		//KeyboardManager.Instance.KeyInputs.Add(new KeyInput(KeyCode.Space, KeyInput.InputMode.KEY_HOLD, ));
 	}
 
 	#endregion

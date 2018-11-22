@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovementController
+public class PlayerMovementController : MonoBehaviour
 {
 	#region FIELDS
 
@@ -13,6 +14,11 @@ public class PlayerMovementController
 	#endregion
 
 	#region METHODS
+
+	public void Initialize()
+	{
+
+	}
 
 	public void MoveUp()
 	{

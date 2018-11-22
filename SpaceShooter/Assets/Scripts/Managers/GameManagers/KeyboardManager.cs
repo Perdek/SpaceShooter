@@ -20,12 +20,12 @@ public class KeyboardManager : BaseSingletonManager<KeyboardManager>
 
 	#region METHODS
 
-	protected virtual void Update()
+	public void Initialize()
 	{
-		CheckKeys();
+
 	}
 
-	private void CheckKeys()
+	public void CheckKeys()
 	{
 		for (int i = 0; i < KeyInputs.Count; i++)
 		{
