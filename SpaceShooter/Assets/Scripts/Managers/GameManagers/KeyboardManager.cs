@@ -14,7 +14,7 @@ public class KeyboardManager : BaseSingletonManager<KeyboardManager>
 	public List<KeyInput> KeyInputs {
 		get;
 		private set;
-	}
+	} = new List<KeyInput>();
 
 	#endregion
 
@@ -31,6 +31,11 @@ public class KeyboardManager : BaseSingletonManager<KeyboardManager>
 		{
 			CheckKey(KeyInputs[i]);
 		}
+	}
+
+	public void AddKey(KeyCode newKeyCode, KeyInput.InputMode newInputMode, Action newOnKeyAction)
+	{
+		KeyInputs.Add(new KeyInput(newKeyCode, newInputMode, newOnKeyAction));
 	}
 
 	private void CheckKey(KeyInput keyInput)

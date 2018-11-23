@@ -22,12 +22,7 @@ public class BaseMonoBehaviourSingletonManager<T> : MonoBehaviour where T : Mono
 
 	#region METHODS
 
-	protected virtual void Awake()
-	{
-		SingletonInitialization();
-	}
-
-	private void SingletonInitialization()
+	public void SingletonInitialization()
 	{
 		Instance = this as T;
 	}

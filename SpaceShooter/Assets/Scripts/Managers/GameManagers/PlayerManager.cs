@@ -2,43 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : BaseSingletonManager<PlayerManager>
+public class PlayerManager : BaseMonoBehaviourSingletonManager<PlayerManager>
 {
 	#region FIELDS
+
+	[SerializeField]
+	private PlayerMainController playerMainController = null;
 
 	#endregion
 
 	#region PROPERTIES
 
-	[SerializeField]
-	private PlayerMovementController playerMovementController;
-	[SerializeField]
-	private PlayerShootingController playerShootingController;
+	public PlayerMainController PlayerMainController => playerMainController;
 
 	#endregion
 
 	#region METHODS
 
-	public PlayerMovementController PlayerMovementController => playerMovementController;
-	public PlayerShootingController PlayerShootingController => playerShootingController;
-
 	public void Initialize()
 	{
-		PlayerMovementController.Initialize();
-		PlayerShootingController.Initialize();
-	}
-
-	private void InitializeMovement()
-	{
-		//KeyboardManager.Instance.KeyInputs.Add(new KeyInput(KeyCode.A, KeyInput.InputMode.KEY_HOLD, ));
-		//KeyboardManager.Instance.KeyInputs.Add(new KeyInput());
-		//KeyboardManager.Instance.KeyInputs.Add(new KeyInput());
-		//KeyboardManager.Instance.KeyInputs.Add(new KeyInput());
-	}
-
-	private void InitializeShooting()
-	{
-		//KeyboardManager.Instance.KeyInputs.Add(new KeyInput(KeyCode.Space, KeyInput.InputMode.KEY_HOLD, ));
+		PlayerMainController.Initialize();
 	}
 
 	#endregion

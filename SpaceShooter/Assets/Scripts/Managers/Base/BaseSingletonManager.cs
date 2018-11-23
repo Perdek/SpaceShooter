@@ -21,7 +21,7 @@ public abstract class BaseSingletonManager<T> where T : class
 
 	#region METHODS
 
-	private void SingletonInitialization()
+	public void SingletonInitialization()
 	{
 		Instance = this as T;
 	}

@@ -4,36 +4,49 @@ using UnityEngine;
 
 public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager>
 {
+
 	#region FIELDS
+
+	[SerializeField]
+	private PlayerManager playerManager = null;
 
 	#endregion
 
 	#region PROPERTIES
+
+	public PlayerManager PlayerManager => playerManager;
 
 	public KeyboardManager KeyboardManager {
 		get;
 		private set;
 	} = new KeyboardManager();
 
-	public PlayerManager PlayerManager {
-		get;
-		private set;
-	} = new PlayerManager();
-
 	#endregion
 
 	#region METHODS
 
-	protected override void Awake()
+	protected virtual void Awake()
 	{
-		base.Awake();
-		KeyboardManager.Initialize();
-		PlayerManager.Initialize();
+		SingletonsInitializes();
+		ManagersInitialize();
 	}
 
 	protected virtual void Update()
 	{
-        KeyboardManager.CheckKeys();
+		KeyboardManager.CheckKeys();
+	}
+
+	private void SingletonsInitializes()
+	{
+		SingletonInitialization();
+		KeyboardManager.SingletonInitialization();
+		PlayerManager.SingletonInitialization();
+	}
+
+	private void ManagersInitialize()
+	{
+		KeyboardManager.Initialize();
+		PlayerManager.Initialize();
 	}
 
 	#endregion
