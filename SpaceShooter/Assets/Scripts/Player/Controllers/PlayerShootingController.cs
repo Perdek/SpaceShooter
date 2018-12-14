@@ -7,9 +7,14 @@ public class PlayerShootingController : MonoBehaviour
 {
 	#region FIELDS
 
+	[SerializeField]
+	private Transform playerBulletSpawnTransform = null;
+
 	#endregion
 
 	#region PROPERTIES
+
+	public Transform PlayerBulletSpawnTransform => playerBulletSpawnTransform;
 
 	#endregion
 
@@ -17,12 +22,17 @@ public class PlayerShootingController : MonoBehaviour
 
 	public void Initialize()
 	{
-
+		InitializeKeys();
 	}
 
 	public void Shoot()
 	{
+		Debug.Log("Shoot");
+	}
 
+	private void InitializeKeys()
+	{
+		KeyboardManager.Instance.AddKey(KeyCode.Space, KeyInput.InputMode.KEY_PRESSED_DOWN, Shoot);
 	}
 
 	#endregion

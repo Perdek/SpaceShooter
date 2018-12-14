@@ -16,7 +16,12 @@ public class PlayerMovementController : MonoBehaviour
 
 	public Rigidbody2D PlayerRigidBody2D => playerRigidBody2D;
 
-	public float Speed {
+	public float SpeedToAdd {
+		get;
+		private set;
+	}
+
+	public float MaxSpeed {
 		get;
 		private set;
 	}
@@ -31,29 +36,39 @@ public class PlayerMovementController : MonoBehaviour
 		SetSpeed(newSpeed);
 	}
 
-	public void SetSpeed(float newSpeed)
+	public void SetSpeed(float newSpeedToAdd)
 	{
-		Speed = newSpeed;
+		SpeedToAdd = newSpeedToAdd;
+	}
+
+	public void SetMaxSpeed(float newMaxSpeed)
+	{
+		MaxSpeed = newMaxSpeed;
 	}
 
 	public void MoveUp()
 	{
-		PlayerRigidBody2D.AddForce(Vector2.up * Speed);
+		PlayerRigidBody2D.AddForce(Vector2.up * SpeedToAdd);
 	}
 
 	public void MoveDown()
 	{
-		PlayerRigidBody2D.AddForce(Vector2.down * Speed);
+		PlayerRigidBody2D.AddForce(Vector2.down * SpeedToAdd);
 	}
 
 	public void MoveRight()
 	{
-		PlayerRigidBody2D.AddForce(Vector2.right * Speed);
+		PlayerRigidBody2D.AddForce(Vector2.right * SpeedToAdd);
 	}
 
 	public void MoveLeft()
 	{
-		PlayerRigidBody2D.AddForce(Vector2.left * Speed);
+		PlayerRigidBody2D.AddForce(Vector2.left * SpeedToAdd);
+	}
+
+	public void Brake()
+	{
+		//PlayerRigidBody2D
 	}
 
 	private void InitializeKeys()
