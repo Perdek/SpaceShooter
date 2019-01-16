@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : BasePoolObject
+public class PoolObjectsParent : MonoBehaviour
 {
 	#region FIELDS
 
@@ -10,9 +10,19 @@ public class Bullet : BasePoolObject
 
 	#region PROPERTIES
 
+	public string Tag {
+		get;
+		private set;
+	}
+
 	#endregion
 
 	#region METHODS
+
+	public void SetTag(string newTag)
+	{
+		Tag = newTag;
+	}
 
 	#endregion
 

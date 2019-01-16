@@ -9,17 +9,21 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 
 	[SerializeField]
 	private PlayerManager playerManager = null;
+	[SerializeField]
+	private PoolManager poolManager = null;
 
 	#endregion
 
 	#region PROPERTIES
 
 	public PlayerManager PlayerManager => playerManager;
+	public PoolManager PoolManager  => poolManager;
 
 	public KeyboardManager KeyboardManager {
 		get;
 		private set;
 	} = new KeyboardManager();
+	
 
 	#endregion
 
@@ -41,12 +45,14 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		SingletonInitialization();
 		KeyboardManager.SingletonInitialization();
 		PlayerManager.SingletonInitialization();
+		PoolManager.SingletonInitialization();
 	}
 
 	private void ManagersInitialize()
 	{
 		KeyboardManager.Initialize();
 		PlayerManager.Initialize();
+		PoolManager.Initialize();
 	}
 
 	#endregion

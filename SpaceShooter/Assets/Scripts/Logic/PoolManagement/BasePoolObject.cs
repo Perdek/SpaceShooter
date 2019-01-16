@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : BasePoolObject
+public class BasePoolObject : MonoBehaviour
 {
 	#region FIELDS
 
@@ -13,6 +13,11 @@ public class Bullet : BasePoolObject
 	#endregion
 
 	#region METHODS
+
+	public virtual void HandleObjectSpawn()
+	{
+
+	}
 
 	#endregion
 
