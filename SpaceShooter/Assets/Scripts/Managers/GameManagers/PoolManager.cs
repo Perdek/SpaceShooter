@@ -33,29 +33,10 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 
 	#region METHODS
 
-	public void Initialize()
+	public override void Initialize()
 	{
-		Queue<BasePoolObject> poolQueue = new Queue<BasePoolObject>();
-		PoolObjectsParent poolObjectsParent = null;
-		Pool pool = null;
-
-		for (int i = 0; i < PoolList.Count; i++)
-		{
-			pool = PoolList[i];
-			poolQueue.Clear();
-			poolObjectsParent = GameObject.Instantiate(PoolObjectsParentPrefab, this.transform);
-			SetPoolObjectsParent(poolObjectsParent, pool);
-
-			for (int j = 0; j < pool.Size; j++)
-			{
-				BasePoolObject poolObject = GameObject.Instantiate(pool.PoolPrefab, poolObjectsParent.transform);
-				poolObject.gameObject.SetActive(false);
-				poolQueue.Enqueue(poolObject);
-			}
-
-			PoolDictionary.Add(pool.Tag, poolQueue);
-		}
-	}
+		InitializePools();
+	}	
 
 	public BasePoolObject GetPoolObject(string tag, Vector3 newPosition, Quaternion newRotation)
 	{
@@ -84,6 +65,7 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 		poolObject.transform.rotation = newRotation;
 		poolObject.gameObject.SetActive(true);
 		poolObject.HandleObjectSpawn();
+		poolObject.SetState(BasePoolObject.PoolObjectState.IN_USE);		
 	}
 
 	private void SetPoolObjectsParent(PoolObjectsParent newPoolObjectsParent, Pool pool)
@@ -91,6 +73,31 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 		newPoolObjectsParent.name = pool.Tag;
 		newPoolObjectsParent.SetTag(pool.Tag);
 		newPoolObjectsParent.transform.SetParent(this.transform);
+	}
+
+	private void InitializePools()
+	{
+		Queue<BasePoolObject> poolQueue = new Queue<BasePoolObject>();
+		PoolObjectsParent poolObjectsParent = null;
+		Pool pool = null;
+
+		for (int i = 0; i < PoolList.Count; i++)
+		{
+			pool = PoolList[i];
+			poolQueue.Clear();
+			poolObjectsParent = GameObject.Instantiate(PoolObjectsParentPrefab, this.transform);
+			SetPoolObjectsParent(poolObjectsParent, pool);
+
+			for (int j = 0; j < pool.Size; j++)
+			{
+				BasePoolObject poolObject = GameObject.Instantiate(pool.PoolPrefab, poolObjectsParent.transform);
+				poolObject.gameObject.SetActive(false);
+				poolObject.SetState(BasePoolObject.PoolObjectState.WAITING_FOR_USE);
+				poolQueue.Enqueue(poolObject);
+			}
+
+			PoolDictionary.Add(pool.Tag, poolQueue);
+		}
 	}
 
 	#endregion

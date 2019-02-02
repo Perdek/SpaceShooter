@@ -20,11 +20,6 @@ public class KeyboardManager : BaseSingletonManager<KeyboardManager>
 
 	#region METHODS
 
-	public void Initialize()
-	{
-
-	}
-
 	public void CheckKeys()
 	{
 		for (int i = 0; i < KeyInputs.Count; i++)

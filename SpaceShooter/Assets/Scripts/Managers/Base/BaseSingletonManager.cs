@@ -26,6 +26,11 @@ public abstract class BaseSingletonManager<T> where T : class
 		Instance = this as T;
 	}
 
+	public virtual void Initialize()
+	{
+
+	}
+
 	#endregion
 
 	#region ENUMS

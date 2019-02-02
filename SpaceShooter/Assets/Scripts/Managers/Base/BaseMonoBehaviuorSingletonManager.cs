@@ -27,6 +27,11 @@ public class BaseMonoBehaviourSingletonManager<T> : MonoBehaviour where T : Mono
 		Instance = this as T;
 	}
 
+	public virtual void Initialize()
+	{
+
+	}
+
 	#endregion
 
 	#region ENUMS

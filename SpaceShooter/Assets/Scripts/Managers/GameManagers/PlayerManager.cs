@@ -19,7 +19,7 @@ public class PlayerManager : BaseMonoBehaviourSingletonManager<PlayerManager>
 
 	#region METHODS
 
-	public void Initialize()
+	public override void Initialize()
 	{
 		PlayerMainController.Initialize();
 	}

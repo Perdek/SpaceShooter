@@ -14,6 +14,8 @@ public class PlayerMainController : MonoBehaviour
 	private PlayerMovementController playerMovementController = null;
 	[SerializeField]
 	private PlayerShootingController playerShootingController = null;
+	[SerializeField]
+	private PlayerColliderController playerColliderController = null;
 
 	[Header("Movement")]
 	[SerializeField, Range(MIN_SPEED_TO_SET, MAX_SPEED_TO_SET)]
@@ -25,6 +27,7 @@ public class PlayerMainController : MonoBehaviour
 
 	public PlayerMovementController PlayerMovementController => playerMovementController;
 	public PlayerShootingController PlayerShootingController => playerShootingController;
+	public PlayerColliderController PlayerColliderController => playerColliderController;
 	public float PlayerSpeed => playerSpeed;
 
 	#endregion
