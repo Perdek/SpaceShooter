@@ -65,7 +65,7 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 		poolObject.transform.rotation = newRotation;
 		poolObject.gameObject.SetActive(true);
 		poolObject.HandleObjectSpawn();
-		poolObject.SetState(BasePoolObject.PoolObjectState.IN_USE);		
+		poolObject.SetState(BasePoolObject.PoolObjectStateEnum.IN_USE);		
 	}
 
 	private void SetPoolObjectsParent(PoolObjectsParent newPoolObjectsParent, Pool pool)
@@ -92,7 +92,7 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 			{
 				BasePoolObject poolObject = GameObject.Instantiate(pool.PoolPrefab, poolObjectsParent.transform);
 				poolObject.gameObject.SetActive(false);
-				poolObject.SetState(BasePoolObject.PoolObjectState.WAITING_FOR_USE);
+				poolObject.SetState(BasePoolObject.PoolObjectStateEnum.WAITING_FOR_USE);
 				poolQueue.Enqueue(poolObject);
 			}
 

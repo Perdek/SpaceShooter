@@ -6,7 +6,10 @@ public class UpdateManager : BaseMonoBehaviourSingletonManager<UpdateManager>
 {
 	#region FIELDS
 
-	public event System.Action OnUpdate = delegate { };
+	public event System.Action OnUpdateInputInformation = delegate { };
+	public event System.Action OnDataChange = delegate { };
+	public event System.Action OnUpdatePhysic = delegate { };
+	public event System.Action OnUpdateView = delegate { };
 
 	#endregion
 
@@ -18,12 +21,30 @@ public class UpdateManager : BaseMonoBehaviourSingletonManager<UpdateManager>
 
 	protected virtual void FixedUpdate()
 	{
-		HandleOnUpdate();
+		HandleOnUpdateInputInformation();
+		HandleOnDataChange();
+		HandleOnUpdatePhysic();
+		HandleOnUpdateView();
 	}
 
-	private void HandleOnUpdate()
+	private void HandleOnUpdateInputInformation()
 	{
-		OnUpdate();
+		OnUpdateInputInformation();
+	}
+
+	private void HandleOnDataChange()
+	{
+		OnDataChange();
+	}
+
+	private void HandleOnUpdatePhysic()
+	{
+		OnUpdatePhysic();
+	}
+
+	private void HandleOnUpdateView()
+	{
+		OnUpdateView();
 	}
 
 	#endregion

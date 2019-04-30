@@ -19,7 +19,11 @@ public class PlayerMainController : MonoBehaviour
 
 	[Header("Movement")]
 	[SerializeField, Range(MIN_SPEED_TO_SET, MAX_SPEED_TO_SET)]
-	private float playerSpeed = 0;
+	private float playerMaxSpeed = 1;
+	[SerializeField]
+	private float playerAccelerationFactory = 1;
+	[SerializeField]
+	private float playerBrakingFactory = 1;
 
 	#endregion
 
@@ -28,7 +32,9 @@ public class PlayerMainController : MonoBehaviour
 	public PlayerMovementController PlayerMovementController => playerMovementController;
 	public PlayerShootingController PlayerShootingController => playerShootingController;
 	public PlayerColliderController PlayerColliderController => playerColliderController;
-	public float PlayerSpeed => playerSpeed;
+	public float PlayerMaxSpeed => playerMaxSpeed;
+	public float PlayerAccelerationFactory => playerAccelerationFactory;
+	public float PlayerBrakingFactory => playerBrakingFactory;
 
 	#endregion
 
@@ -36,7 +42,7 @@ public class PlayerMainController : MonoBehaviour
 
 	public void Initialize()
 	{
-		PlayerMovementController.Initialize(PlayerSpeed);
+		PlayerMovementController.Initialize(PlayerAccelerationFactory, PlayerBrakingFactory, PlayerMaxSpeed);
 		PlayerShootingController.Initialize();
 	}
 

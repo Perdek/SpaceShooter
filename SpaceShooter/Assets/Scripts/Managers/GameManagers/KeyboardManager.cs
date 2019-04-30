@@ -24,53 +24,24 @@ public class KeyboardManager : BaseSingletonManager<KeyboardManager>
 	{
 		for (int i = 0; i < KeyInputs.Count; i++)
 		{
-			CheckKey(KeyInputs[i]);
+			KeyInputs[i].CheckKey();
 		}
 	}
 
-	public void AddKey(KeyCode newKeyCode, KeyInput.InputMode newInputMode, Action newOnKeyAction)
+	public void AddKey(KeyCode newKeyCode, Action newOnKeyAction, KeyInput.KeyStateEnum newInputMode = KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum newCheckingMode = KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum newOccurrencyMode = KeyInput.OccurrenceModeEnum.KEY_HAS_OCCURE)
 	{
-		KeyInputs.Add(new KeyInput(newKeyCode, newInputMode, newOnKeyAction));
+		KeyInputs.Add(new KeyInput(newKeyCode, newInputMode, newCheckingMode, newOnKeyAction, newOccurrencyMode));
 	}
 
-	private void CheckKey(KeyInput keyInput)
+	public void AddKey(List<KeyCode> newKeyCode, Action newOnKeyAction, KeyInput.KeyStateEnum newInputMode = KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum newCheckingMode = KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum newOccurrencyMode = KeyInput.OccurrenceModeEnum.KEY_HAS_OCCURE)
 	{
-		switch (keyInput.Mode)
-		{
-			case KeyInput.InputMode.KEY_HOLD:
-				HandleKeyHold(keyInput);
-				break;
-			case KeyInput.InputMode.KEY_PRESSED_DOWN:
-				HandleKeyPressedDown(keyInput);
-				break;
-			case KeyInput.InputMode.KEY_RELEASED:
-				HandleKeyReleased(keyInput);
-				break;
-		}
+		KeyInputs.Add(new KeyInput(newKeyCode, newInputMode, newCheckingMode, newOnKeyAction, newOccurrencyMode));
 	}
 
-	private void HandleKeyHold(KeyInput keyInput)
+	public override void Initialize()
 	{
-		if (Input.GetKey(keyInput.KeyCode) == true)
-		{
-			keyInput.HandleOnKeyAction();
-		}
-	}
-
-	private void HandleKeyPressedDown(KeyInput keyInput)
-	{
-		if (Input.GetKeyDown(keyInput.KeyCode) == true)
-		{
-			keyInput.HandleOnKeyAction();
-		}
-	}
-
-	private void HandleKeyReleased(KeyInput keyInput)
-	{
-		if (Input.GetKeyUp(keyInput.KeyCode) == true)
-		{
-			keyInput.HandleOnKeyAction();
-		}
+		base.Initialize();
+		UpdateManager.Instance.OnUpdateInputInformation += CheckKeys;
 	}
 
 	#endregion

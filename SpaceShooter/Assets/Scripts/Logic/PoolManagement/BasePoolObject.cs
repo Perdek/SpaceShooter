@@ -11,7 +11,7 @@ public class BasePoolObject : MonoBehaviour
 
 	#region PROPERTIES
 
-	public PoolObjectState State {
+	public PoolObjectStateEnum State {
 		get;
 		private set;
 	}
@@ -20,7 +20,7 @@ public class BasePoolObject : MonoBehaviour
 
 	#region METHODS
 
-	public void SetState(PoolObjectState newState)
+	public void SetState(PoolObjectStateEnum newState)
 	{
 		State = newState;
 	}
@@ -32,7 +32,7 @@ public class BasePoolObject : MonoBehaviour
 
 	public virtual void Deactivation()
 	{
-		SetState(PoolObjectState.WAITING_FOR_USE);
+		SetState(PoolObjectStateEnum.WAITING_FOR_USE);
 		gameObject.SetActive(false);
 	}
 
@@ -40,7 +40,7 @@ public class BasePoolObject : MonoBehaviour
 
 	#region ENUMS
 
-	public enum PoolObjectState
+	public enum PoolObjectStateEnum
 	{
 		WAITING_FOR_USE,
 		IN_USE

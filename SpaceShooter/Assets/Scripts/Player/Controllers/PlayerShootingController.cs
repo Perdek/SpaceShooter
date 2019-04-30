@@ -36,7 +36,7 @@ public class PlayerShootingController : MonoBehaviour
 
 	private void InitializeKeys()
 	{
-		KeyboardManager.Instance.AddKey(KeyCode.Space, KeyInput.InputMode.KEY_PRESSED_DOWN, Shoot);
+		KeyboardManager.Instance.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN);
 	}
 
 	#endregion

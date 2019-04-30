@@ -13,6 +13,8 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 	private PoolManager poolManager = null;
 	[SerializeField]
 	private UpdateManager updateManager = null;
+	[SerializeField]
+	private InputManager inputManager = null;	
 
 	#endregion
 
@@ -21,6 +23,7 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 	public PlayerManager PlayerManager => playerManager;
 	public PoolManager PoolManager => poolManager;
 	public UpdateManager UpdateManager => updateManager;
+	public InputManager InputManager => inputManager;
 
 	public KeyboardManager KeyboardManager {
 		get;
@@ -44,15 +47,11 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		ManagersInitialize();
 	}
 
-	protected virtual void Update()
-	{
-		KeyboardManager.CheckKeys();
-	}
-
 	private void SingletonsInitializes()
 	{
 		SingletonInitialization();
 		UpdateManager.SingletonInitialization();
+		InputManager.SingletonInitialization();
 		KeyboardManager.SingletonInitialization();
 		PlayerManager.SingletonInitialization();
 		PoolManager.SingletonInitialization();
@@ -62,6 +61,7 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 	private void ManagersInitialize()
 	{
 		UpdateManager.Initialize();
+		InputManager.Initialize();
 		KeyboardManager.Initialize();
 		PlayerManager.Initialize();
 		PoolManager.Initialize();
