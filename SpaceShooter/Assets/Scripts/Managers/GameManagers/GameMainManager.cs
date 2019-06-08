@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager>
 {
 
 	#region FIELDS
+
+	public event Action OnGameStart = delegate { };
+	public event Action OnMainOpen = delegate { };
 
 	[SerializeField]
 	private PlayerManager playerManager = null;
@@ -14,7 +18,7 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 	[SerializeField]
 	private UpdateManager updateManager = null;
 	[SerializeField]
-	private InputManager inputManager = null;	
+	private InputManager inputManager = null;
 
 	#endregion
 
@@ -35,16 +39,36 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		private set;
 	} = new TagManager();
 
+	public ScenesNamesManager ScenesNamesManager {
+		get;
+		private set;
+	} = new ScenesNamesManager();
 
+	public GameState State {
+		get;
+		private set;
+	} = GameState.MENU;
 
 	#endregion
 
 	#region METHODS
 
+	public void SetGameState(GameState newState)
+	{
+		State = newState;
+	}
+
+	public void SetGameStateAsGame()
+	{
+		SetGameState(GameState.GAME);
+		OnGameStart();
+	}
+
 	protected virtual void Awake()
 	{
 		SingletonsInitializes();
 		ManagersInitialize();
+		DontDestroyOnLoad(this);
 	}
 
 	private void SingletonsInitializes()
@@ -56,6 +80,7 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		PlayerManager.SingletonInitialization();
 		PoolManager.SingletonInitialization();
 		TagManager.SingletonInitialization();
+		ScenesNamesManager.SingletonInitialization();
 	}
 
 	private void ManagersInitialize()
@@ -66,11 +91,19 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		PlayerManager.Initialize();
 		PoolManager.Initialize();
 		TagManager.Initialize();
+		ScenesNamesManager.Initialize();
 	}
 
 	#endregion
 
 	#region ENUMS
+
+	public enum GameState
+	{
+		MENU,
+		GAME,
+		PAUSE
+	}
 
 	#endregion
 }

@@ -16,6 +16,11 @@ public class PlayerShootingController : MonoBehaviour
 
 	public Transform PlayerBulletSpawnTransform => playerBulletSpawnTransform;
 
+	private List<int> KeysIds {
+		get;
+		set;
+	} = new List<int>();
+
 	#endregion
 
 	#region METHODS
@@ -36,7 +41,22 @@ public class PlayerShootingController : MonoBehaviour
 
 	private void InitializeKeys()
 	{
-		KeyboardManager.Instance.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN);
+		GameMainManager.Instance.OnGameStart += AttachKeysForShooting;
+		GameMainManager.Instance.OnMainOpen += DetachKeysForShooting;
+	}
+
+	private void AttachKeysForShooting()
+	{
+		KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN));
+	}
+
+	private void DetachKeysForShooting()
+	{
+		for (int i = KeysIds.Count - 1; i >= 0 ; i--)
+		{
+			KeyboardManager.Instance.RemoveKey(KeysIds[i]);
+			KeysIds.RemoveAt(i);
+		}
 	}
 
 	#endregion

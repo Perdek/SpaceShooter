@@ -37,6 +37,11 @@ public class PlayerMovementController : MonoBehaviour
 		private set => state = value;
 	}
 
+	private List<int> KeysIds {
+		get;
+		set;
+	} = new List<int>();
+
 	#endregion
 
 	#region METHODS
@@ -116,7 +121,7 @@ public class PlayerMovementController : MonoBehaviour
 		Vector3 brakeVelocity = normalisedVelocity * MaxSpeed;  // make the brake Vector3 value
 
 		PlayerRigidBody2D.velocity = brakeVelocity;  // apply opposing brake force
-	}	
+	}
 
 	private void HandleVelocityLimit()
 	{
@@ -128,15 +133,30 @@ public class PlayerMovementController : MonoBehaviour
 
 	private void InitializeKeys()
 	{
-		KeyboardManager.Instance.AddKey(GetKeyCodeMoveUp(), SetMoveUp);
-		KeyboardManager.Instance.AddKey(GetKeyCodeMoveDown(), SetMoveDown);
-		KeyboardManager.Instance.AddKey(GetKeyCodeMoveLeft(), SetMoveLeft);
-		KeyboardManager.Instance.AddKey(GetKeyCodeMoveRight(), SetMoveRight);
-		KeyboardManager.Instance.AddKey(GetKeysCodeMoveUpRight(), SetMoveUpRight);
-		KeyboardManager.Instance.AddKey(GetKeysCodeMoveUpLeft(), SetMoveUpLeft);
-		KeyboardManager.Instance.AddKey(GetKeysCodeMoveDownRight(), SetMoveDownRight);
-		KeyboardManager.Instance.AddKey(GetKeysCodeMoveDownLeft(), SetMoveDownLeft);
-		KeyboardManager.Instance.AddKey(GetKeysCodeMovement(), SetBreake, KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum.KEY_HAS_NOT_OCCURE);
+		GameMainManager.Instance.OnGameStart += AttachKeysForMovement;
+		GameMainManager.Instance.OnMainOpen += DetachKeysForMovement;
+	}
+
+	private void AttachKeysForMovement()
+	{
+		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveUp(), SetMoveUp));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveDown(), SetMoveDown));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveLeft(), SetMoveLeft));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveRight(), SetMoveRight));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveUpRight(), SetMoveUpRight));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveUpLeft(), SetMoveUpLeft));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveDownRight(), SetMoveDownRight));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveDownLeft(), SetMoveDownLeft));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMovement(), SetBreake, KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum.KEY_HAS_NOT_OCCURE));
+	}
+
+	private void DetachKeysForMovement()
+	{
+		for (int i = KeysIds.Count - 1; i >= 0 ; i--)
+		{
+			KeyboardManager.Instance.RemoveKey(KeysIds[i]);
+			KeysIds.RemoveAt(i);
+		}
 	}
 
 	private void InitializeUpdate()

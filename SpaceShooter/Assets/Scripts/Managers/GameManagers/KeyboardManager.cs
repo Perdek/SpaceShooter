@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class KeyboardManager : BaseSingletonManager<KeyboardManager>
 {
@@ -16,6 +17,11 @@ public class KeyboardManager : BaseSingletonManager<KeyboardManager>
 		private set;
 	} = new List<KeyInput>();
 
+	private int FreeId {
+		get;
+		set;
+	} = 0;
+
 	#endregion
 
 	#region METHODS
@@ -28,14 +34,34 @@ public class KeyboardManager : BaseSingletonManager<KeyboardManager>
 		}
 	}
 
-	public void AddKey(KeyCode newKeyCode, Action newOnKeyAction, KeyInput.KeyStateEnum newInputMode = KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum newCheckingMode = KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum newOccurrencyMode = KeyInput.OccurrenceModeEnum.KEY_HAS_OCCURE)
+	public int AddKey(KeyCode newKeyCode, Action newOnKeyAction, KeyInput.KeyStateEnum newInputMode = KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum newCheckingMode = KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum newOccurrencyMode = KeyInput.OccurrenceModeEnum.KEY_HAS_OCCURE)
 	{
-		KeyInputs.Add(new KeyInput(newKeyCode, newInputMode, newCheckingMode, newOnKeyAction, newOccurrencyMode));
+		KeyInput newKeyInput = new KeyInput(newKeyCode, newInputMode, newCheckingMode, newOnKeyAction, newOccurrencyMode);
+		newKeyInput.SetId(FreeId++);
+		KeyInputs.Add(newKeyInput);
+
+		return newKeyInput.Id;
 	}
 
-	public void AddKey(List<KeyCode> newKeyCode, Action newOnKeyAction, KeyInput.KeyStateEnum newInputMode = KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum newCheckingMode = KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum newOccurrencyMode = KeyInput.OccurrenceModeEnum.KEY_HAS_OCCURE)
+	public int AddKey(List<KeyCode> newKeyCode, Action newOnKeyAction, KeyInput.KeyStateEnum newInputMode = KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum newCheckingMode = KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum newOccurrencyMode = KeyInput.OccurrenceModeEnum.KEY_HAS_OCCURE)
 	{
-		KeyInputs.Add(new KeyInput(newKeyCode, newInputMode, newCheckingMode, newOnKeyAction, newOccurrencyMode));
+		KeyInput newKeyInput = new KeyInput(newKeyCode, newInputMode, newCheckingMode, newOnKeyAction, newOccurrencyMode);
+		newKeyInput.SetId(FreeId++);
+		KeyInputs.Add(newKeyInput);
+
+		return newKeyInput.Id;
+	}
+
+	public void RemoveKey(int idToRemove)
+	{
+		for (int i = KeyInputs.Count - 1; i >= 0; i--)
+		{
+			if (KeyInputs[i].Id == idToRemove)
+			{
+				KeyInputs.RemoveAt(i);
+				return;
+			}
+		}
 	}
 
 	public override void Initialize()

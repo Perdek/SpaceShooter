@@ -13,6 +13,11 @@ public class KeyInput
 
 	#region PROPERTIES
 
+	public int Id {
+		get;
+		private set;
+	} = -1;
+
 	public List<KeyCode> KeyCodes {
 		get;
 		private set;
@@ -53,6 +58,11 @@ public class KeyInput
 		CheckingKeyMode = newCheckingKeyMode;
 		OnKeyAction = newOnKeyAction;
 		OccurrenceMode = newOccurrencyMode;
+	}
+
+	public void SetId(int newId)
+	{
+		Id = newId;
 	}
 
 	public void HandleOnKeyAction()
