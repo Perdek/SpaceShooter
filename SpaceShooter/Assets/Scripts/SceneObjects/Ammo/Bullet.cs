@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Bullet : BasePoolObject
 {
@@ -60,7 +57,7 @@ public class Bullet : BasePoolObject
 
 	private bool CheckCollisionWithPlayer(Collider2D other)
 	{
-		return other.GetComponent<PlayerColliderController>() != null;
+		return other.GetComponentInChildren<PlayerColliderController>() != null;
 	}
 
 	#endregion

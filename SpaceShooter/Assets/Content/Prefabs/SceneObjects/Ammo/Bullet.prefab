@@ -59,6 +59,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -94,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d72f5e303e2d534491a0fcac4ca1864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speedFactory: 10
   rigidbody2DComponent: {fileID: 5404112664972228854}
 --- !u!61 &7408553487247332741
 BoxCollider2D:
