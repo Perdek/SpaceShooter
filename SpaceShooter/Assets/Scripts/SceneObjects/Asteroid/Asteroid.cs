@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Bullet : BasePoolObject
+public class Asteroid : BasePoolObject
 {
 	#region FIELDS
 
@@ -10,16 +10,12 @@ public class Bullet : BasePoolObject
 	[SerializeField]
 	private Rigidbody2D rigidbody2DComponent = null;
 
-	[SerializeField]
-	private IdentificationFriendOrFoeEnum iff = IdentificationFriendOrFoeEnum.FOE;
-
 	#endregion
 
 	#region PROPERTIES
 
 	public Rigidbody2D Rigidbody2DComponent => rigidbody2DComponent;
 	public uint SpeedFactory => speedFactory;
-	public IdentificationFriendOrFoeEnum Iff => iff;
 
 	#endregion
 
@@ -36,6 +32,7 @@ public class Bullet : BasePoolObject
 	public override void Deactivation()
 	{
 		base.Deactivation();
+		Explosion();
 		UpdateManager.Instance.OnUpdatePhysic -= Move;
 	}
 
@@ -49,19 +46,21 @@ public class Bullet : BasePoolObject
 		Rigidbody2DComponent.MovePosition(Rigidbody2DComponent.position + Vector2.up * Time.fixedDeltaTime * SpeedFactory);
 	}
 
+	private void Explosion()
+	{
+        Debug.Log("Explosion");
+	}
+
 	private void HandleCollision(Collider2D other)
 	{
-		if (CheckCollisionWithPlayer(other) == true)
-		{
-			return;
-		}
-
 		base.Deactivation();
 	}
 
-	private bool CheckCollisionWithPlayer(Collider2D other)
+	private bool CheckCollisionWithPlayerBullet(Collider2D other)
 	{
-		return other.GetComponentInChildren<PlayerColliderController>() != null;
+		Bullet bullet = other.GetComponentInChildren<Bullet>();
+
+		return bullet != null ? false : bullet.Iff == IdentificationFriendOrFoeEnum.FRIEND;
 	}
 
 	#endregion
