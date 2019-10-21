@@ -43,7 +43,7 @@ public class Asteroid : BasePoolObject
 
 	private void Move()
 	{
-		Rigidbody2DComponent.MovePosition(Rigidbody2DComponent.position + Vector2.up * Time.fixedDeltaTime * SpeedFactory);
+		Rigidbody2DComponent.MovePosition(Rigidbody2DComponent.position + Vector2.down * Time.fixedDeltaTime * SpeedFactory);
 	}
 
 	private void Explosion()

@@ -8,17 +8,17 @@ public class Pool
 	#region FIELDS
 
 	[SerializeField]
-	private string tag;
+	private TagManager.TagsEnum tag = TagManager.TagsEnum.PLAYER_BULLET_TAG;
 	[SerializeField]
-	private int size;
+	private int size = 0;
 	[SerializeField]
-	private BasePoolObject poolPrefab;
+	private BasePoolObject poolPrefab = null;
 
 	#endregion
 
 	#region PROPERTIES
 
-	public string Tag {
+	public TagManager.TagsEnum Tag {
 		get => tag;
 		private set => tag = value;
 	}

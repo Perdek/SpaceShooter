@@ -38,14 +38,14 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 		InitializePools();
 	}
 
-	public BasePoolObject GetPoolObject(string tag, Vector3 newPosition, Quaternion newRotation)
+	public BasePoolObject GetPoolObject(TagManager.TagsEnum tag, Vector3 newPosition, Quaternion newRotation)
 	{
-		if (PoolDictionary.ContainsKey(tag) == false)
+		if (PoolDictionary.ContainsKey(tag.ToString()) == false)
 		{
 			return null;
 		}
 
-		BasePoolObject poolObject = PoolDictionary[tag].Dequeue();
+		BasePoolObject poolObject = PoolDictionary[tag.ToString()].Dequeue();
 
 		if (poolObject == null)
 		{
@@ -54,7 +54,7 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 
 		SetPoolObject(poolObject, newPosition, newRotation);
 
-		PoolDictionary[tag].Enqueue(poolObject);
+		PoolDictionary[tag.ToString()].Enqueue(poolObject);
 
 		return poolObject;
 	}
@@ -70,8 +70,8 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 
 	private void SetPoolObjectsParent(PoolObjectsParent newPoolObjectsParent, Pool pool)
 	{
-		newPoolObjectsParent.name = pool.Tag;
-		newPoolObjectsParent.SetTag(pool.Tag);
+		newPoolObjectsParent.name = pool.Tag.ToString();
+		newPoolObjectsParent.SetTag(pool.Tag.ToString());
 		newPoolObjectsParent.transform.SetParent(this.transform);
 	}
 
@@ -96,7 +96,7 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 				poolQueue.Enqueue(poolObject);
 			}
 
-			PoolDictionary.Add(pool.Tag, poolQueue);
+			PoolDictionary.Add(pool.Tag.ToString(), poolQueue);
 		}
 	}
 

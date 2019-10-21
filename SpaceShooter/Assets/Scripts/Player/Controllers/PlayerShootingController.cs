@@ -35,7 +35,7 @@ public class PlayerShootingController : MonoBehaviour
 		if (PoolManager.Instance != null)
 		{
 			Debug.Log("Shoot");
-			PoolManager.Instance.GetPoolObject(TagManager.PLAYER_BULLET_TAG, PlayerBulletSpawnTransform.position, PlayerBulletSpawnTransform.rotation);
+			PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.PLAYER_BULLET_TAG, PlayerBulletSpawnTransform.position, PlayerBulletSpawnTransform.rotation);
 		}
 	}
 

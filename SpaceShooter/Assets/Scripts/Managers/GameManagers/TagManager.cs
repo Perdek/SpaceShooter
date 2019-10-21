@@ -6,7 +6,7 @@ public class TagManager : BaseSingletonManager<TagManager>
 {
 	#region FIELDS
 
-    public const string PLAYER_BULLET_TAG = "PlayerAmmo";
+	public const string PLAYER_BULLET_TAG = "PlayerAmmo";
 	public const string ASTEROID_TAG = "Asteroids";
 
 	#endregion
@@ -20,6 +20,12 @@ public class TagManager : BaseSingletonManager<TagManager>
 	#endregion
 
 	#region ENUMS
+
+	public enum TagsEnum
+	{
+		PLAYER_BULLET_TAG,
+		ASTEROID_TAG,
+	}
 
 	#endregion
 }
