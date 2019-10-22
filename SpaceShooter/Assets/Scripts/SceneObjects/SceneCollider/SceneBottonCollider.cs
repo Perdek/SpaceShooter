@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TagManager : BaseSingletonManager<TagManager>
+public class SceneBottonCollider : MonoBehaviour
 {
 	#region FIELDS
 
@@ -17,12 +17,6 @@ public class TagManager : BaseSingletonManager<TagManager>
 	#endregion
 
 	#region ENUMS
-
-	public enum TagsEnum
-	{
-		PLAYER_BULLET_TAG,
-		ASTEROID_TAG,
-	}
 
 	#endregion
 }

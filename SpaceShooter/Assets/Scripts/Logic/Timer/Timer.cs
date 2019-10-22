@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Timer
 {
 	#region FIELDS
 
-	public System.Action OnCountingEnd = delegate { };
-	private float firstSpawnDelayInSeconds;
-	private float delayBetweenSpawnsInSeconds;
-	private Action spawn;
+	public event System.Action OnCountingEnd = delegate { };
 
 	#endregion
 
@@ -40,11 +36,12 @@ public class Timer
 
 	#region METHODS
 
-	public Timer(float firstSpawnDelayInSeconds, float delayBetweenSpawnsInSeconds, Action spawn)
+	public Timer(float newFirstDelay, float newTargetTime, Action methodToInvokeOnCountingEnd, bool isRepeatable = false)
 	{
-		this.firstSpawnDelayInSeconds = firstSpawnDelayInSeconds;
-		this.delayBetweenSpawnsInSeconds = delayBetweenSpawnsInSeconds;
-		this.spawn = spawn;
+		FirstDelay = newFirstDelay;
+		TargetTime = newTargetTime;
+		OnCountingEnd = methodToInvokeOnCountingEnd;
+		Repeatable = isRepeatable;
 	}
 
 	public void StartCounting()

@@ -46,7 +46,5 @@ public class BasePoolObject : MonoBehaviour
 		IN_USE
 	}
 
-	
-
 	#endregion
 }

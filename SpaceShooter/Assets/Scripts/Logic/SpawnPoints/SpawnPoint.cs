@@ -4,8 +4,8 @@ public class SpawnPoint : MonoBehaviour
 {
 	#region FIELDS
 
-	public System.Action OnSpawn = delegate { };
-	public System.Action OnSpawnEnd = delegate { };
+	public event System.Action OnSpawn = delegate { };
+	public event System.Action OnSpawnEnd = delegate { };
 
 	[SerializeField]
 	private TagManager.TagsEnum poolObjectTag = TagManager.TagsEnum.PLAYER_BULLET_TAG;
@@ -44,7 +44,7 @@ public class SpawnPoint : MonoBehaviour
 
 	public void StartSpawn()
 	{
-		SpawningTimer = new Timer(FirstSpawnDelayInSeconds, DelayBetweenSpawnsInSeconds, Spawn);
+		SpawningTimer = new Timer(FirstSpawnDelayInSeconds, DelayBetweenSpawnsInSeconds, Spawn, true);
 		SpawningTimer.StartCounting();
 	}
 

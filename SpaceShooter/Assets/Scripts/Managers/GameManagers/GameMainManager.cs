@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager>
 {
@@ -67,6 +68,45 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		SingletonsInitializes();
 		ManagersInitialize();
 		DontDestroyOnLoad(this);
+		AttachInternalEvents();
+	}
+
+	protected virtual void OnDestroy()
+	{
+		DetachInGameEvents();
+	}
+
+	private void AttachInternalEvents()
+	{
+		OnGameStart += AttachInGameEvents;
+	}
+
+	private void DetachInternalEvents()
+	{
+		OnGameStart -= AttachInGameEvents;
+	}
+
+	private void AttachInGameEvents()
+	{
+		SceneManager.sceneLoaded += OnSceneLoaded;
+	}
+
+	private void DetachInGameEvents()
+	{
+		SceneManager.sceneLoaded -= OnSceneLoaded;
+	}
+
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		StartLevel();
+	}
+
+	private void StartLevel()
+	{
+		if (LevelManager.Instance != null)
+		{
+			LevelManager.Instance.StartLevel();
+		}
 	}
 
 	private void SingletonsInitializes()

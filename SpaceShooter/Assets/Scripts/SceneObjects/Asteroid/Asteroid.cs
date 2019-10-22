@@ -48,12 +48,15 @@ public class Asteroid : BasePoolObject
 
 	private void Explosion()
 	{
-        Debug.Log("Explosion");
+		Debug.Log("Explosion");
 	}
 
 	private void HandleCollision(Collider2D other)
 	{
-		base.Deactivation();
+		if (other.GetComponent<SceneBottonCollider>() != null || other.GetComponent<Bullet>() != null)
+		{
+			Deactivation();
+		}
 	}
 
 	private bool CheckCollisionWithPlayerBullet(Collider2D other)

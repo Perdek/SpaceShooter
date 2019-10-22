@@ -14,7 +14,22 @@ public class BaseMonoBehaviourSingletonManager<T> : MonoBehaviour where T : Mono
 	#region PROPERTIES
 
 	public static T Instance {
-		get => instance;
+		get
+		{
+			if (instance == null)
+			{
+				instance = FindObjectOfType<T>();
+
+				if (instance == null)
+				{
+					GameObject newSingletonGameObject = new GameObject(typeof(T).ToString());
+					instance = newSingletonGameObject.AddComponent<T>();
+				}
+			}
+
+			return instance;
+		}
+
 		private set => instance = value;
 	}
 

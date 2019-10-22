@@ -56,7 +56,7 @@ public class Bullet : BasePoolObject
 			return;
 		}
 
-		base.Deactivation();
+		Deactivation();
 	}
 
 	private bool CheckCollisionWithPlayer(Collider2D other)
