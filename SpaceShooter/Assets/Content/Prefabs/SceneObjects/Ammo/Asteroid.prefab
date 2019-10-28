@@ -96,7 +96,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedFactory: 5
+  speedLotteryRangeFactor: 1
   rigidbody2DComponent: {fileID: 5404112664972228854}
+  directionLotteryRange: 0.2
 --- !u!61 &7408553487247332741
 BoxCollider2D:
   m_ObjectHideFlags: 0
