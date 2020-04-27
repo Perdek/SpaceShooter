@@ -34,18 +34,18 @@ public class KeyboardManager : BaseSingletonManager<KeyboardManager>
 		}
 	}
 
-	public int AddKey(KeyCode newKeyCode, Action newOnKeyAction, KeyInput.KeyStateEnum newInputMode = KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum newCheckingMode = KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum newOccurrencyMode = KeyInput.OccurrenceModeEnum.KEY_HAS_OCCURE)
+	public int AddKey(KeyCode newKeyCode, Action newOnKeyAction, KeyInput.KeyStateEnum newInputMode = KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum newCheckingMode = KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum newOccurrenceMode = KeyInput.OccurrenceModeEnum.KEY_HAS_OCCUR)
 	{
-		KeyInput newKeyInput = new KeyInput(newKeyCode, newInputMode, newCheckingMode, newOnKeyAction, newOccurrencyMode);
+		KeyInput newKeyInput = new KeyInput(newKeyCode, newInputMode, newCheckingMode, newOnKeyAction, newOccurrenceMode);
 		newKeyInput.SetId(FreeId++);
 		KeyInputs.Add(newKeyInput);
 
 		return newKeyInput.Id;
 	}
 
-	public int AddKey(List<KeyCode> newKeyCode, Action newOnKeyAction, KeyInput.KeyStateEnum newInputMode = KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum newCheckingMode = KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum newOccurrencyMode = KeyInput.OccurrenceModeEnum.KEY_HAS_OCCURE)
+	public int AddKey(List<KeyCode> newKeyCode, Action newOnKeyAction, KeyInput.KeyStateEnum newInputMode = KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum newCheckingMode = KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum newOccurrenceMode = KeyInput.OccurrenceModeEnum.KEY_HAS_OCCUR)
 	{
-		KeyInput newKeyInput = new KeyInput(newKeyCode, newInputMode, newCheckingMode, newOnKeyAction, newOccurrencyMode);
+		KeyInput newKeyInput = new KeyInput(newKeyCode, newInputMode, newCheckingMode, newOnKeyAction, newOccurrenceMode);
 		newKeyInput.SetId(FreeId++);
 		KeyInputs.Add(newKeyInput);
 

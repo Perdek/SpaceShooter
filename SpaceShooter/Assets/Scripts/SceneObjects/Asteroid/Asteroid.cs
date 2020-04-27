@@ -1,101 +1,72 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Asteroid : BasePoolObject
 {
 	#region FIELDS
 
 	[SerializeField]
-	private uint speedFactory = 10;
+	private AsteroidCollisionComponent collisionComponent;
 	[SerializeField]
-	private float speedLotteryRangeFactor = 1;
+	private AsteroidMovementComponent movementComponent;
 	[SerializeField]
-	private Rigidbody2D rigidbody2DComponent = null;
-	[SerializeField]
-	private float directionLotteryRange = 0;
+	private AsteroidViewComponent viewComponent;
 
 	#endregion
 
 	#region PROPERTIES
 
-	public Rigidbody2D Rigidbody2DComponent => rigidbody2DComponent;
-	public uint SpeedFactory => speedFactory;
-	public float SpeedLotteryRangeFactor => speedLotteryRangeFactor;
-	public float DirectionLotteryRange => directionLotteryRange;
-
-	private float CalculatedSpeedFactor {
-		get;
-		set;
-	} = 1;
-
-	private Vector2 CalculatedDirection {
-		get;
-		set;
-	} = new Vector2();
+	private AsteroidCollisionComponent CollisionComponent => collisionComponent;
+	private AsteroidMovementComponent MovementComponent => movementComponent;
+	private AsteroidViewComponent ViewComponent => viewComponent;
 
 	#endregion
 
 	#region METHODS
 
+	public void AttachEvents()
+	{
+		CollisionComponent.OnHit += Deactivation;
+
+		MovementComponent.AttachEvents();
+	}
+
+	public void DetachEvents()
+	{
+		CollisionComponent.OnHit -= Deactivation;
+
+		MovementComponent.DetachEvents();
+	}
+
 	public override void HandleObjectSpawn()
 	{
-		if (State == PoolObjectStateEnum.WAITING_FOR_USE)
-		{
-			UpdateManager.Instance.OnUpdatePhysic += Move;
-		}
+		base.HandleObjectSpawn();
 
-		RandomSpeedFactor();
-		RandomDirectionValue();
+		AttachEvents();
+		Initialize();
 	}
 
 	public override void Deactivation()
 	{
 		base.Deactivation();
-		Explosion();
-		UpdateManager.Instance.OnUpdatePhysic -= Move;
+
+		Terminate();
+		DetachEvents();
 	}
 
 	protected virtual void OnTriggerEnter2D(Collider2D other)
 	{
-		HandleCollision(other);
+		CollisionComponent.HandleCollision(other);
 	}
 
-	private void RandomSpeedFactor()
+	private void Initialize()
 	{
-		float minSpeed = SpeedFactory - SpeedLotteryRangeFactor;
-		float maxSpeed = SpeedFactory + SpeedLotteryRangeFactor;
-		CalculatedSpeedFactor = Random.Range(minSpeed > 1 ? minSpeed : 1, maxSpeed);
+		MovementComponent.Initialize();
 	}
 
-	private void RandomDirectionValue()
+	private void Terminate()
 	{
-		float minDirectionValue = -DirectionLotteryRange;
-		float maxDirectionValue = DirectionLotteryRange;
-		CalculatedDirection = new Vector2(Random.Range(minDirectionValue, maxDirectionValue), -1);
-	}
-
-	private void Move()
-	{
-		Rigidbody2DComponent.MovePosition(Rigidbody2DComponent.position + CalculatedDirection * Time.fixedDeltaTime * CalculatedSpeedFactor);
-	}
-
-	private void Explosion()
-	{
-		Debug.Log("Explosion");
-	}
-
-	private void HandleCollision(Collider2D other)
-	{
-		if (other.GetComponent<SceneBottonCollider>() != null || other.GetComponent<Bullet>() != null)
-		{
-			Deactivation();
-		}
-	}
-
-	private bool CheckCollisionWithPlayerBullet(Collider2D other)
-	{
-		Bullet bullet = other.GetComponentInChildren<Bullet>();
-
-		return bullet != null ? false : bullet.Iff == IdentificationFriendOrFoeEnum.FRIEND;
+		ViewComponent.Explosion();
 	}
 
 	#endregion

@@ -34,7 +34,6 @@ public class PlayerShootingController : MonoBehaviour
 	{
 		if (PoolManager.Instance != null)
 		{
-			Debug.Log("Shoot");
 			PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.PLAYER_BULLET_TAG, PlayerBulletSpawnTransform.position, PlayerBulletSpawnTransform.rotation);
 		}
 	}
@@ -47,7 +46,7 @@ public class PlayerShootingController : MonoBehaviour
 
 	private void AttachKeysForShooting()
 	{
-		KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN, KeyInput.CheckingModeEnum.DISJUNCTION));
 	}
 
 	private void DetachKeysForShooting()

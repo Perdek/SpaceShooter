@@ -49,7 +49,7 @@ public class Timer
 		UpdateManager.Instance.OnDataChange += Counting;
 	}
 
-	public void EndCouting()
+	public void EndCounting()
 	{
 		UpdateManager.Instance.OnDataChange -= Counting;
 	}
@@ -76,7 +76,7 @@ public class Timer
 		{
 			if (Repeatable == false)
 			{
-				EndCouting();
+				EndCounting();
 			}
 			else
 			{

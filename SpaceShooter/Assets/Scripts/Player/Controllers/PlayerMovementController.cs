@@ -117,8 +117,8 @@ public class PlayerMovementController : MonoBehaviour
 
 	public void LimitVelocity()
 	{
-		Vector3 normalisedVelocity = PlayerRigidBody2D.velocity.normalized;
-		Vector3 brakeVelocity = normalisedVelocity * MaxSpeed;  // make the brake Vector3 value
+		Vector3 normalizedVelocity = PlayerRigidBody2D.velocity.normalized;
+		Vector3 brakeVelocity = normalizedVelocity * MaxSpeed;  // make the brake Vector3 value
 
 		PlayerRigidBody2D.velocity = brakeVelocity;  // apply opposing brake force
 	}
@@ -147,7 +147,7 @@ public class PlayerMovementController : MonoBehaviour
 		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveUpLeft(), SetMoveUpLeft));
 		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveDownRight(), SetMoveDownRight));
 		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveDownLeft(), SetMoveDownLeft));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMovement(), SetBreake, KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum.KEY_HAS_NOT_OCCURE));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMovement(), SetBreak, KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum.KEY_HAS_NOT_OCCUR));
 	}
 
 	private void DetachKeysForMovement()
@@ -208,7 +208,7 @@ public class PlayerMovementController : MonoBehaviour
 		SetState(MovingStateEnum.MOVING_DOWN_RIGHT);
 	}
 
-	private void SetBreake()
+	private void SetBreak()
 	{
 		SetState(MovingStateEnum.BREAKING);
 	}

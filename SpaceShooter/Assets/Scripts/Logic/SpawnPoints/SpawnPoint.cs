@@ -59,7 +59,7 @@ public class SpawnPoint : MonoBehaviour
 	{
 		if (CheckSpawnEnd() == true)
 		{
-			SpawningTimer.EndCouting();
+			SpawningTimer.EndCounting();
 			OnSpawnEnd();
 		}
 	}

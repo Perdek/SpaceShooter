@@ -48,6 +48,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -95,10 +96,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ddb16715f84e84483ecb955b806792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedFactory: 5
-  speedLotteryRangeFactor: 1
-  rigidbody2DComponent: {fileID: 5404112664972228854}
-  directionLotteryRange: 0.2
+  movementComponent:
+    speedFactory: 5
+    speedLotteryRangeFactor: 1
+    rigidbody2DComponent: {fileID: 5404112664972228854}
+    directionLotteryRange: 0.2
 --- !u!61 &7408553487247332741
 BoxCollider2D:
   m_ObjectHideFlags: 0

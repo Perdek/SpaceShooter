@@ -36,28 +36,28 @@ public class KeyInput
 	public OccurrenceModeEnum OccurrenceMode {
 		get;
 		private set;
-	} = OccurrenceModeEnum.KEY_HAS_OCCURE;
+	} = OccurrenceModeEnum.KEY_HAS_OCCUR;
 
 	#endregion
 
 	#region METHODS
 
-	public KeyInput(KeyCode newKeyCode, KeyStateEnum newKeyState, CheckingModeEnum newCheckingKeyMode, System.Action newOnKeyAction, OccurrenceModeEnum newOccurrencyMode = OccurrenceModeEnum.KEY_HAS_OCCURE)
+	public KeyInput(KeyCode newKeyCode, KeyStateEnum newKeyState, CheckingModeEnum newCheckingKeyMode, System.Action newOnKeyAction, OccurrenceModeEnum newOccurrenceMode = OccurrenceModeEnum.KEY_HAS_OCCUR)
 	{
 		KeyCodes.Add(newKeyCode);
 		KeyState = newKeyState;
 		CheckingKeyMode = newCheckingKeyMode;
 		OnKeyAction = newOnKeyAction;
-		OccurrenceMode = newOccurrencyMode;
+		OccurrenceMode = newOccurrenceMode;
 	}
 
-	public KeyInput(List<KeyCode> newKeyCode, KeyStateEnum newKeyState, CheckingModeEnum newCheckingKeyMode, System.Action newOnKeyAction, OccurrenceModeEnum newOccurrencyMode = OccurrenceModeEnum.KEY_HAS_OCCURE)
+	public KeyInput(List<KeyCode> newKeyCode, KeyStateEnum newKeyState, CheckingModeEnum newCheckingKeyMode, System.Action newOnKeyAction, OccurrenceModeEnum newOccurrenceMode = OccurrenceModeEnum.KEY_HAS_OCCUR)
 	{
 		KeyCodes.AddRange(newKeyCode);
 		KeyState = newKeyState;
 		CheckingKeyMode = newCheckingKeyMode;
 		OnKeyAction = newOnKeyAction;
-		OccurrenceMode = newOccurrencyMode;
+		OccurrenceMode = newOccurrenceMode;
 	}
 
 	public void SetId(int newId)
@@ -91,28 +91,28 @@ public class KeyInput
 		switch (CheckingKeyMode)
 		{
 			case CheckingModeEnum.CONJUNCTION:
-				CheckConcjution(checkKey);
+				CheckConjunction(checkKey);
 				break;
 			case CheckingModeEnum.DISJUNCTION:
-				CheckDisjuction(checkKey);
+				CheckDisjunction(checkKey);
 				break;
 		}
 	}
 
-	private void CheckDisjuction(Func<KeyCode, bool> checkKey)
+	private void CheckDisjunction(Func<KeyCode, bool> checkKey)
 	{
 		for (int i = 0; i < KeyCodes.Count; i++)
 		{
 			switch (OccurrenceMode)
 			{
-				case OccurrenceModeEnum.KEY_HAS_OCCURE:
+				case OccurrenceModeEnum.KEY_HAS_OCCUR:
 					if (checkKey(KeyCodes[i]) == true)
 					{
 						HandleOnKeyAction();
 						return;
 					}
 					break;
-				case OccurrenceModeEnum.KEY_HAS_NOT_OCCURE:
+				case OccurrenceModeEnum.KEY_HAS_NOT_OCCUR:
 					if (checkKey(KeyCodes[i]) == false)
 					{
 						HandleOnKeyAction();
@@ -123,19 +123,19 @@ public class KeyInput
 		}
 	}
 
-	private void CheckConcjution(Func<KeyCode, bool> checkKey)
+	private void CheckConjunction(Func<KeyCode, bool> checkKey)
 	{
 		for (int i = 0; i < KeyCodes.Count; i++)
 		{
 			switch (OccurrenceMode)
 			{
-				case OccurrenceModeEnum.KEY_HAS_OCCURE:
+				case OccurrenceModeEnum.KEY_HAS_OCCUR:
 					if (checkKey(KeyCodes[i]) == false)
 					{
 						return;
 					}
 					break;
-				case OccurrenceModeEnum.KEY_HAS_NOT_OCCURE:
+				case OccurrenceModeEnum.KEY_HAS_NOT_OCCUR:
 					if (checkKey(KeyCodes[i]) == true)
 					{
 						return;
@@ -181,8 +181,8 @@ public class KeyInput
 
 	public enum OccurrenceModeEnum
 	{
-		KEY_HAS_OCCURE,
-		KEY_HAS_NOT_OCCURE
+		KEY_HAS_OCCUR,
+		KEY_HAS_NOT_OCCUR
 	}
 
 	#endregion

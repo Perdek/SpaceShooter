@@ -19,9 +19,13 @@ public class UpdateManager : BaseMonoBehaviourSingletonManager<UpdateManager>
 
 	#region METHODS
 
-	protected virtual void FixedUpdate()
+	protected virtual void Update()
 	{
 		HandleOnUpdateInputInformation();
+	}
+
+	protected virtual void FixedUpdate()
+	{
 		HandleOnDataChange();
 		HandleOnUpdatePhysic();
 		HandleOnUpdateView();
