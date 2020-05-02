@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -308,6 +309,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.27450982, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -381,6 +383,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -431,11 +434,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 787421275}
     m_Modifications:
-    - target: {fileID: 1503772590190289885, guid: cc01c7e3c92e8c343b73fb3b8386445f,
-        type: 3}
-      propertyPath: m_Name
-      value: PoolManager
-      objectReference: {fileID: 0}
     - target: {fileID: 1503772590190289882, guid: cc01c7e3c92e8c343b73fb3b8386445f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -506,6 +504,11 @@ PrefabInstance:
       propertyPath: poolList.Array.data[1].tag
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1503772590190289885, guid: cc01c7e3c92e8c343b73fb3b8386445f,
+        type: 3}
+      propertyPath: m_Name
+      value: PoolManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc01c7e3c92e8c343b73fb3b8386445f, type: 3}
 --- !u!1001 &578976677
@@ -515,11 +518,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 787421275}
     m_Modifications:
-    - target: {fileID: 9043486319791178517, guid: c083d562ba9a6c94c881cb8f20426048,
-        type: 3}
-      propertyPath: m_Name
-      value: PlayerManager
-      objectReference: {fileID: 0}
     - target: {fileID: 9043486319791178515, guid: c083d562ba9a6c94c881cb8f20426048,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -580,6 +578,11 @@ PrefabInstance:
       propertyPath: playerMainController
       value: 
       objectReference: {fileID: 70875439}
+    - target: {fileID: 9043486319791178517, guid: c083d562ba9a6c94c881cb8f20426048,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c083d562ba9a6c94c881cb8f20426048, type: 3}
 --- !u!1 &680775708
@@ -690,6 +693,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.27450982, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -819,6 +823,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.27450982, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -948,6 +953,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.27450982, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1040,6 +1046,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1231,8 +1238,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 955646453}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -1349,6 +1357,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1426,6 +1435,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1569,6 +1579,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1768,11 +1779,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1351653642}
     m_Modifications:
-    - target: {fileID: 664811274800005388, guid: 49889a9e07fb16c4e98ef5efcd54bdff,
-        type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 664811274800005387, guid: 49889a9e07fb16c4e98ef5efcd54bdff,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1827,6 +1833,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 664811274800005388, guid: 49889a9e07fb16c4e98ef5efcd54bdff,
+        type: 3}
+      propertyPath: m_Name
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4443528417976763808, guid: 49889a9e07fb16c4e98ef5efcd54bdff,
         type: 3}
@@ -1999,6 +2010,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.27450982, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
