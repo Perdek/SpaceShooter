@@ -13,14 +13,32 @@ public class AsteroidCollisionComponent
 
 	#region PROPERTIES
 
+	private int DamageCollisionValue {
+		get;
+		set;
+	} = 1;
+
 	#endregion
 
 	#region METHODS
+
+	public void SetDamageCollisionValue(int newValue)
+	{
+		DamageCollisionValue = newValue;
+	}
 
 	public void HandleCollision(Collider2D other)
 	{
 		if (other.GetComponent<SceneBottonCollider>() != null || other.GetComponent<Bullet>() != null)
 		{
+			OnHit();
+		}
+
+		PlayerColliderController playerCollider = other.GetComponentInChildren<PlayerColliderController>();
+
+		if (playerCollider != null)
+		{
+			playerCollider.DamageCollision(DamageCollisionValue);
 			OnHit();
 		}
 	}

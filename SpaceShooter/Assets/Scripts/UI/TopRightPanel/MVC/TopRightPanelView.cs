@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,8 +25,20 @@ public class TopRightPanelView : View
 
 	public void RefreshView(int hpPoints, int shieldPoints)
 	{
-        HpPanel.RefreshPanel(hpPoints);
-        ShieldsPanel.RefreshPanel(shieldPoints);
+		HpPanel.RefreshPanel(hpPoints);
+		ShieldsPanel.RefreshPanel(shieldPoints);
+	}
+
+	public void AttachEvents()
+	{
+		HpPanel.AttachEvents();
+		ShieldsPanel.AttachEvents();
+	}
+
+	public void DetachEvents()
+	{
+		HpPanel.DetachEvents();
+		ShieldsPanel.DetachEvents();
 	}
 
 	#endregion

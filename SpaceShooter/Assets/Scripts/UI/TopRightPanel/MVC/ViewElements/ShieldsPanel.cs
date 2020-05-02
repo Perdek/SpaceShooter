@@ -35,32 +35,51 @@ public class ShieldsPanel
 		FillPanel(playerShields);
 	}
 
+	public void AttachEvents()
+	{
+		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsAdd += AddUIElement;
+		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsRemove += RemoveUIElement;
+	}
+
+	public void DetachEvents()
+	{
+		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsAdd -= AddUIElement;
+		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsRemove -= RemoveUIElement;
+	}
+
 	private void ClearPanel()
 	{
 		for (int i = ShieldsUIElements.Count - 1; i >= 0; i--)
 		{
-            RemoveUIElement(ShieldsUIElements[i]);
+			RemoveUIElement(ShieldsUIElements[i]);
 		}
+	}
+
+	private void RemoveUIElement()
+	{
+		GameObject.Destroy(ShieldsUIElements[ShieldsUIElements.Count - 1].gameObject);
+		ShieldsUIElements.Remove(ShieldsUIElements[ShieldsUIElements.Count - 1].gameObject);
 	}
 
 	private void RemoveUIElement(GameObject uiElement)
 	{
 		GameObject.Destroy(uiElement.gameObject);
-        ShieldsUIElements.Remove(uiElement);
+		ShieldsUIElements.Remove(uiElement);
 	}
 
 	private void FillPanel(int playerShields)
 	{
 		for (int i = 0; i < playerShields; i++)
-        {
-            AddUIElement();
-        }
+		{
+			AddUIElement();
+		}
 	}
 
 	private void AddUIElement()
 	{
 		GameObject newUIElement = GameObject.Instantiate(ShieldsUIElementPrefab, ShieldsContentTransform);
-        ShieldsUIElements.Add(newUIElement);
+		newUIElement.SetActive(true);
+		ShieldsUIElements.Add(newUIElement);
 	}
 
 	#endregion

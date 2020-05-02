@@ -15,8 +15,8 @@ public class Controller : MonoBehaviour
 
 	#region PROPERTIES
 
-	public View ViewModule => viewModule;
-	public Model ModelModule => modelModule;
+	protected View ViewModule => viewModule;
+	protected Model ModelModule => modelModule;
 
 	#endregion
 
@@ -36,6 +36,11 @@ public class Controller : MonoBehaviour
 	public T GetView<T>() where T : View
 	{
 		return ViewModule as T;
+	}
+
+	private void Awake()
+	{
+		Initialize();
 	}
 
 	#endregion

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ using UnityEngine;
 public class PlayerColliderController : MonoBehaviour
 {
 	#region FIELDS
+
+	public event Action<int> OnDamageCollision = delegate { };
 
 	#endregion
 
@@ -15,9 +18,15 @@ public class PlayerColliderController : MonoBehaviour
 
 	#region METHODS
 
+	public void DamageCollision(int damageCollisionValue)
+	{
+		OnDamageCollision(damageCollisionValue);
+	}
+
 	#endregion
 
 	#region ENUMS
 
 	#endregion
+
 }

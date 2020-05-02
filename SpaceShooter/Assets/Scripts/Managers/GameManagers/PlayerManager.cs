@@ -24,6 +24,11 @@ public class PlayerManager : BaseMonoBehaviourSingletonManager<PlayerManager>
 		PlayerMainController.Initialize();
 	}
 
+	public (int, int) GetPlayerStatistics()
+	{
+		return (PlayerMainController.PlayerStatisticsController.HealthPoints, PlayerMainController.PlayerStatisticsController.ShieldsPoints);
+	}
+
 	#endregion
 
 	#region ENUMS

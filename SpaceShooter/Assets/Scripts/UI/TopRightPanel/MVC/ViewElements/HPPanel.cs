@@ -35,32 +35,51 @@ public class HPPanel
 		FillPanel(playerHP);
 	}
 
+	public void AttachEvents()
+	{
+		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsAdd += AddUIElement;
+		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsRemove += RemoveUIElement;
+	}
+
+	public void DetachEvents()
+	{
+		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsAdd -= AddUIElement;
+		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsRemove -= RemoveUIElement;
+	}
+
 	private void ClearPanel()
 	{
 		for (int i = HPUIElements.Count - 1; i >= 0; i--)
 		{
-            RemoveUIElement(HPUIElements[i]);
+			RemoveUIElement(HPUIElements[i]);
 		}
+	}
+
+	private void RemoveUIElement()
+	{
+		GameObject.Destroy(HPUIElements[HPUIElements.Count - 1].gameObject);
+		HPUIElements.Remove(HPUIElements[HPUIElements.Count - 1].gameObject);
 	}
 
 	private void RemoveUIElement(GameObject uiElement)
 	{
 		GameObject.Destroy(uiElement.gameObject);
-        HPUIElements.Remove(uiElement);
+		HPUIElements.Remove(uiElement);
 	}
 
 	private void FillPanel(int playerHP)
 	{
 		for (int i = 0; i < playerHP; i++)
-        {
-            AddUIElement();
-        }
+		{
+			AddUIElement();
+		}
 	}
 
 	private void AddUIElement()
 	{
 		GameObject newUIElement = GameObject.Instantiate(HPUIElementPrefab, HpContentTransform);
-        HPUIElements.Add(newUIElement);
+		newUIElement.SetActive(true);
+		HPUIElements.Add(newUIElement);
 	}
 
 	#endregion

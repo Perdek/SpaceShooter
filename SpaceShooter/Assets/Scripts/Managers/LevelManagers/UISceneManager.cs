@@ -2,17 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UISceneManager : MonoBehaviour
+public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	#region MEMBERS
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	[SerializeField]
+	private TopRightPanelController topRightPanel = null;
+
+	#endregion
+
+	#region PROPERTIES
+
+	private TopRightPanelController TopRightPanel => topRightPanel;
+
+	#endregion
+
+	#region METHODS
+
+	public void RefreshUI()
+	{
+		TopRightPanel.RefreshPanel(PlayerManager.Instance.GetPlayerStatistics());
+	}
+
+	#endregion
+
+	#region CLASS_ENUMS
+
+	#endregion
 }

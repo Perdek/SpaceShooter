@@ -107,6 +107,12 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		{
 			LevelManager.Instance.StartLevel();
 		}
+
+		if (UISceneManager.Instance != null)
+		{
+			UISceneManager.Instance.Initialize();
+			UISceneManager.Instance.RefreshUI();
+		}
 	}
 
 	private void SingletonsInitializes()
