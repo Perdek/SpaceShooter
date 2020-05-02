@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerShootingController : MonoBehaviour
+[System.Serializable]
+public class PlayerShootingController
 {
 	#region FIELDS
 

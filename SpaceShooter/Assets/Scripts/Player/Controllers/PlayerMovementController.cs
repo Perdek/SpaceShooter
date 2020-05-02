@@ -3,10 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovementController : MonoBehaviour
+[System.Serializable]
+public class PlayerMovementController
 {
 	#region FIELDS
 
+	private const float MIN_SPEED_TO_SET = 0;
+	private const float MAX_SPEED_TO_SET = 100;
+
+	[Header("Movement")]
+	[SerializeField, Range(MIN_SPEED_TO_SET, MAX_SPEED_TO_SET)]
+	private float maxSpeed = 1;
+	[SerializeField]
+	private float accelerationFactory = 1;
+	[SerializeField]
+	private float brakingFactory = 1;
 	[SerializeField]
 	private Rigidbody2D playerRigidBody2D = null;
 	private MovingStateEnum state = MovingStateEnum.IDLE;
@@ -15,26 +26,26 @@ public class PlayerMovementController : MonoBehaviour
 
 	#region PROPERTIES
 
-	public Rigidbody2D PlayerRigidBody2D => playerRigidBody2D;
+	private Rigidbody2D PlayerRigidBody2D => playerRigidBody2D;
 
-	public float AccelerationFactory {
-		get;
-		private set;
-	} = 1;
+	private float AccelerationFactory {
+		get => accelerationFactory;
+		set => accelerationFactory = value;
+	}
 
-	public float BrakingFactory {
-		get;
-		private set;
-	} = 1;
+	private float BrakingFactory {
+		get => brakingFactory;
+		set => brakingFactory = value;
+	}
 
-	public float MaxSpeed {
-		get;
-		private set;
-	} = 1;
+	private float MaxSpeed {
+		get => maxSpeed;
+		set => maxSpeed = value;
+	}
 
-	public MovingStateEnum State {
+	private MovingStateEnum State {
 		get => state;
-		private set => state = value;
+		set => state = value;
 	}
 
 	private List<int> KeysIds {
@@ -46,28 +57,10 @@ public class PlayerMovementController : MonoBehaviour
 
 	#region METHODS
 
-	public void Initialize(float newAccelerationFactory, float newBrakingFactory, float newMaxSpeed)
+	public void Initialize()
 	{
 		InitializeKeys();
-		SetAccelerationFactory(newAccelerationFactory);
-		SetBrakingFactory(newBrakingFactory);
-		SetMaxSpeed(newMaxSpeed);
 		InitializeUpdate();
-	}
-
-	public void SetAccelerationFactory(float newAccelerationFactory)
-	{
-		AccelerationFactory = newAccelerationFactory;
-	}
-
-	public void SetMaxSpeed(float newMaxSpeed)
-	{
-		MaxSpeed = newMaxSpeed;
-	}
-
-	public void SetBrakingFactory(float newBreakingFactory)
-	{
-		BrakingFactory = newBreakingFactory;
 	}
 
 	public void MoveUp()
@@ -152,7 +145,7 @@ public class PlayerMovementController : MonoBehaviour
 
 	private void DetachKeysForMovement()
 	{
-		for (int i = KeysIds.Count - 1; i >= 0 ; i--)
+		for (int i = KeysIds.Count - 1; i >= 0; i--)
 		{
 			KeyboardManager.Instance.RemoveKey(KeysIds[i]);
 			KeysIds.RemoveAt(i);
