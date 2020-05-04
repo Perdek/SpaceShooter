@@ -69,7 +69,7 @@ public class PlayerStatisticsController
 	{
 		for (int i = 0; i < damage; i++)
 		{
-			if (IsPlayerAlive() == true)
+			if (IsPlayerAlive() == false)
 			{
 				OnPlayerDead();
 				return;
