@@ -12,13 +12,26 @@ public class AsteroidViewComponent
 
 	#region PROPERTIES
 
+	private Transform AsteroidTransform {
+		get;
+		set;
+	} = null;
+
 	#endregion
 
 	#region METHODS
 
+	public void SetAsteroidTranform(Transform asteroidTransform)
+	{
+		AsteroidTransform = asteroidTransform;
+	}
+
 	public void Explosion()
 	{
-		Debug.Log("Explosion");
+		if (PoolManager.Instance != null)
+		{
+			PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.ASTEROID_EXPLOSION_TAG, AsteroidTransform.position, AsteroidTransform.rotation);
+		}
 	}
 
 	#endregion

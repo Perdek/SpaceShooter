@@ -62,6 +62,7 @@ public class Asteroid : BasePoolObject
 	private void Initialize()
 	{
 		MovementComponent.Initialize();
+		ViewComponent.SetAsteroidTranform(this.transform);
 	}
 
 	private void Terminate()

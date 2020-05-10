@@ -45,12 +45,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolList:
   - tag: 0
-    size: 5
+    size: 50
     poolPrefab: {fileID: 7776014728476065519, guid: dbf7c81d2dabf8648b0b6434a27989e7,
       type: 3}
   - tag: 1
-    size: 5
+    size: 20
     poolPrefab: {fileID: 5871493446619282462, guid: 2a2bd286ded3ef046874a74998e0b85f,
+      type: 3}
+  - tag: 2
+    size: 20
+    poolPrefab: {fileID: 1894023344422044527, guid: 3d7e7f7e585d1594fb6f211ccddac21d,
       type: 3}
   poolObjectsParentPrefab: {fileID: 4211724078361536507, guid: 74ef8775db1e70b49904981d41e01c79,
     type: 3}

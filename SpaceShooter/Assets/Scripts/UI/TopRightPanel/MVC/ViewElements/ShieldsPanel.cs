@@ -37,14 +37,20 @@ public class ShieldsPanel
 
 	public void AttachEvents()
 	{
-		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsAdd += AddUIElement;
-		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsRemove += RemoveUIElement;
+		if (PlayerManager.Instance != null && PlayerManager.Instance.PlayerMainController != null)
+		{
+			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsAdd += AddUIElement;
+			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsRemove += RemoveUIElement;
+		}
 	}
 
 	public void DetachEvents()
 	{
-		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsAdd -= AddUIElement;
-		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsRemove -= RemoveUIElement;
+		if (PlayerManager.Instance != null && PlayerManager.Instance.PlayerMainController != null)
+		{
+			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsAdd -= AddUIElement;
+			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsRemove -= RemoveUIElement;
+		}
 	}
 
 	private void ClearPanel()

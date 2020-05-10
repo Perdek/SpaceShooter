@@ -22,6 +22,7 @@ public class TagManager : BaseSingletonManager<TagManager>
 	{
 		PLAYER_BULLET_TAG,
 		ASTEROID_TAG,
+		ASTEROID_EXPLOSION_TAG
 	}
 
 	#endregion
