@@ -30,8 +30,9 @@ public class TopRightPanelController : Controller
 		View.RefreshView(playerStatistics.hp, playerStatistics.shields);
 	}
 
-	protected virtual void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
 		PrepareProperties();
 		AttachEvents();
 	}

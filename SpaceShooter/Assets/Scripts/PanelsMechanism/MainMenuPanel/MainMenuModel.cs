@@ -17,8 +17,7 @@ public class MainMenuModel : Model
 
 	public void StartGame()
 	{
-		UnityEngine.SceneManagement.SceneManager.LoadScene(ScenesNamesManager.Level01);
-		GameMainManager.Instance.SetGameStateAsGame();
+		GameMainManager.Instance.StartGame();
 	}
 
 	#endregion

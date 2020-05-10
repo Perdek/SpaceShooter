@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
@@ -53,6 +54,11 @@ public class SpawnPoint : MonoBehaviour
 		PoolManager.Instance.GetPoolObject(PoolObjectTag, this.transform.position, this.transform.rotation);
 		CurrentSpawnedObjectNumber++;
 		HandleSpawnEnd();
+	}
+
+	public void EndLevel()
+	{
+		SpawningTimer.EndCounting();
 	}
 
 	private void HandleSpawnEnd()

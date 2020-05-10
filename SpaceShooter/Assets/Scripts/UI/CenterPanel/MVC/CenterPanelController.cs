@@ -35,9 +35,19 @@ public class CenterPanelController : Controller
 		GameMainManager.Instance.OnGameOver -= View.ShowCenterPanel;
 	}
 
+	public bool IsShowedCenterPanel()
+	{
+		return View.IsShowedCenterPanel();
+	}
+
 	public void ShowGameOverPanel()
 	{
 		View.ShowCenterPanel();
+	}
+
+	public void BackToMenu()
+	{
+		Model.BackToMenu();
 	}
 
 	protected override void Awake()

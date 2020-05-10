@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 {
@@ -16,7 +17,12 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 	#region PROPERTIES
 
 	private TopRightPanelController TopRightPanel => topRightPanel;
-	public CenterPanelController CenterPanel => centerPanel;
+	private CenterPanelController CenterPanel => centerPanel;
+
+	private int KeyIdForOpenMenu {
+		get;
+		set;
+	} = 0;
 
 	#endregion
 
@@ -32,9 +38,27 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 		AttachEvents();
 	}
 
+	protected void OnDestroy()
+	{
+		DetachEvents();
+	}
+
 	private void AttachEvents()
 	{
 		GameMainManager.Instance.OnGameOver += CenterPanel.ShowGameOverPanel;
+		KeyIdForOpenMenu = KeyboardManager.Instance.AddKey(KeyCode.Escape, OpenLevelMenu);
+	}
+
+	private void DetachEvents()
+	{
+		GameMainManager.Instance.OnGameOver -= CenterPanel.ShowGameOverPanel;
+		KeyboardManager.Instance.RemoveKey(KeyIdForOpenMenu);
+	}
+
+	private void OpenLevelMenu()
+	{
+		UpdateManager.Instance.PauseTime();
+		CenterPanel.ShowGameOverPanel();
 	}
 
 	#endregion

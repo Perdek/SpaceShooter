@@ -7,6 +7,9 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 {
 	#region FIELDS
 
+	public event Action OnLevelStart = delegate { };
+	public event Action OnLevelEnd = delegate { };
+
 	[SerializeField]
 	private List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
 
@@ -45,6 +48,8 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 		{
 			SpawnPoints[i].StartSpawn();
 		}
+
+		OnLevelStart();
 	}
 
 	public void EndLevel()
@@ -53,7 +58,12 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 		{
 			SpawnPoints[i].OnSpawn -= UpdateEnemyCount;
 			SpawnPoints[i].OnSpawnEnd -= UpdateFinishedSpawnPoints;
+			SpawnPoints[i].EndLevel();
 		}
+
+		SpawnPoints.Clear();
+
+		OnLevelEnd();
 	}
 
 	private void UpdateFinishedSpawnPoints()

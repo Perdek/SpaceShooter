@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using UnityEngine.PlayerLoop;
 
 public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager>
 {
@@ -58,8 +59,9 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		State = newState;
 	}
 
-	public void SetGameStateAsGame()
+	public void StartGame()
 	{
+		SceneManager.LoadScene(ScenesNamesManager.Level01);
 		SetGameState(GameState.GAME);
 		OnGameStart();
 	}
@@ -70,12 +72,21 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		OnGameOver();
 	}
 
+	public void OpenMenu()
+	{
+		UpdateManager.UnPauseTime();
+		SceneManager.LoadScene(ScenesNamesManager.MainSceneName);
+		SetGameState(GameState.MENU);
+		OnMainOpen();
+	}
+
 	protected virtual void Awake()
 	{
 		SingletonsInitializes();
 		ManagersInitialize();
 		DontDestroyOnLoad(this);
 		AttachInternalEvents();
+		OpenMenu();
 	}
 
 	protected virtual void OnDestroy()
@@ -105,7 +116,10 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
-		StartLevel();
+		if (scene.name != ScenesNamesManager.MainSceneName)
+		{
+			StartLevel();
+		}
 	}
 
 	private void StartLevel()

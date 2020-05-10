@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -34,9 +35,14 @@ public class CenterPanelView : View
 		CenterPanelGameObject.SetActive(false);
 	}
 
-	#endregion
+	public bool IsShowedCenterPanel()
+    {
+		return CenterPanelGameObject.activeInHierarchy;
+	}
 
-	#region CLASS_ENUMS
+    #endregion
 
-	#endregion
+    #region CLASS_ENUMS
+
+    #endregion
 }

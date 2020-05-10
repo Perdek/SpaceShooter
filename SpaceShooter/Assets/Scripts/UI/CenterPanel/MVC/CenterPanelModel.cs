@@ -1,22 +1,29 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CenterPanelModel : Model
 {
-	#region MEMBERS
+    #region MEMBERS
 
-	#endregion
+    #endregion
 
-	#region PROPERTIES
+    #region PROPERTIES
 
-	#endregion
+    #endregion
 
-	#region METHODS
+    #region METHODS
 
-	#endregion
+    public void BackToMenu()
+    {
+        LevelManager.Instance.EndLevel();
+        GameMainManager.Instance.OpenMenu();
+    }
 
-	#region CLASS_ENUMS
+    #endregion
 
-	#endregion
+    #region CLASS_ENUMS
+
+    #endregion
 }
