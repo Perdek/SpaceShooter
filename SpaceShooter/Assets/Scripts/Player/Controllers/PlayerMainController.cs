@@ -41,6 +41,7 @@ public class PlayerMainController : MonoBehaviour
 	{
 		GameMainManager.Instance.OnGameStart += AttachInterControllersEvents;
 		GameMainManager.Instance.OnMainOpen += DetachInterControllersEvents;
+		PlayerStatisticsController.OnPlayerDead += GameMainManager.Instance.GameOver;
 	}
 
 	private void AttachInterControllersEvents()

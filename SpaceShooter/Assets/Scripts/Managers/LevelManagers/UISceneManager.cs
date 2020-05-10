@@ -8,12 +8,15 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 
 	[SerializeField]
 	private TopRightPanelController topRightPanel = null;
+	[SerializeField]
+	private CenterPanelController centerPanel = null;
 
 	#endregion
 
 	#region PROPERTIES
 
 	private TopRightPanelController TopRightPanel => topRightPanel;
+	public CenterPanelController CenterPanel => centerPanel;
 
 	#endregion
 
@@ -22,6 +25,16 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 	public void RefreshUI()
 	{
 		TopRightPanel.RefreshPanel(PlayerManager.Instance.GetPlayerStatistics());
+	}
+
+	protected void Awake()
+	{
+		AttachEvents();
+	}
+
+	private void AttachEvents()
+	{
+		GameMainManager.Instance.OnGameOver += CenterPanel.ShowGameOverPanel;
 	}
 
 	#endregion

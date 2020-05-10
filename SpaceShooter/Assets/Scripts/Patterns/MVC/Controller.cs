@@ -38,7 +38,7 @@ public class Controller : MonoBehaviour
 		return ViewModule as T;
 	}
 
-	private void Awake()
+	protected virtual void Awake()
 	{
 		Initialize();
 	}

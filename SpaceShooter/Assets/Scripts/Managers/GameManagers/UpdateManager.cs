@@ -19,6 +19,16 @@ public class UpdateManager : BaseMonoBehaviourSingletonManager<UpdateManager>
 
 	#region METHODS
 
+	public void PauseTime()
+	{
+		Time.timeScale = 0;
+	}
+
+	public void UnPauseTime()
+	{
+		Time.timeScale = 1;
+	}
+
 	protected virtual void Update()
 	{
 		HandleOnUpdateInputInformation();

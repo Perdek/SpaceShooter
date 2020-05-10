@@ -9,6 +9,7 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 
 	public event Action OnGameStart = delegate { };
 	public event Action OnMainOpen = delegate { };
+	public event Action OnGameOver = delegate { };
 
 	[SerializeField]
 	private PlayerManager playerManager = null;
@@ -61,6 +62,12 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 	{
 		SetGameState(GameState.GAME);
 		OnGameStart();
+	}
+
+	public void GameOver()
+	{
+		UpdateManager.PauseTime();
+		OnGameOver();
 	}
 
 	protected virtual void Awake()

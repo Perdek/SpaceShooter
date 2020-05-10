@@ -93,7 +93,7 @@ public class PlayerStatisticsController
 
 	private bool IsPlayerAlive()
 	{
-		return HealthPoints >= 0;
+		return HealthPoints > 0;
 	}
 
 	#endregion

@@ -37,14 +37,20 @@ public class HPPanel
 
 	public void AttachEvents()
 	{
-		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsAdd += AddUIElement;
-		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsRemove += RemoveUIElement;
+		if (PlayerManager.Instance != null)
+		{
+			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsAdd += AddUIElement;
+			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsRemove += RemoveUIElement;
+		}
 	}
 
 	public void DetachEvents()
 	{
-		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsAdd -= AddUIElement;
-		PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsRemove -= RemoveUIElement;
+		if (PlayerManager.Instance != null && PlayerManager.Instance.PlayerMainController != null)
+		{
+			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsAdd -= AddUIElement;
+			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsRemove -= RemoveUIElement;
+		}
 	}
 
 	private void ClearPanel()
