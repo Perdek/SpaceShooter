@@ -37,7 +37,7 @@ public class ShieldsPanel
 
 	public void AttachEvents()
 	{
-		if (PlayerManager.Instance != null && PlayerManager.Instance.PlayerMainController != null)
+		if (PlayerManager.IsInstantiated == true && PlayerManager.Instance.PlayerMainController != null)
 		{
 			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsAdd += AddUIElement;
 			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsRemove += RemoveUIElement;
@@ -46,7 +46,7 @@ public class ShieldsPanel
 
 	public void DetachEvents()
 	{
-		if (PlayerManager.Instance != null && PlayerManager.Instance.PlayerMainController != null)
+		if (PlayerManager.IsInstantiated == true && PlayerManager.Instance.PlayerMainController != null)
 		{
 			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsAdd -= AddUIElement;
 			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnShieldsPointsRemove -= RemoveUIElement;

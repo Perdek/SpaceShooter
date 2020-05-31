@@ -5,7 +5,7 @@ public class SpawnPoint : MonoBehaviour
 {
 	#region FIELDS
 
-	public event System.Action OnSpawn = delegate { };
+	public event System.Action<BasePoolObject> OnSpawn = delegate { };
 	public event System.Action OnSpawnEnd = delegate { };
 
 	[SerializeField]
@@ -51,8 +51,9 @@ public class SpawnPoint : MonoBehaviour
 
 	public void Spawn()
 	{
-		PoolManager.Instance.GetPoolObject(PoolObjectTag, this.transform.position, this.transform.rotation);
+		BasePoolObject basePoolObject = PoolManager.Instance.GetPoolObject(PoolObjectTag, this.transform.position, this.transform.rotation);
 		CurrentSpawnedObjectNumber++;
+		OnSpawn(basePoolObject);
 		HandleSpawnEnd();
 	}
 

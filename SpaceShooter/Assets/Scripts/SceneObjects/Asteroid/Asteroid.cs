@@ -1,16 +1,16 @@
 ﻿using System;
 using UnityEngine;
 
-public class Asteroid : BasePoolObject
+public class Asteroid : Enemy
 {
 	#region FIELDS
 
 	[SerializeField]
-	private AsteroidCollisionComponent collisionComponent;
+	private AsteroidCollisionComponent collisionComponent = null;
 	[SerializeField]
-	private AsteroidMovementComponent movementComponent;
+	private AsteroidMovementComponent movementComponent = null;
 	[SerializeField]
-	private AsteroidViewComponent viewComponent;
+	private AsteroidViewComponent viewComponent = null;
 
 	#endregion
 

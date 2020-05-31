@@ -17,6 +17,12 @@ public abstract class BaseSingletonManager<T> where T : class
 		private set => instance = value;
 	}
 
+	public static bool IsInstantiated {
+		get {
+			return instance == null;
+		}
+	}
+
 	#endregion
 
 	#region METHODS

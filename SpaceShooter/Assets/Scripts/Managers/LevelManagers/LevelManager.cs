@@ -5,89 +5,113 @@ using UnityEngine;
 
 public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 {
-	#region FIELDS
+    #region FIELDS
 
-	public event Action OnLevelStart = delegate { };
-	public event Action OnLevelEnd = delegate { };
+    public event Action OnLevelStart = delegate { };
+    public event Action OnLevelEnd = delegate { };
 
-	[SerializeField]
-	private List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
+    [SerializeField]
+    private List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
 
-	#endregion
+    #endregion
 
-	#region PROPERTIES
+    #region PROPERTIES
 
-	public List<SpawnPoint> SpawnPoints => spawnPoints;
+    public List<SpawnPoint> SpawnPoints => spawnPoints;
 
-	private int FinishedSpawnPoints {
-		get;
-		set;
-	} = 0;
+    private int FinishedSpawnPoints {
+        get;
+        set;
+    } = 0;
 
-	private int EnemyCount {
-		get;
-		set;
-	} = 0;
+    private int EnemyCount {
+        get;
+        set;
+    } = 0;
 
-	#endregion
+    #endregion
 
-	#region METHODS
+    #region METHODS
 
-	public override void Initialize()
-	{
-		for (int i = 0; i < SpawnPoints.Count; i++)
-		{
-			SpawnPoints[i].OnSpawn += UpdateEnemyCount;
-			SpawnPoints[i].OnSpawnEnd += UpdateFinishedSpawnPoints;
-		}
-	}
+    public override void Initialize()
+    {
+        for (int i = 0; i < SpawnPoints.Count; i++)
+        {
+            SpawnPoints[i].OnSpawn += HandleEnemySpawn;
+            SpawnPoints[i].OnSpawnEnd += UpdateFinishedSpawnPoints;
+        }
+    }
 
-	public void StartLevel()
-	{
-		for (int i = 0; i < SpawnPoints.Count; i++)
-		{
-			SpawnPoints[i].StartSpawn();
-		}
+    public void StartLevel()
+    {
+        for (int i = 0; i < SpawnPoints.Count; i++)
+        {
+            SpawnPoints[i].StartSpawn();
+            AddEnemyCount(SpawnPoints[i].SpawnObjectsLimit);
+        }
 
-		OnLevelStart();
-	}
+        OnLevelStart();
+    }
 
-	public void EndLevel()
-	{
-		for (int i = 0; i < SpawnPoints.Count; i++)
-		{
-			SpawnPoints[i].OnSpawn -= UpdateEnemyCount;
-			SpawnPoints[i].OnSpawnEnd -= UpdateFinishedSpawnPoints;
-			SpawnPoints[i].EndLevel();
-		}
+    public void EndLevel()
+    {
+        for (int i = 0; i < SpawnPoints.Count; i++)
+        {
+            SpawnPoints[i].OnSpawn -= HandleEnemySpawn;
+            SpawnPoints[i].OnSpawnEnd -= UpdateFinishedSpawnPoints;
+            SpawnPoints[i].EndLevel();
+        }
 
-		SpawnPoints.Clear();
+        SpawnPoints.Clear();
 
-		OnLevelEnd();
-	}
+        OnLevelEnd();
+    }
 
-	private void UpdateFinishedSpawnPoints()
-	{
-		FinishedSpawnPoints++;
-		HandleFinishedSpawnPoints();
-	}
+    protected virtual void Awake()
+    {
+        SingletonInitialization();
+        Initialize();
+    }
 
-	private void HandleFinishedSpawnPoints()
-	{
-		if (FinishedSpawnPoints == SpawnPoints.Count)
-		{
+    private void UpdateFinishedSpawnPoints()
+    {
+        FinishedSpawnPoints++;
+        HandleCheckLevelEnd();
+    }
 
-		}
-	}
+    private void HandleEnemySpawn(BasePoolObject spawnedEnemy)
+    {
+        spawnedEnemy.OnDeactivation += HandleEnemyDeactivation;
+    }
 
-	private void UpdateEnemyCount()
-	{
-		EnemyCount++;
-	}
+    private void HandleEnemyDeactivation(BasePoolObject destroyedEnemy)
+    {
+        destroyedEnemy.OnDeactivation -= HandleEnemyDeactivation;
+        DescreseEnemyCount();
+        HandleCheckLevelEnd();
+    }
 
-	#endregion
+    private void HandleCheckLevelEnd()
+    {
+        if (FinishedSpawnPoints == SpawnPoints.Count && EnemyCount == 0)
+        {
+            EndLevel();
+        }
+    }
 
-	#region ENUMS
+    private void DescreseEnemyCount()
+    {
+        EnemyCount--;
+    }
 
-	#endregion
+    private void AddEnemyCount(int amount)
+    {
+        EnemyCount += amount;
+    }
+
+    #endregion
+
+    #region ENUMS
+
+    #endregion
 }

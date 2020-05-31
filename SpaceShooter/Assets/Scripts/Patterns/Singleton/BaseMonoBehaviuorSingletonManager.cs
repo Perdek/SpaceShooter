@@ -33,6 +33,12 @@ public class BaseMonoBehaviourSingletonManager<T> : MonoBehaviour where T : Mono
 		private set => instance = value;
 	}
 
+	public static bool IsInstantiated {
+		get {
+			return instance != null;
+		}
+	}
+
 	#endregion
 
 	#region METHODS

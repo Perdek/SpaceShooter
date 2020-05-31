@@ -9,7 +9,7 @@ public class BasePoolObject : MonoBehaviour
 
 	public event Action OnHandleObjectSpawn = delegate { };
 	public event Action<PoolObjectStateEnum> OnStateChange = delegate { };
-	public event Action OnDeactivation = delegate { };
+	public event Action<BasePoolObject> OnDeactivation = delegate { };
 
 	#endregion
 
@@ -39,7 +39,7 @@ public class BasePoolObject : MonoBehaviour
 	{
 		SetState(PoolObjectStateEnum.WAITING_FOR_USE);
 		gameObject.SetActive(false);
-		OnDeactivation();
+		OnDeactivation(this);
 	}
 
 	#endregion

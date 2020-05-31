@@ -47,12 +47,25 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 	{
 		GameMainManager.Instance.OnGameOver += CenterPanel.ShowGameOverPanel;
 		KeyIdForOpenMenu = KeyboardManager.Instance.AddKey(KeyCode.Escape, OpenLevelMenu);
+		LevelManager.Instance.OnLevelEnd += CenterPanel.ShowGameOverPanel;
 	}
 
 	private void DetachEvents()
 	{
-		GameMainManager.Instance.OnGameOver -= CenterPanel.ShowGameOverPanel;
-		KeyboardManager.Instance.RemoveKey(KeyIdForOpenMenu);
+		if (GameMainManager.IsInstantiated == true)
+		{
+			GameMainManager.Instance.OnGameOver -= CenterPanel.ShowGameOverPanel;
+		}
+
+		if (KeyboardManager.IsInstantiated == true)
+		{
+			KeyboardManager.Instance.RemoveKey(KeyIdForOpenMenu);
+		}
+
+		if (LevelManager.IsInstantiated == true)
+		{
+			LevelManager.Instance.OnLevelEnd -= CenterPanel.ShowGameOverPanel;
+		}
 	}
 
 	private void OpenLevelMenu()

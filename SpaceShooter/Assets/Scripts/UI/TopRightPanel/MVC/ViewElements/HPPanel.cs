@@ -37,7 +37,7 @@ public class HPPanel
 
 	public void AttachEvents()
 	{
-		if (PlayerManager.Instance != null)
+		if (PlayerManager.IsInstantiated == true)
 		{
 			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsAdd += AddUIElement;
 			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsRemove += RemoveUIElement;
@@ -46,7 +46,7 @@ public class HPPanel
 
 	public void DetachEvents()
 	{
-		if (PlayerManager.Instance != null && PlayerManager.Instance.PlayerMainController != null)
+		if (PlayerManager.IsInstantiated == true && PlayerManager.Instance.PlayerMainController != null)
 		{
 			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsAdd -= AddUIElement;
 			PlayerManager.Instance.PlayerMainController.PlayerStatisticsController.OnHealthPointsRemove -= RemoveUIElement;

@@ -7,6 +7,8 @@ public class ParticleEffect : BasePoolObject
 	#region MEMBERS
 
 	[SerializeField]
+	private float lifeTime = 1.0f;
+	[SerializeField]
 	private ParticleSystem particleSystem = null;
 
 	#endregion
@@ -14,6 +16,7 @@ public class ParticleEffect : BasePoolObject
 	#region PROPERTIES
 
 	private ParticleSystem ParticleSystem => particleSystem;
+	private float LifeTime => lifeTime;
 
 	private Timer LifeTimer {
 		get;
@@ -46,7 +49,8 @@ public class ParticleEffect : BasePoolObject
 
 	private void HandleLifeTime()
 	{
-		LifeTimer = new Timer(0, ParticleSystem.time, Deactivation);
+		LifeTimer = new Timer(0, LifeTime, Deactivation);
+		LifeTimer.StartCounting();
 	}
 
 	#endregion

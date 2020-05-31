@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ddb16715f84e84483ecb955b806792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyInformation: {fileID: 11400000, guid: b0e93257d8477574196f4a51674e2830, type: 2}
   movementComponent:
     speedFactory: 5
     speedLotteryRangeFactor: 1

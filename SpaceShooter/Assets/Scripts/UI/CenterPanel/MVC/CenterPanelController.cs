@@ -32,7 +32,10 @@ public class CenterPanelController : Controller
 
 	public void DetachEvents()
 	{
-		GameMainManager.Instance.OnGameOver -= View.ShowCenterPanel;
+		if (GameMainManager.IsInstantiated == true)
+		{
+			GameMainManager.Instance.OnGameOver -= View.ShowCenterPanel;
+		}
 	}
 
 	public bool IsShowedCenterPanel()
