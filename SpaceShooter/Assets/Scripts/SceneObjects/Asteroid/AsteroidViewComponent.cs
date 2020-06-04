@@ -28,7 +28,7 @@ public class AsteroidViewComponent
 
 	public void Explosion()
 	{
-		if (PoolManager.Instance != null)
+		if (PoolManager.Instance != null && LevelManager.Instance != null && LevelManager.Instance.IsEndedLevel() == false)
 		{
 			PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.ASTEROID_EXPLOSION_TAG, AsteroidTransform.position, AsteroidTransform.rotation);
 		}

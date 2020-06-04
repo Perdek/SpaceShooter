@@ -19,6 +19,11 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 
     public List<SpawnPoint> SpawnPoints => spawnPoints;
 
+    public LevelState State {
+        get;
+        private set;
+    }
+
     private int FinishedSpawnPoints {
         get;
         set;
@@ -42,8 +47,15 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
         }
     }
 
+    public bool IsEndedLevel()
+    {
+        return State == LevelState.ENDED;
+    }
+
     public void StartLevel()
     {
+        State = LevelState.STARTED;
+
         for (int i = 0; i < SpawnPoints.Count; i++)
         {
             SpawnPoints[i].StartSpawn();
@@ -55,6 +67,8 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 
     public void EndLevel()
     {
+        State = LevelState.ENDED;
+
         for (int i = 0; i < SpawnPoints.Count; i++)
         {
             SpawnPoints[i].OnSpawn -= HandleEnemySpawn;
@@ -63,6 +77,7 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
         }
 
         SpawnPoints.Clear();
+        UISceneManager.Instance.DetachEvents();
 
         OnLevelEnd();
     }
@@ -112,6 +127,12 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
     #endregion
 
     #region ENUMS
+
+    public enum LevelState
+    {
+        STARTED,
+        ENDED
+    }
 
     #endregion
 }

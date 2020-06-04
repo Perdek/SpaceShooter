@@ -2,6 +2,7 @@
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.PlayerLoop;
+using System.Linq;
 
 public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager>
 {
@@ -77,6 +78,7 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		UpdateManager.UnPauseTime();
 		SceneManager.LoadScene(ScenesNamesManager.MainSceneName);
 		SetGameState(GameState.MENU);
+		DetachInGameEvents();
 		OnMainOpen();
 	}
 

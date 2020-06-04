@@ -22,8 +22,8 @@ public class BaseMonoBehaviourSingletonManager<T> : MonoBehaviour where T : Mono
 
 				if (instance == null)
 				{
-					GameObject newSingletonGameObject = new GameObject(typeof(T).ToString());
-					instance = newSingletonGameObject.AddComponent<T>();
+					//GameObject newSingletonGameObject = new GameObject(typeof(T).ToString());
+					//instance = newSingletonGameObject.AddComponent<T>();
 				}
 			}
 

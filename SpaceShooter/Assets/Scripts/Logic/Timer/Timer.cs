@@ -46,12 +46,18 @@ public class Timer
 
 	public void StartCounting()
 	{
-		UpdateManager.Instance.OnDataChange += Counting;
+		if (UpdateManager.Instance != null)
+        {
+			UpdateManager.Instance.OnDataChange += Counting;
+		}
 	}
 
 	public void EndCounting()
 	{
-		UpdateManager.Instance.OnDataChange -= Counting;
+		if (UpdateManager.Instance != null)
+        {
+			UpdateManager.Instance.OnDataChange -= Counting;
+		}
 	}
 
 	private void Counting()

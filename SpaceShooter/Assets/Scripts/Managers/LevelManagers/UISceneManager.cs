@@ -50,7 +50,7 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 		LevelManager.Instance.OnLevelEnd += CenterPanel.ShowGameOverPanel;
 	}
 
-	private void DetachEvents()
+	public void DetachEvents()
 	{
 		if (GameMainManager.IsInstantiated == true)
 		{

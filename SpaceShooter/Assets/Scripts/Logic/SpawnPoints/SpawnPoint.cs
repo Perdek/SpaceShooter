@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.UNetWeaver;
 using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
@@ -60,6 +61,7 @@ public class SpawnPoint : MonoBehaviour
 	public void EndLevel()
 	{
 		SpawningTimer.EndCounting();
+		SpawningTimer = null;
 	}
 
 	private void HandleSpawnEnd()

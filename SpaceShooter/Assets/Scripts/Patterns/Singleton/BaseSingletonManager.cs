@@ -19,7 +19,7 @@ public abstract class BaseSingletonManager<T> where T : class
 
 	public static bool IsInstantiated {
 		get {
-			return instance == null;
+			return instance != null;
 		}
 	}
 

@@ -4,58 +4,63 @@ using System;
 
 public class ParticleEffect : BasePoolObject
 {
-	#region MEMBERS
+    #region MEMBERS
 
-	[SerializeField]
-	private float lifeTime = 1.0f;
-	[SerializeField]
-	private ParticleSystem particleSystem = null;
+    [SerializeField]
+    private float lifeTime = 1.0f;
+    [SerializeField]
+    private ParticleSystem particleSystem = null;
 
-	#endregion
+    #endregion
 
-	#region PROPERTIES
+    #region PROPERTIES
 
-	private ParticleSystem ParticleSystem => particleSystem;
-	private float LifeTime => lifeTime;
+    private ParticleSystem ParticleSystem => particleSystem;
+    private float LifeTime => lifeTime;
 
-	private Timer LifeTimer {
-		get;
-		set;
-	} = null;
+    private Timer LifeTimer {
+        get;
+        set;
+    } = null;
 
-	#endregion
+    #endregion
 
-	#region FUNCTIONS
+    #region FUNCTIONS
 
-	protected virtual void Awake()
-	{
-		AttachEvents();
-	}
+    protected virtual void Awake()
+    {
+        AttachEvents();
+    }
 
-	protected virtual void OnDestroy()
-	{
-		DetachEvents();
-	}
+    protected virtual void OnDestroy()
+    {
+        DetachEvents();
+    }
 
-	private void AttachEvents()
-	{
-		OnHandleObjectSpawn += HandleLifeTime;
-	}
+    private void AttachEvents()
+    {
+        OnHandleObjectSpawn += HandleLifeTime;
+    }
 
-	private void DetachEvents()
-	{
-		OnHandleObjectSpawn -= HandleLifeTime;
-	}
+    private void DetachEvents()
+    {
+        OnHandleObjectSpawn -= HandleLifeTime;
 
-	private void HandleLifeTime()
-	{
-		LifeTimer = new Timer(0, LifeTime, Deactivation);
-		LifeTimer.StartCounting();
-	}
+        if (LifeTimer != null)
+        {
+            LifeTimer.EndCounting();
+        }
+    }
 
-	#endregion
+    private void HandleLifeTime()
+    {
+        LifeTimer = new Timer(0, LifeTime, Deactivation);
+        LifeTimer.StartCounting();
+    }
 
-	#region CLASS_ENUMS
+    #endregion
 
-	#endregion
+    #region CLASS_ENUMS
+
+    #endregion
 }
