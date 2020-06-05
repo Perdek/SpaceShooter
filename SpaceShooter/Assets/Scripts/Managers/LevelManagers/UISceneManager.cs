@@ -70,7 +70,6 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 
 	private void OpenLevelMenu()
 	{
-		UpdateManager.Instance.PauseTime();
 		CenterPanel.ShowGameOverPanel();
 	}
 

@@ -38,7 +38,7 @@ public class PlayerMovementController
 		set => brakingFactory = value;
 	}
 
-	private float MaxSpeed {
+    private float MaxSpeed {
 		get => maxSpeed;
 		set => maxSpeed = value;
 	}
@@ -61,6 +61,11 @@ public class PlayerMovementController
 	{
 		InitializeKeys();
 		InitializeUpdate();
+	}
+
+	public void ResetPosition()
+	{
+		PlayerRigidBody2D.transform.position = Vector3.zero;
 	}
 
 	public void MoveUp()

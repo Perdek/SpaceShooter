@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,6 +39,17 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 		InitializePools();
 	}
 
+	public void DeactivateAllObjects()
+	{
+        foreach (KeyValuePair<string, Queue<BasePoolObject>> pool in PoolDictionary)
+        {
+            foreach (BasePoolObject basePoolObject in pool.Value)
+            {
+				basePoolObject.Deactivation();
+			}
+		}
+	}
+
 	public BasePoolObject GetPoolObject(TagManager.TagsEnum tag, Vector3 newPosition, Quaternion newRotation)
 	{
 		if (PoolDictionary.ContainsKey(tag.ToString()) == false)
@@ -75,7 +87,7 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 		newPoolObjectsParent.transform.SetParent(this.transform);
 	}
 
-	private void InitializePools()
+    private void InitializePools()
 	{
 		PoolObjectsParent poolObjectsParent = null;
 		Pool pool = null;

@@ -1,5 +1,5 @@
 ﻿using System;
-using Unity.UNetWeaver;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
@@ -40,6 +40,11 @@ public class SpawnPoint : MonoBehaviour
 		set;
 	} = 0;
 
+	private List<BasePoolObject> ActiveSpawnedObjects {
+		get;
+		set;
+	} = new List<BasePoolObject>();
+
 	#endregion
 
 	#region METHODS
@@ -53,16 +58,26 @@ public class SpawnPoint : MonoBehaviour
 	public void Spawn()
 	{
 		BasePoolObject basePoolObject = PoolManager.Instance.GetPoolObject(PoolObjectTag, this.transform.position, this.transform.rotation);
+        basePoolObject.OnDeactivation += DeactiveSpawnedObject;
 		CurrentSpawnedObjectNumber++;
+		ActiveSpawnedObjects.Add(basePoolObject);
 		OnSpawn(basePoolObject);
 		HandleSpawnEnd();
 	}
 
-	public void EndLevel()
+    public void EndLevel()
 	{
 		SpawningTimer.EndCounting();
-		SpawningTimer = null;
+		DeactivateSpawnedObjects();
 	}
+
+	private void DeactivateSpawnedObjects()
+    {
+        for (int i = ActiveSpawnedObjects.Count - 1; i >= 0; i--)
+        {
+			ActiveSpawnedObjects[i].Deactivation();
+		}
+    }
 
 	private void HandleSpawnEnd()
 	{
@@ -76,6 +91,12 @@ public class SpawnPoint : MonoBehaviour
 	private bool CheckSpawnEnd()
 	{
 		return CurrentSpawnedObjectNumber == SpawnObjectsLimit;
+	}
+
+	private void DeactiveSpawnedObject(BasePoolObject obj)
+	{
+		obj.OnDeactivation -= DeactiveSpawnedObject;
+		ActiveSpawnedObjects.Remove(obj);
 	}
 
 	#endregion

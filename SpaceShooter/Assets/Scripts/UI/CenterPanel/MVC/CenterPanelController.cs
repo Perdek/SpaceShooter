@@ -45,6 +45,7 @@ public class CenterPanelController : Controller
 
 	public void ShowGameOverPanel()
 	{
+		UpdateManager.Instance.PauseTime();
 		View.ShowCenterPanel();
 	}
 

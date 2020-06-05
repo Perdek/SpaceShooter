@@ -76,9 +76,6 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
             SpawnPoints[i].EndLevel();
         }
 
-        SpawnPoints.Clear();
-        UISceneManager.Instance.DetachEvents();
-
         OnLevelEnd();
     }
 
@@ -97,6 +94,11 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
     private void HandleEnemySpawn(BasePoolObject spawnedEnemy)
     {
         spawnedEnemy.OnDeactivation += HandleEnemyDeactivation;
+    }
+
+    private void HandleEnemyDeactivationDetachEvents(BasePoolObject destroyedEnemy)
+    {
+        destroyedEnemy.OnDeactivation -= HandleEnemyDeactivation;
     }
 
     private void HandleEnemyDeactivation(BasePoolObject destroyedEnemy)

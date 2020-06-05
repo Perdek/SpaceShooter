@@ -6,6 +6,9 @@ public class PlayerStatisticsController
 {
 	#region MEMBERS
 
+	private const int DEFAULT_HEALTH_POINTS = 5;
+	private const int DEFAULT_SHIELD_POINTS = 2;
+
 	public event Action OnPlayerDead = delegate { };
 	public event Action OnHealthPointsAdd = delegate { };
 	public event Action OnHealthPointsRemove = delegate { };
@@ -15,9 +18,9 @@ public class PlayerStatisticsController
 	public event Action<int> OnShieldsPointsChange = delegate { };
 
 	[SerializeField]
-	private int healthPoints = 5;
+	private int healthPoints = DEFAULT_HEALTH_POINTS;
 	[SerializeField]
-	private int shieldsPoints = 2;
+	private int shieldsPoints = DEFAULT_SHIELD_POINTS;
 
 	#endregion
 
@@ -36,6 +39,12 @@ public class PlayerStatisticsController
 	#endregion
 
 	#region METHODS
+
+	public void ReloadStatistics()
+	{
+		HealthPoints = DEFAULT_HEALTH_POINTS;
+		ShieldsPoints = DEFAULT_SHIELD_POINTS;
+	}
 
 	public void AddHealthPoints(int value)
 	{

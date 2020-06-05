@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,9 +30,15 @@ public class PlayerManager : BaseMonoBehaviourSingletonManager<PlayerManager>
 		return (PlayerMainController.PlayerStatisticsController.HealthPoints, PlayerMainController.PlayerStatisticsController.ShieldsPoints);
 	}
 
-	#endregion
+	public void ReloadPlayer()
+    {
+		PlayerMainController.PlayerStatisticsController.ReloadStatistics();
+		PlayerMainController.PlayerMovementController.ResetPosition();
+	}
 
-	#region ENUMS
+    #endregion
 
-	#endregion
+    #region ENUMS
+
+    #endregion
 }

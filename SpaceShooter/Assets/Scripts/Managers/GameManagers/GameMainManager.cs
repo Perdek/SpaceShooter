@@ -126,6 +126,11 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 
 	private void StartLevel()
 	{
+		if (PlayerManager.Instance != null)
+        {
+			PlayerManager.Instance.ReloadPlayer();
+        }
+
 		if (LevelManager.Instance != null)
 		{
 			LevelManager.Instance.StartLevel();
