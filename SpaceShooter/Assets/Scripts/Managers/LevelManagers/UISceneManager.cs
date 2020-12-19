@@ -8,7 +8,7 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 	#region MEMBERS
 
 	[SerializeField]
-	private TopRightPanelController topRightPanel = null;
+	private StatisticsPanelController statisticPanel = null;
 	[SerializeField]
 	private CenterPanelController centerPanel = null;
 
@@ -16,7 +16,7 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 
 	#region PROPERTIES
 
-	private TopRightPanelController TopRightPanel => topRightPanel;
+	public StatisticsPanelController StatisticsPanel => statisticPanel;
 	private CenterPanelController CenterPanel => centerPanel;
 
 	private int KeyIdForOpenMenu {
@@ -30,7 +30,7 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 
 	public void RefreshUI()
 	{
-		TopRightPanel.RefreshPanel(PlayerManager.Instance.GetPlayerStatistics());
+		StatisticsPanel.RefreshPanel(PlayerManager.Instance.PlayerStatisticsController);
 	}
 
 	protected void Awake()
@@ -43,7 +43,7 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 		DetachEvents();
 	}
 
-	private void AttachEvents()
+    private void AttachEvents()
 	{
 		GameMainManager.Instance.OnGameOver += CenterPanel.ShowGameOverPanel;
 		KeyIdForOpenMenu = KeyboardManager.Instance.AddKey(KeyCode.Escape, OpenLevelMenu);

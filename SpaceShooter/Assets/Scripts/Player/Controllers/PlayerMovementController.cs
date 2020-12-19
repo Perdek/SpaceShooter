@@ -20,6 +20,7 @@ public class PlayerMovementController
 	private float brakingFactory = 1;
 	[SerializeField]
 	private Rigidbody2D playerRigidBody2D = null;
+
 	private MovingStateEnum state = MovingStateEnum.IDLE;
 
 	#endregion

@@ -16,6 +16,9 @@ public class PlayerManager : BaseMonoBehaviourSingletonManager<PlayerManager>
 
 	public PlayerMainController PlayerMainController => playerMainController;
 
+	public PlayerStatisticsController PlayerStatisticsController => PlayerMainController.PlayerStatisticsController;
+	private PlayerMovementController PlayerMovementController => PlayerMainController.PlayerMovementController;
+
 	#endregion
 
 	#region METHODS
@@ -25,15 +28,10 @@ public class PlayerManager : BaseMonoBehaviourSingletonManager<PlayerManager>
 		PlayerMainController.Initialize();
 	}
 
-	public (int, int) GetPlayerStatistics()
-	{
-		return (PlayerMainController.PlayerStatisticsController.HealthPoints, PlayerMainController.PlayerStatisticsController.ShieldsPoints);
-	}
-
 	public void ReloadPlayer()
     {
-		PlayerMainController.PlayerStatisticsController.ReloadStatistics();
-		PlayerMainController.PlayerMovementController.ResetPosition();
+		PlayerStatisticsController.ReloadStatistics();
+		PlayerMovementController.ResetPosition();
 	}
 
     #endregion

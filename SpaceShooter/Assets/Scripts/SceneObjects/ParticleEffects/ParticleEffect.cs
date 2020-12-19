@@ -9,13 +9,13 @@ public class ParticleEffect : BasePoolObject
     [SerializeField]
     private float lifeTime = 1.0f;
     [SerializeField]
-    private ParticleSystem particleSystem = null;
+    private ParticleSystem particleSystemReference = null;
 
     #endregion
 
     #region PROPERTIES
 
-    private ParticleSystem ParticleSystem => particleSystem;
+    private ParticleSystem ParticleSystemReference => particleSystemReference;
     private float LifeTime => lifeTime;
 
     private Timer LifeTimer {

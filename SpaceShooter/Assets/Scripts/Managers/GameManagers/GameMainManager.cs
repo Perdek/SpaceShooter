@@ -139,7 +139,6 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		if (UISceneManager.Instance != null)
 		{
 			UISceneManager.Instance.Initialize();
-			UISceneManager.Instance.RefreshUI();
 		}
 	}
 
