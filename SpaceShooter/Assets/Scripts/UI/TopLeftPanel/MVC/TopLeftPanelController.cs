@@ -28,12 +28,19 @@ public class TopLeftPanelController : Controller
 	{
 		base.Awake();
 		PrepareProperties();
+		AttachEvents();
 	}
 
 	private void PrepareProperties()
 	{
 		Model = GetModel<TopLeftPanelModel>();
 		View = GetView<TopLeftPanelView>();
+	}
+
+	private void AttachEvents()
+    {
+		View.RegisterMoney(Model.GetMoneyParameter());
+		View.RegisterScore(Model.GetScoreParameter());
 	}
 
 	#endregion

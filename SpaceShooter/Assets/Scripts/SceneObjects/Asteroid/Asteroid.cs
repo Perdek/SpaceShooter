@@ -63,6 +63,7 @@ public class Asteroid : Enemy
 	{
 		MovementComponent.Initialize();
 		ViewComponent.SetAsteroidTranform(this.transform);
+		CollisionComponent.SetAsteroidInformation(EnemyInformation);
 	}
 
 	private void Terminate()

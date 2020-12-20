@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +6,8 @@ using UnityEngine;
 public class PlayerShootingController
 {
 	#region FIELDS
+
+	public event Action<EnemyInformation> OnKillEnemy = delegate { };
 
 	[SerializeField]
 	private Transform playerBulletSpawnTransform = null;
@@ -31,11 +32,20 @@ public class PlayerShootingController
 		InitializeKeys();
 	}
 
+	public void NotifyKillEnemy(EnemyInformation killedEnemyInformation)
+    {
+		OnKillEnemy(killedEnemyInformation);
+	}
+
 	public void Shoot()
 	{
 		if (PoolManager.Instance != null)
 		{
-			PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.PLAYER_BULLET_TAG, PlayerBulletSpawnTransform.position, PlayerBulletSpawnTransform.rotation);
+			BasePoolObject poolObject = PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.PLAYER_BULLET_TAG, PlayerBulletSpawnTransform.position, PlayerBulletSpawnTransform.rotation);
+
+			Bullet bullet = poolObject as Bullet;
+
+			bullet.OnKillTarget += NotifyKillEnemy;
 		}
 	}
 

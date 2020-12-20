@@ -1,22 +1,33 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TopLeftPanelModel : Model
 {
-	#region MEMBERS
+    #region MEMBERS
 
-	#endregion
+    #endregion
 
-	#region PROPERTIES
+    #region PROPERTIES
 
-	#endregion
+    #endregion
 
-	#region FUNCTIONS
+    #region FUNCTIONS
 
-	#endregion
+    public IntValue GetMoneyParameter()
+    {
+        return PlayerManager.Instance.PlayerStatisticsController.MoneyPoints;
+    }
 
-	#region CLASS_ENUMS
+    public IntValue GetScoreParameter()
+    {
+        return PlayerManager.Instance.PlayerStatisticsController.ScorePoints;
+    }
 
-	#endregion
+    #endregion
+
+    #region CLASS_ENUMS
+
+    #endregion
 }

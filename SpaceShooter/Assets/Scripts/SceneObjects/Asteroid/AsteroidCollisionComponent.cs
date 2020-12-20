@@ -7,7 +7,7 @@ public class AsteroidCollisionComponent
 {
 	#region MEMBERS
 
-	public event Action OnHit = delegate { };
+	public event Action OnHit = delegate { };	
 
 	#endregion
 
@@ -18,6 +18,11 @@ public class AsteroidCollisionComponent
 		set;
 	} = 1;
 
+	private EnemyInformation CachedEnemyInformation {
+		get;
+		set;
+    }
+
 	#endregion
 
 	#region METHODS
@@ -27,9 +32,23 @@ public class AsteroidCollisionComponent
 		DamageCollisionValue = newValue;
 	}
 
+	public void SetAsteroidInformation(EnemyInformation cachedEnemyInformation)
+    {
+		CachedEnemyInformation = cachedEnemyInformation;
+	}
+
 	public void HandleCollision(Collider2D other)
 	{
-		if (other.GetComponent<SceneBottonCollider>() != null || other.GetComponent<Bullet>() != null)
+		Bullet bullet = other.GetComponent<Bullet>();
+
+		if (bullet != null)
+        {
+			bullet.NotifyComfirmKill(CachedEnemyInformation);
+			OnHit();
+			return;
+        }
+
+		if (other.GetComponent<SceneBottonCollider>() != null)
 		{
 			OnHit();
 		}

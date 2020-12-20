@@ -7,9 +7,9 @@ public class TopLeftPanelView : View
 	#region MEMBERS
 
 	[SerializeField]
-	private ScorePanel scorePanel = null;
+	private IntValueTMP scoreIntValueTMP = null;
 	[SerializeField]
-	private MoneyPanel moneyPanel = null;
+	private IntValueTMP moneyIntValueTMP = null;
 	[SerializeField]
 	private WeaponPanel weaponPanel = null;
 
@@ -17,13 +17,23 @@ public class TopLeftPanelView : View
 
 	#region PROPERTIES
 
-	private ScorePanel ScorePanel => scorePanel;
-	private MoneyPanel MoneyPanel => moneyPanel;
+	private IntValueTMP ScoreIntValueTMP => scoreIntValueTMP;
+	private IntValueTMP MoneyIntValueTMP => moneyIntValueTMP;
 	private WeaponPanel WeaponPanel => weaponPanel;
 
 	#endregion
 
 	#region FUNCTIONS
+
+	public void RegisterScore(IntValue score)
+    {
+		ScoreIntValueTMP.RegisterValue(score);
+    }
+
+	public void RegisterMoney(IntValue score)
+	{
+		MoneyIntValueTMP.RegisterValue(score);
+	}
 
 	#endregion
 

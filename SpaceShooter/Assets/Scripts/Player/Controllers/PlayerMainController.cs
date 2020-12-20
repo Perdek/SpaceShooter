@@ -5,58 +5,60 @@ using UnityEngine;
 
 public class PlayerMainController : MonoBehaviour
 {
-	#region FIELDS
+    #region FIELDS
 
-	[Header("Controllers")]
-	[SerializeField]
-	private PlayerMovementController playerMovementController = null;
-	[SerializeField]
-	private PlayerShootingController playerShootingController = null;
-	[SerializeField]
-	private PlayerColliderController playerColliderController = null;
-	[SerializeField]
-	private PlayerStatisticsController playerStatisticsController = null;
+    [Header("Controllers")]
+    [SerializeField]
+    private PlayerMovementController playerMovementController = null;
+    [SerializeField]
+    private PlayerShootingController playerShootingController = null;
+    [SerializeField]
+    private PlayerColliderController playerColliderController = null;
+    [SerializeField]
+    private PlayerStatisticsController playerStatisticsController = null;
 
-	#endregion
+    #endregion
 
-	#region PROPERTIES
+    #region PROPERTIES
 
-	public PlayerMovementController PlayerMovementController => playerMovementController;
-	public PlayerShootingController PlayerShootingController => playerShootingController;
-	public PlayerColliderController PlayerColliderController => playerColliderController;
-	public PlayerStatisticsController PlayerStatisticsController => playerStatisticsController;
+    public PlayerMovementController PlayerMovementController => playerMovementController;
+    public PlayerShootingController PlayerShootingController => playerShootingController;
+    public PlayerColliderController PlayerColliderController => playerColliderController;
+    public PlayerStatisticsController PlayerStatisticsController => playerStatisticsController;
 
-	#endregion
+    #endregion
 
-	#region METHODS
+    #region METHODS
 
-	public void Initialize()
-	{
-		AttachEvents();
-		PlayerMovementController.Initialize();
-		PlayerShootingController.Initialize();
-	}
+    public void Initialize()
+    {
+        AttachEvents();
+        PlayerMovementController.Initialize();
+        PlayerShootingController.Initialize();
+    }
 
-	private void AttachEvents()
-	{
-		GameMainManager.Instance.OnGameStart += AttachInterControllersEvents;
-		GameMainManager.Instance.OnMainOpen += DetachInterControllersEvents;
-		PlayerStatisticsController.OnPlayerDead += GameMainManager.Instance.GameOver;
-	}
+    private void AttachEvents()
+    {
+        GameMainManager.Instance.OnGameStart += AttachInterControllersEvents;
+        GameMainManager.Instance.OnMainOpen += DetachInterControllersEvents;
+        PlayerStatisticsController.OnPlayerDead += GameMainManager.Instance.GameOver;
+    }
 
-	private void AttachInterControllersEvents()
-	{
-		PlayerColliderController.OnDamageCollision += PlayerStatisticsController.HandleDamage;
-	}
+    private void AttachInterControllersEvents()
+    {
+        PlayerColliderController.OnDamageCollision += PlayerStatisticsController.HandleDamage;
+        PlayerShootingController.OnKillEnemy += PlayerStatisticsController.RewardForKill;
+    }
 
-	private void DetachInterControllersEvents()
-	{
-		PlayerColliderController.OnDamageCollision -= PlayerStatisticsController.HandleDamage;
-	}
+    private void DetachInterControllersEvents()
+    {
+        PlayerColliderController.OnDamageCollision -= PlayerStatisticsController.HandleDamage;
+        PlayerShootingController.OnKillEnemy -= PlayerStatisticsController.RewardForKill;
+    }
 
-	#endregion
+    #endregion
 
-	#region ENUMS
+    #region ENUMS
 
-	#endregion
+    #endregion
 }

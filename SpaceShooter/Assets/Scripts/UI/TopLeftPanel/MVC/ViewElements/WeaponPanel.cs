@@ -11,13 +11,13 @@ public class WeaponPanel
 	[SerializeField]
 	private Image weaponIconImage = null;
 	[SerializeField]
-	private Text reloadText = null;
+	private TMPro.TMP_Text reloadText = null;
 
 	#endregion
 
 	#region PROPERTIES
 
-	private Text ReloadText => reloadText;
+	private TMPro.TMP_Text ReloadText => reloadText;
 	private Image WeaponIconImage => weaponIconImage;
 
 	#endregion

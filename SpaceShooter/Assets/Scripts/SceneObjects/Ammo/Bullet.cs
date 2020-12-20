@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using System;
 
 public class Bullet : BasePoolObject
 {
 	#region FIELDS
+
+	public event Action<EnemyInformation> OnKillTarget = delegate { };
 
 	[SerializeField]
 	private uint speedFactory = 10;
@@ -36,8 +39,14 @@ public class Bullet : BasePoolObject
 	public override void Deactivation()
 	{
 		base.Deactivation();
+		OnKillTarget = null;
 		UpdateManager.Instance.OnUpdatePhysic -= Move;
 	}
+
+	public void NotifyComfirmKill(EnemyInformation enemyInformation)
+    {
+		OnKillTarget(enemyInformation);
+    }
 
 	protected virtual void OnTriggerEnter2D(Collider2D other)
 	{
@@ -49,9 +58,9 @@ public class Bullet : BasePoolObject
 		Rigidbody2DComponent.MovePosition(Rigidbody2DComponent.position + Vector2.up * Time.fixedDeltaTime * SpeedFactory);
 	}
 
-	private void HandleCollision(Collider2D other)
+	private void HandleCollision(Collider2D hittedObjectCollider)
 	{
-		if (CheckCollisionWithPlayer(other) == true)
+		if (CheckCollisionWithPlayer(hittedObjectCollider) == true)
 		{
 			return;
 		}
