@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
-using UnityEngine.PlayerLoop;
-using System.Linq;
 
 public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager>
 {
@@ -41,11 +39,6 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		private set;
 	} = new TagManager();
 
-	public ScenesNamesManager ScenesNamesManager {
-		get;
-		private set;
-	} = new ScenesNamesManager();
-
 	public GameState State {
 		get;
 		private set;
@@ -62,7 +55,7 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 
 	public void StartGame()
 	{
-		SceneManager.LoadScene(ScenesNamesManager.Level01);
+		SceneManager.LoadScene(Constants.Level01);
 		SetGameState(GameState.GAME);
 		OnGameStart();
 	}
@@ -76,7 +69,7 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 	public void OpenMenu()
 	{
 		UpdateManager.UnPauseTime();
-		SceneManager.LoadScene(ScenesNamesManager.MainSceneName);
+		SceneManager.LoadScene(Constants.MainSceneName);
 		SetGameState(GameState.MENU);
 		DetachInGameEvents();
 		OnMainOpen();
@@ -118,7 +111,7 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 	{
-		if (scene.name != ScenesNamesManager.MainSceneName)
+		if (scene.name != Constants.MainSceneName)
 		{
 			StartLevel();
 		}
@@ -151,7 +144,6 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		PlayerManager.SingletonInitialization();
 		PoolManager.SingletonInitialization();
 		TagManager.SingletonInitialization();
-		ScenesNamesManager.SingletonInitialization();
 	}
 
 	private void ManagersInitialize()
@@ -162,7 +154,6 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		PlayerManager.Initialize();
 		PoolManager.Initialize();
 		TagManager.Initialize();
-		ScenesNamesManager.Initialize();
 	}
 
 	#endregion
