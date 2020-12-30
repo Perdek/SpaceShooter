@@ -5025,6 +5025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5650c20a61a58b4cbeb5c543b527edc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  basicHealthCosts: {fileID: 11400000, guid: 9f3053089f350ad41bccf91ae22a5693, type: 2}
 --- !u!114 &8920552141759123630
 MonoBehaviour:
   m_ObjectHideFlags: 0

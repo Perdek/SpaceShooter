@@ -29,14 +29,26 @@ public class PlayerManager : BaseMonoBehaviourSingletonManager<PlayerManager>
 	}
 
 	public void ReloadPlayer()
-    {
+	{
 		PlayerStatisticsController.ReloadStatistics();
 		PlayerMovementController.ResetPosition();
 	}
 
-    #endregion
+	public void BuyHP(int value, int cost)
+	{
+		PlayerStatisticsController.MoneyPoints.RemoveValue(cost);
+		PlayerStatisticsController.HealthPoints.AddValue(value);
+	}
 
-    #region ENUMS
+	public void BuyShield(int value, int cost)
+	{
+		PlayerStatisticsController.MoneyPoints.RemoveValue(cost);
+		PlayerStatisticsController.HealthPoints.AddValue(value);
+	}
 
-    #endregion
+	#endregion
+
+	#region ENUMS
+
+	#endregion
 }

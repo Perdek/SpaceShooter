@@ -1,6 +1,7 @@
 using UnityEngine.Events;
 using UnityEngine;
 using UI.WaitingRoom;
+using System;
 
 public class WaitingRoomView : View
 {
@@ -10,46 +11,66 @@ public class WaitingRoomView : View
 	[SerializeField] private UI.WaitingRoom.StatisticsPanel statisticsPanel = default;
 	[SerializeField] private UI.WaitingRoom.ButtonsPanel buttonsPanel = default;
 
-    #endregion
+	#endregion
 
-    #region PROPERTIES
+	#region PROPERTIES
 
-    private UI.WaitingRoom.WeaponPanel WeaponPanel => weaponPanel;
-    private UI.WaitingRoom.StatisticsPanel StatisticsPanel => statisticsPanel;
-    private UI.WaitingRoom.ButtonsPanel ButtonsPanel => buttonsPanel;
+	private UI.WaitingRoom.WeaponPanel WeaponPanel => weaponPanel;
+	private UI.WaitingRoom.StatisticsPanel StatisticsPanel => statisticsPanel;
+	private UI.WaitingRoom.ButtonsPanel ButtonsPanel => buttonsPanel;
 
-    #endregion
+	#endregion
 
-    #region METHODS
+	#region METHODS
 
-    public void RefreshWeaponPanel()
-    {
-        
-    }
+	public void RefreshWeaponPanel()
+	{
 
-    public void RefreshStatisticsPanel(PlayerStatisticsController playerStatisticsController)
-    {
-        StatisticsPanel.RegisterPlayerStatistics(playerStatisticsController);
-    }
+	}
 
-    public void AddListenerToExitButton(UnityAction onClick)
-    {
-        ButtonsPanel.AddListenerToExitButton(onClick);
-    }
+	public void RefreshStatisticsPanel(PlayerStatisticsController playerStatisticsController)
+	{
+		StatisticsPanel.RegisterPlayerStatistics(playerStatisticsController);
+	}
 
-    public void AddListenerToReadyButton(UnityAction onClick)
-    {
-        ButtonsPanel.AddListenerToReadyButton(onClick);
-    }
+	public void AddListenerToExitButton(UnityAction onClick)
+	{
+		ButtonsPanel.AddListenerToExitButton(onClick);
+	}
 
-    public void AddListenerToSaveButton(UnityAction onClick)
-    {
-        ButtonsPanel.AddListenerToSaveButton(onClick);
-    }
+	public void AddListenerToReadyButton(UnityAction onClick)
+	{
+		ButtonsPanel.AddListenerToReadyButton(onClick);
+	}
 
-    #endregion
+	public void AddListenerToSaveButton(UnityAction onClick)
+	{
+		ButtonsPanel.AddListenerToSaveButton(onClick);
+	}
 
-    #region CLASS_ENUMS
+	public void AddListenerToUpgradeHP(UnityAction onClick)
+	{
+        StatisticsPanel.AddListenerToUpgradeHP(onClick);
+	}
 
-    #endregion
+	public void AddListenerToUpgradeShield(UnityAction onClick)
+	{
+        StatisticsPanel.AddListenerToUpgradeShield(onClick);
+	}
+
+	public void RefreshShieldButtonInteractivity(bool value)
+	{
+		StatisticsPanel.RefreshShieldButtonInteractivity(value);
+	}
+
+	public void RefreshHPButtonInteractivity(bool value)
+	{
+		StatisticsPanel.RefreshHPButtonInteractivity(value);
+	}
+
+	#endregion
+
+	#region CLASS_ENUMS
+
+	#endregion
 }

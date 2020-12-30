@@ -31,6 +31,24 @@ public class WaitingRoomController : Controller
         View.AddListenerToSaveButton(Model.Save);
         View.AddListenerToReadyButton(Model.Ready);
         View.AddListenerToExitButton(Model.Exit);
+
+        View.AddListenerToUpgradeHP(UpgradeHP);
+        View.AddListenerToUpgradeShield(UpgradeShield);
+
+        View.RefreshHPButtonInteractivity(Model.CanPlayerAffordUpgradingHP());
+        View.RefreshShieldButtonInteractivity(Model.CanPlayerAffordUpgradingShield());
+    }
+
+    private void UpgradeHP()
+    {
+        Model.UpgradeHP();
+        View.RefreshHPButtonInteractivity(Model.CanPlayerAffordUpgradingHP());
+    }
+
+    private void UpgradeShield()
+    {
+        Model.UpgradeShield();
+        View.RefreshShieldButtonInteractivity(Model.CanPlayerAffordUpgradingShield());
     }
 
     #endregion

@@ -37,6 +37,11 @@ public class PlayerMainController : MonoBehaviour
         PlayerShootingController.Initialize();
     }
 
+    public bool CanPlayerAffordCost(int value)
+    {
+        return PlayerStatisticsController.CurrentMoneyPoints >= value;
+    }
+
     private void AttachEvents()
     {
         GameMainManager.Instance.OnGameStart += AttachInterControllersEvents;

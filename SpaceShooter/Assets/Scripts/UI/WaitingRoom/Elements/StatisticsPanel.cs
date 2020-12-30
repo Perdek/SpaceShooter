@@ -1,7 +1,7 @@
-﻿using System;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.Events;
+using System;
 
 namespace UI.WaitingRoom
 {
@@ -35,7 +35,7 @@ namespace UI.WaitingRoom
         public void RegisterPlayerStatistics(PlayerStatisticsController playerStatisticsController)
         {
             ScoreValue.RegisterValue(playerStatisticsController.ScorePoints);
-            MoneyValue.RegisterValue(playerStatisticsController.ScorePoints);
+            MoneyValue.RegisterValue(playerStatisticsController.MoneyPoints);
             HPValue.RegisterValue(playerStatisticsController.HealthPoints);
             ShieldValue.RegisterValue(playerStatisticsController.ShieldsPoints);
         }
@@ -45,10 +45,20 @@ namespace UI.WaitingRoom
             UpgradeHP.onClick.AddListener(onClick);
         }
 
-        public void AddListenerToUpgradeShield(UnityAction onClick)
+		public void AddListenerToUpgradeShield(UnityAction onClick)
         {
             UpgradeShield.onClick.AddListener(onClick);
         }
+
+		public void RefreshShieldButtonInteractivity(bool value)
+		{
+			UpgradeShield.interactable = value;
+		}
+
+		public void RefreshHPButtonInteractivity(bool value)
+		{
+			UpgradeHP.interactable = value;
+		}
 
         #endregion
     }

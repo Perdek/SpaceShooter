@@ -6,39 +6,70 @@ using UnityEngine.Events;
 
 public class WaitingRoomModel : Model
 {
-    #region MEMBERS
+	#region MEMBERS
 
-    #endregion
+	[SerializeField]
+	private ShopCostsInformation basicHealthCosts = default;
 
-    #region PROPERTIES
+	#endregion
 
-    #endregion
+	#region PROPERTIES
 
-    #region METHODS
+	private ShopCostsInformation BasicHealthCosts => basicHealthCosts;
 
-    public PlayerStatisticsController GetPlayerStatistics()
-    {
-        return PlayerManager.Instance.PlayerStatisticsController;
-    }
+	#endregion
 
-    public void Save()
-    {
+	#region METHODS
 
-    }
+	public PlayerStatisticsController GetPlayerStatistics()
+	{
+		return PlayerManager.Instance.PlayerStatisticsController;
+	}
 
-    public void Ready()
-    {
-        GameMainManager.Instance.StartNextLevel();
-    }
+	public void Save()
+	{
 
-    public void Exit()
-    {
-        GameMainManager.Instance.OpenMenu();
-    }
+	}
 
-    #endregion
+	public void Ready()
+	{
+		GameMainManager.Instance.StartNextLevel();
+	}
 
-    #region CLASS_ENUMS
+	public void Exit()
+	{
+		GameMainManager.Instance.OpenMenu();
+	}
 
-    #endregion
+	public void UpgradeHP()
+	{
+		if (CanPlayerAffordUpgradingHP() == true)
+		{
+			PlayerManager.Instance.BuyHP(1, BasicHealthCosts.HpCost);
+		}
+	}
+
+	public void UpgradeShield()
+	{
+		if (CanPlayerAffordUpgradingShield() == true)
+		{
+			PlayerManager.Instance.BuyShield(1, BasicHealthCosts.ShieldCost);
+		}
+	}
+
+	public bool CanPlayerAffordUpgradingHP()
+	{
+		return PlayerManager.Instance.PlayerMainController.CanPlayerAffordCost(BasicHealthCosts.HpCost);
+	}
+
+	public bool CanPlayerAffordUpgradingShield()
+	{
+		return PlayerManager.Instance.PlayerMainController.CanPlayerAffordCost(BasicHealthCosts.ShieldCost);
+	}
+
+	#endregion
+
+	#region CLASS_ENUMS
+
+	#endregion
 }
