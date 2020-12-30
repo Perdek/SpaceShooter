@@ -1,7 +1,5 @@
-using System.Collections;
 using UnityEngine.Events;
 using UnityEngine;
-using UnityEngine.UI;
 using UI.WaitingRoom;
 
 public class WaitingRoomView : View

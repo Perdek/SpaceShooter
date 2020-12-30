@@ -65,7 +65,7 @@ public class SpawnPoint : MonoBehaviour
 		HandleSpawnEnd();
 	}
 
-    public void EndLevel()
+    public void Reset()
 	{
 		SpawningTimer.EndCounting();
 		DeactivateSpawnedObjects();

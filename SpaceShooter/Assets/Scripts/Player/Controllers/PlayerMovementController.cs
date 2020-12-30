@@ -133,6 +133,7 @@ public class PlayerMovementController
 	private void InitializeKeys()
 	{
 		GameMainManager.Instance.OnGameStart += AttachKeysForMovement;
+		GameMainManager.Instance.OnWaitingOpen += DetachKeysForMovement;
 		GameMainManager.Instance.OnMainOpen += DetachKeysForMovement;
 	}
 

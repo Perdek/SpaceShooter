@@ -73,7 +73,7 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
         {
             SpawnPoints[i].OnSpawn -= HandleEnemySpawn;
             SpawnPoints[i].OnSpawnEnd -= UpdateFinishedSpawnPoints;
-            SpawnPoints[i].EndLevel();
+            SpawnPoints[i].Reset();
         }
 
         OnLevelEnd();
@@ -104,19 +104,24 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
     private void HandleEnemyDeactivation(BasePoolObject destroyedEnemy)
     {
         destroyedEnemy.OnDeactivation -= HandleEnemyDeactivation;
-        DescreseEnemyCount();
+        DecreaseEnemyCount();
         HandleCheckLevelEnd();
     }
 
     private void HandleCheckLevelEnd()
-    {
-        if (FinishedSpawnPoints == SpawnPoints.Count && EnemyCount == 0)
-        {
-            EndLevel();
-        }
-    }
+	{
+		if (IsAnyMoreEnemies() == true)
+		{
+			EndLevel();
+		}
+	}
 
-    private void DescreseEnemyCount()
+	private bool IsAnyMoreEnemies()
+	{
+		return FinishedSpawnPoints == SpawnPoints.Count && EnemyCount == 0;
+	}
+
+	private void DecreaseEnemyCount()
     {
         EnemyCount--;
     }

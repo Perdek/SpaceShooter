@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CenterPanelModel : Model
+public class LevelEndPanelModel : Model
 {
     #region MEMBERS
 
@@ -19,6 +19,12 @@ public class CenterPanelModel : Model
     {
         LevelManager.Instance.EndLevel();
         GameMainManager.Instance.OpenMenu();
+    }
+
+    public void Continue()
+    {
+        LevelManager.Instance.EndLevel();
+        GameMainManager.Instance.OpenWaitingRoom();
     }
 
     #endregion

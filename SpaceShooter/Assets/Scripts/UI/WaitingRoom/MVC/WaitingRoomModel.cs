@@ -28,12 +28,12 @@ public class WaitingRoomModel : Model
 
     public void Ready()
     {
-
+        GameMainManager.Instance.StartNextLevel();
     }
 
     public void Exit()
     {
-
+        GameMainManager.Instance.OpenMenu();
     }
 
     #endregion

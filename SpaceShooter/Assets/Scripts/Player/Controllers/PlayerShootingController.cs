@@ -52,6 +52,7 @@ public class PlayerShootingController
 	private void InitializeKeys()
 	{
 		GameMainManager.Instance.OnGameStart += AttachKeysForShooting;
+		GameMainManager.Instance.OnWaitingOpen += DetachKeysForShooting;
 		GameMainManager.Instance.OnMainOpen += DetachKeysForShooting;
 	}
 

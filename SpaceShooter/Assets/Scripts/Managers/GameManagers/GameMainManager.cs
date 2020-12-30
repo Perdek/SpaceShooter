@@ -10,6 +10,7 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 	public event Action OnGameStart = delegate { };
 	public event Action OnMainOpen = delegate { };
 	public event Action OnGameOver = delegate { };
+	public event Action OnWaitingOpen = delegate { };
 
 	[SerializeField]
 	private PlayerManager playerManager = null;
@@ -44,6 +45,11 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		private set;
 	} = GameState.MENU;
 
+	private int LevelNumber {
+		get;
+		set;
+	} = 1;
+
 	#endregion
 
 	#region METHODS
@@ -57,6 +63,15 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 	{
 		SceneManager.LoadScene(Constants.Level01);
 		SetGameState(GameState.GAME);
+		ResetLevelNumber();
+		OnGameStart();
+	}
+
+	public void StartNextLevel()
+	{
+		SceneManager.LoadScene(Constants.Level01);
+		SetGameState(GameState.GAME);
+		IncreaseLevelNumber();
 		OnGameStart();
 	}
 
@@ -73,6 +88,15 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		SetGameState(GameState.MENU);
 		DetachInGameEvents();
 		OnMainOpen();
+	}
+
+	public void OpenWaitingRoom()
+	{
+		UpdateManager.UnPauseTime();
+		SceneManager.LoadScene(Constants.WaitingRoom);
+		SetGameState(GameState.WAITING_ROOM);
+		DetachInGameEvents();
+		OnWaitingOpen();
 	}
 
 	protected virtual void Awake()
@@ -119,10 +143,10 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 
 	private void StartLevel()
 	{
-		if (PlayerManager.Instance != null)
-        {
+		if (PlayerManager.Instance != null && IsFirstLevel() == true)
+		{
 			PlayerManager.Instance.ReloadPlayer();
-        }
+		}
 
 		if (LevelManager.Instance != null)
 		{
@@ -156,6 +180,21 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 		TagManager.Initialize();
 	}
 
+	private void IncreaseLevelNumber()
+	{
+		LevelNumber++;
+	}
+
+	private bool IsFirstLevel()
+	{
+		return LevelNumber == 1;
+	}
+
+	private void ResetLevelNumber()
+	{
+		LevelNumber = 1;
+	}
+
 	#endregion
 
 	#region ENUMS
@@ -164,7 +203,8 @@ public class GameMainManager : BaseMonoBehaviourSingletonManager<GameMainManager
 	{
 		MENU,
 		GAME,
-		PAUSE
+		PAUSE,
+		WAITING_ROOM
 	}
 
 	#endregion
