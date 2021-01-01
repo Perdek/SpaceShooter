@@ -10,43 +10,51 @@ public class PlayerShootingController
 	public event Action<EnemyInformation> OnKillEnemy = delegate { };
 
 	[SerializeField]
-	private Transform playerBulletSpawnTransform = null;
+	private Transform bulletSpawnPointTransform = null;
+	[SerializeField]
+	private List<Weapon> weapons = new List<Weapon>();
 
 	#endregion
 
 	#region PROPERTIES
 
-	public Transform PlayerBulletSpawnTransform => playerBulletSpawnTransform;
+	public Transform BulletSpawnPointTransform => bulletSpawnPointTransform;
+	public List<Weapon> Weapons => weapons;
+
+	private WeaponValue ActiveWeapon {
+		get;
+		set;
+	}
 
 	private List<int> KeysIds {
 		get;
 		set;
 	} = new List<int>();
 
-	#endregion
+	private int ActiveWeaponIndex {
+		get;
+		set;
+	} = 0;
 
-	#region METHODS
+    #endregion
 
-	public void Initialize()
+    #region METHODS
+
+    public void Initialize()
 	{
 		InitializeKeys();
+		ChooseFirstWeapon();
+		InitializeWeapons();
 	}
 
-	public void NotifyKillEnemy(EnemyInformation killedEnemyInformation)
+    public void NotifyKillEnemy(EnemyInformation killedEnemyInformation)
     {
 		OnKillEnemy(killedEnemyInformation);
 	}
 
 	public void Shoot()
 	{
-		if (PoolManager.Instance != null)
-		{
-			BasePoolObject poolObject = PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.PLAYER_BULLET_TAG, PlayerBulletSpawnTransform.position, PlayerBulletSpawnTransform.rotation);
-
-			Bullet bullet = poolObject as Bullet;
-
-			bullet.OnKillTarget += NotifyKillEnemy;
-		}
+		ActiveWeapon.Value.Shoot();
 	}
 
 	private void InitializeKeys()
@@ -56,9 +64,21 @@ public class PlayerShootingController
 		GameMainManager.Instance.OnMainOpen += DetachKeysForShooting;
 	}
 
+	private void InitializeWeapons()
+	{
+        for (int i = 0; i < Weapons.Count; i++)
+        {
+			Weapons[i].InitializeBulletTransform(BulletSpawnPointTransform);
+			Weapons[i].CachePlayerShootingController(this);
+			Weapons[i].InitializeWeapon();
+		}
+	}
+
 	private void AttachKeysForShooting()
 	{
 		KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN, KeyInput.CheckingModeEnum.DISJUNCTION));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.E, NextWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
+		KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.Q, PrevWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
 	}
 
 	private void DetachKeysForShooting()
@@ -68,6 +88,24 @@ public class PlayerShootingController
 			KeyboardManager.Instance.RemoveKey(KeysIds[i]);
 			KeysIds.RemoveAt(i);
 		}
+	}
+
+	private void NextWeapon()
+    {
+		ActiveWeaponIndex = Weapons.Count == ActiveWeaponIndex + 1 ? ActiveWeaponIndex = 0 : ActiveWeaponIndex++;
+		ActiveWeapon.SetValue(Weapons[ActiveWeaponIndex]);
+    }
+
+	private void PrevWeapon()
+    {
+		ActiveWeaponIndex = ActiveWeaponIndex == 0 ? ActiveWeaponIndex = Weapons.Count - 1 : ActiveWeaponIndex--;
+		ActiveWeapon.SetValue(Weapons[ActiveWeaponIndex]);
+	}
+
+	private void ChooseFirstWeapon()
+    {
+		ActiveWeaponIndex = 0;
+		ActiveWeapon = new WeaponValue(Weapons[ActiveWeaponIndex]);
 	}
 
 	#endregion

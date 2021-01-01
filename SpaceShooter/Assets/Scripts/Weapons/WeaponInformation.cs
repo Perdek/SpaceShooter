@@ -9,6 +9,8 @@ public class WeaponInformation : ScriptableObject
     #region FIELDS
 
     [SerializeField]
+    private string weaponName = "weapon";
+    [SerializeField]
     private int magazineCapacity = 5;
     [SerializeField]
     private float timeInSecondBetweenShoots = 1f;
@@ -23,6 +25,7 @@ public class WeaponInformation : ScriptableObject
 
     #region PROPERTIES
 
+    public string WeaponName => weaponName;
     public float ReloadingTimeInSeconds => reloadingTimeInSeconds;
     public float TimeInSecondBetweenShoots => timeInSecondBetweenShoots;
     public int MagazineCapacity => magazineCapacity;

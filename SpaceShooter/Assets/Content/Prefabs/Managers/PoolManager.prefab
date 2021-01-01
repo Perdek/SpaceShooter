@@ -56,5 +56,17 @@ MonoBehaviour:
     size: 20
     poolPrefab: {fileID: 1894023344422044527, guid: 3d7e7f7e585d1594fb6f211ccddac21d,
       type: 3}
+  - tag: 3
+    size: 20
+    poolPrefab: {fileID: 7776014728476065519, guid: 96a0cbea35e170e40b1a6ffe4036c1ed,
+      type: 3}
+  - tag: 4
+    size: 20
+    poolPrefab: {fileID: 7776014728476065519, guid: b4d6cb8a722bb054290e5ccee4e52187,
+      type: 3}
+  - tag: 5
+    size: 20
+    poolPrefab: {fileID: 7776014728476065519, guid: 442db12f05a7b6d4da280d36a15d4c1b,
+      type: 3}
   poolObjectsParentPrefab: {fileID: 4211724078361536507, guid: 74ef8775db1e70b49904981d41e01c79,
     type: 3}

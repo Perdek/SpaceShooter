@@ -45,13 +45,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMovementController:
-    maxSpeed: 20
-    accelerationFactory: 15
-    brakingFactory: 10
+    maxSpeed: 35
+    accelerationFactory: 25
+    brakingFactory: 20
     playerRigidBody2D: {fileID: 2993472096035046594}
   playerShootingController:
-    playerBulletSpawnTransform: {fileID: 5431355560651734771}
+    bulletSpawnPointTransform: {fileID: 5431355560651734771}
+    weapons:
+    - bulletTag: 0
+      weaponInformation: {fileID: 11400000, guid: df98ce61525e6cc429e4280150c1af4f,
+        type: 2}
+    - bulletTag: 3
+      weaponInformation: {fileID: 11400000, guid: 87e582e41d76d734cbe45ed557021097,
+        type: 2}
+    - bulletTag: 4
+      weaponInformation: {fileID: 11400000, guid: fcf6504b673cd3148bfeec81bc59ac66,
+        type: 2}
+    - bulletTag: 5
+      weaponInformation: {fileID: 11400000, guid: 8375ddc6eb6b258488fe5268aca30fa1,
+        type: 2}
   playerColliderController: {fileID: 4050980234417259582}
+  playerStatisticsController:
+    defaultHealthPoints: 5
+    defaultShieldPoints: 2
+    defaultScorePoints: 5
+    defaultMoneyPoints: 2
 --- !u!1 &664811276666116924
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,6 +120,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

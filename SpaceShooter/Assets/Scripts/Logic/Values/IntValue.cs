@@ -15,6 +15,11 @@ public class IntValue : NotifiableValue<int>
 
     #region METHODS
 
+    public IntValue()
+    {
+        SetValue(0);
+    }
+
     public IntValue(int value)
     {
         SetValue(value);
@@ -30,7 +35,7 @@ public class IntValue : NotifiableValue<int>
     {
         SetValueSilent(Value - removedValue);
         OnRemoveValue(removedValue);
-    }    
+    }
 
     #endregion
 }
