@@ -30,10 +30,15 @@ public class TopLeftPanelView : View
 		ScoreIntValueTMP.RegisterValue(score);
     }
 
-	public void RegisterMoney(IntValue score)
+	public void RegisterMoney(IntValue money)
 	{
-		MoneyIntValueTMP.RegisterValue(score);
+		MoneyIntValueTMP.RegisterValue(money);
 	}
+
+	public void RegisterWeapon(WeaponValue weapon)
+    {
+		WeaponPanel.RegisterWeapon(weapon);
+    }
 
 	#endregion
 

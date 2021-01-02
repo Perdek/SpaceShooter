@@ -46,6 +46,8 @@ public class Timer
 
 	public void StartCounting()
 	{
+		ResetCounter();
+
 		if (UpdateManager.Instance != null)
         {
 			UpdateManager.Instance.OnDataChange += Counting;

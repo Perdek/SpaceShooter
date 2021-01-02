@@ -25,6 +25,11 @@ public class TopLeftPanelModel : Model
         return PlayerManager.Instance.PlayerStatisticsController.ScorePoints;
     }
 
+    public WeaponValue GetWeaponParameter()
+    {
+        return PlayerManager.Instance.PlayerShootingController.ActiveWeapon;
+    }
+
     #endregion
 
     #region CLASS_ENUMS

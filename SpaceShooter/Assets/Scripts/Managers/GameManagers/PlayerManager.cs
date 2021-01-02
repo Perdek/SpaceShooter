@@ -17,6 +17,7 @@ public class PlayerManager : BaseMonoBehaviourSingletonManager<PlayerManager>
 	public PlayerMainController PlayerMainController => playerMainController;
 
 	public PlayerStatisticsController PlayerStatisticsController => PlayerMainController.PlayerStatisticsController;
+	public PlayerShootingController PlayerShootingController => PlayerMainController.PlayerShootingController;
 	private PlayerMovementController PlayerMovementController => PlayerMainController.PlayerMovementController;
 
 	#endregion

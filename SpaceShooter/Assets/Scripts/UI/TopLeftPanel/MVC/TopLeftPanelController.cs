@@ -41,6 +41,7 @@ public class TopLeftPanelController : Controller
     {
 		View.RegisterMoney(Model.GetMoneyParameter());
 		View.RegisterScore(Model.GetScoreParameter());
+		View.RegisterWeapon(Model.GetWeaponParameter());
 	}
 
 	#endregion
