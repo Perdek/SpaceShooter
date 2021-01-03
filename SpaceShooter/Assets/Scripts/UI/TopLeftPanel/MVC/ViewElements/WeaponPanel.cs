@@ -48,13 +48,7 @@ public class WeaponPanel
         AttachEvents();
     }
 
-    private void RefreshView(Weapon weapon)
-    {
-        WeaponIconImage.sprite = weapon.WeaponInformation.BulletSprite;
-        WeaponNameText.text = weapon.WeaponInformation.WeaponName;
-    }
-
-    private void UnregisterWeapon()
+    public void UnregisterWeapon()
     {
         if (PlayerCurrentWeapon != null)
         {
@@ -62,6 +56,12 @@ public class WeaponPanel
         }
 
         DetachEvents();
+    }
+
+    private void RefreshView(Weapon weapon)
+    {
+        WeaponIconImage.sprite = weapon.WeaponInformation.BulletSprite;
+        WeaponNameText.text = weapon.WeaponInformation.WeaponName;
     }
 
     private void AttachEvents()

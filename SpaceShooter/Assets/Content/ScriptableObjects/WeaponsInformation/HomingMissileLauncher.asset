@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ef7d1ee09b6d3942a8da4fb8191b3c3, type: 3}
   m_Name: HomingMissileLauncher
   m_EditorClassIdentifier: 
+  weaponName: Homing Missile
   magazineCapacity: 5
   timeInSecondBetweenShoots: 1
   reloadingTimeInSeconds: 5

@@ -43,7 +43,6 @@ public class AsteroidCollisionComponent
 
 		if (bullet != null)
         {
-			bullet.NotifyComfirmKill(CachedEnemyInformation);
 			OnHit();
 			return;
         }

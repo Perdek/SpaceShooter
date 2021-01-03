@@ -12,7 +12,7 @@ public class Enemy : BasePoolObject
 
 	#region PROPERTIES
 
-	protected EnemyInformation EnemyInformation => enemyInformation;
+	public EnemyInformation EnemyInformation => enemyInformation;
 
 	#endregion
 

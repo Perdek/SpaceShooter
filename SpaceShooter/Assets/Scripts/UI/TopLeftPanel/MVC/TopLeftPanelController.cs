@@ -31,6 +31,11 @@ public class TopLeftPanelController : Controller
 		AttachEvents();
 	}
 
+	protected virtual void OnDestroy()
+    {
+		View.UnregisterView();
+    }
+
 	private void PrepareProperties()
 	{
 		Model = GetModel<TopLeftPanelModel>();

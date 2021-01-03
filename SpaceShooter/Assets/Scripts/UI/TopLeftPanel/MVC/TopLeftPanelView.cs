@@ -40,6 +40,11 @@ public class TopLeftPanelView : View
 		WeaponPanel.RegisterWeapon(weapon);
     }
 
+	public void UnregisterView()
+    {
+		WeaponPanel.UnregisterWeapon();
+    }
+
 	#endregion
 
 	#region CLASS_ENUMS

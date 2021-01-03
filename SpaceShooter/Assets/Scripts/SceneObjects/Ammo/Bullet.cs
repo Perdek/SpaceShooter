@@ -65,6 +65,13 @@ public class Bullet : BasePoolObject
 			return;
 		}
 
+		Enemy enemy = hittedObjectCollider.GetComponentInChildren<Enemy>();
+
+		if (enemy != null)
+        {
+			NotifyComfirmKill(enemy.EnemyInformation);
+		}
+
 		Deactivation();
 	}
 
