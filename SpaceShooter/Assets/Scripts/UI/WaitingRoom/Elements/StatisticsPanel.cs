@@ -14,6 +14,8 @@ namespace UI.WaitingRoom
         [SerializeField] private IntValueTMP moneyValue = default;
         [SerializeField] private IntValueTMP hpValue = default;
         [SerializeField] private IntValueTMP shieldValue = default;
+        [SerializeField] private IntValueTMP hpCostValue = default;
+        [SerializeField] private IntValueTMP shieldCostValue = default;
         [SerializeField] private Button upgradeHP = default;
         [SerializeField] private Button upgradeShield = default;
 
@@ -27,6 +29,8 @@ namespace UI.WaitingRoom
         private IntValueTMP ShieldValue => shieldValue;
         private Button UpgradeHP => upgradeHP;
         private Button UpgradeShield => upgradeShield;
+        private IntValueTMP HpCostValue => hpCostValue;
+        private IntValueTMP ShieldCostValue => shieldCostValue;
 
         #endregion
 
@@ -38,6 +42,12 @@ namespace UI.WaitingRoom
             MoneyValue.RegisterValue(playerStatisticsController.MoneyPoints);
             HPValue.RegisterValue(playerStatisticsController.HealthPoints);
             ShieldValue.RegisterValue(playerStatisticsController.ShieldsPoints);
+        }
+
+        public void RefreshCosts(ShopCostsInformation shopCostsInformation)
+        {
+            HpCostValue.text = "Cost: " + shopCostsInformation.HpCost;
+            ShieldCostValue.text = "Cost: " + shopCostsInformation.ShieldCost;
         }
 
         public void AddListenerToUpgradeHP(UnityAction onClick)

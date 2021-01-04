@@ -37,6 +37,8 @@ public class WaitingRoomController : Controller
 
         View.RefreshHPButtonInteractivity(Model.CanPlayerAffordUpgradingHP());
         View.RefreshShieldButtonInteractivity(Model.CanPlayerAffordUpgradingShield());
+
+        View.RefreshCosts(Model.GetBasicHealthCosts());
     }
 
     private void UpgradeHP()

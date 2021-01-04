@@ -67,6 +67,11 @@ public class WaitingRoomModel : Model
 		return PlayerManager.Instance.PlayerMainController.CanPlayerAffordCost(BasicHealthCosts.ShieldCost);
 	}
 
+	public ShopCostsInformation GetBasicHealthCosts()
+    {
+		return BasicHealthCosts;
+    }
+
 	#endregion
 
 	#region CLASS_ENUMS

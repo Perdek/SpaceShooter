@@ -43,7 +43,12 @@ public class WaitingRoomView : View
 		ButtonsPanel.AddListenerToReadyButton(onClick);
 	}
 
-	public void AddListenerToSaveButton(UnityAction onClick)
+	public void RefreshCosts(ShopCostsInformation shopCostsInformation)
+    {
+		StatisticsPanel.RefreshCosts(shopCostsInformation);
+	}
+
+    public void AddListenerToSaveButton(UnityAction onClick)
 	{
 		ButtonsPanel.AddListenerToSaveButton(onClick);
 	}
