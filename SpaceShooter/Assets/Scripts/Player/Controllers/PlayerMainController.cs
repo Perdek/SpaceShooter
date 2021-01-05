@@ -16,6 +16,8 @@ public class PlayerMainController : MonoBehaviour
     private PlayerColliderController playerColliderController = null;
     [SerializeField]
     private PlayerStatisticsController playerStatisticsController = null;
+    [SerializeField]
+    private PlayerVisualisationController playerVisualisationController = null;
 
     #endregion
 
@@ -25,6 +27,7 @@ public class PlayerMainController : MonoBehaviour
     public PlayerShootingController PlayerShootingController => playerShootingController;
     public PlayerColliderController PlayerColliderController => playerColliderController;
     public PlayerStatisticsController PlayerStatisticsController => playerStatisticsController;
+    public PlayerVisualisationController PlayerVisualisationController => playerVisualisationController;
 
     #endregion
 
@@ -45,21 +48,34 @@ public class PlayerMainController : MonoBehaviour
     private void AttachEvents()
     {
         GameMainManager.Instance.OnGameStart += AttachInterControllersEvents;
+        GameMainManager.Instance.OnGameStart += RefreshView;
         GameMainManager.Instance.OnMainOpen += DetachInterControllersEvents;
         GameMainManager.Instance.OnWaitingOpen += DetachInterControllersEvents;
         PlayerStatisticsController.OnPlayerDead += GameMainManager.Instance.GameOver;
+    }
+
+    private void RefreshView()
+    {
+        if(PlayerStatisticsController.CurrentShieldPoints > 0)
+        {
+            PlayerVisualisationController.TurnOnForceShield();
+        }
     }
 
     private void AttachInterControllersEvents()
     {
         PlayerColliderController.OnDamageCollision += PlayerStatisticsController.HandleDamage;
         PlayerShootingController.OnKillEnemy += PlayerStatisticsController.RewardForKill;
+        PlayerStatisticsController.OnTurnOnForceShield += PlayerVisualisationController.TurnOnForceShield;
+        PlayerStatisticsController.OnTurnOffForceShield += PlayerVisualisationController.TurnOffForceShield;
     }
 
     private void DetachInterControllersEvents()
     {
         PlayerColliderController.OnDamageCollision -= PlayerStatisticsController.HandleDamage;
         PlayerShootingController.OnKillEnemy -= PlayerStatisticsController.RewardForKill;
+        PlayerStatisticsController.OnTurnOnForceShield -= PlayerVisualisationController.TurnOnForceShield;
+        PlayerStatisticsController.OnTurnOffForceShield -= PlayerVisualisationController.TurnOffForceShield;
     }
 
     #endregion

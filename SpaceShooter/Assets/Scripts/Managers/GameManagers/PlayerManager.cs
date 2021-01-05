@@ -44,7 +44,7 @@ public class PlayerManager : BaseMonoBehaviourSingletonManager<PlayerManager>
 	public void BuyShield(int value, int cost)
 	{
 		PlayerStatisticsController.MoneyPoints.RemoveValue(cost);
-		PlayerStatisticsController.HealthPoints.AddValue(value);
+		PlayerStatisticsController.AddNewShield(value);
 	}
 
 	#endregion
