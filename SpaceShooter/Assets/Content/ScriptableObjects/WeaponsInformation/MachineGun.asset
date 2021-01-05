@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MachineGun
   m_EditorClassIdentifier: 
   weaponName: Machine Gun
-  magazineCapacity: 10
-  timeInSecondBetweenShoots: 0.5
+  magazineCapacity: 20
+  timeInSecondBetweenShoots: 0.1
   reloadingTimeInSeconds: 2
   damage: 1
   bulletSprite: {fileID: 21300000, guid: cc0df7fba7328d74a9bef36da496da2e, type: 3}

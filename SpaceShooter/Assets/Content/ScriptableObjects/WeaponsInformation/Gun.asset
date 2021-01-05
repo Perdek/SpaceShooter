@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Gun
   m_EditorClassIdentifier: 
   weaponName: Gun
-  magazineCapacity: 5
-  timeInSecondBetweenShoots: 1
-  reloadingTimeInSeconds: 3
+  magazineCapacity: 10
+  timeInSecondBetweenShoots: 0.5
+  reloadingTimeInSeconds: 2
   damage: 5
   bulletSprite: {fileID: 21300000, guid: 561c1934911e0284f828fa8f0200e9a5, type: 3}
