@@ -53,7 +53,7 @@ public class Bullet : BasePoolObject
 		HandleCollision(other);
 	}
 
-	private void Move()
+	public void Move()
 	{
 		Rigidbody2DComponent.MovePosition(Rigidbody2DComponent.position + Vector2.up * Time.fixedDeltaTime * SpeedFactory);
 	}

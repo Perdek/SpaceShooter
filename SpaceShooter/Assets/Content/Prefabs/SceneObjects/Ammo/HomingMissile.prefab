@@ -4814,7 +4814,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2395807104001049467}
   - component: {fileID: 4414116271741034061}
-  - component: {fileID: 7776014728476065519}
+  - component: {fileID: 9061181864618376374}
   - component: {fileID: 7408553487247332741}
   - component: {fileID: 5404112664972228854}
   m_Layer: 0
@@ -4891,7 +4891,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7776014728476065519
+--- !u!114 &9061181864618376374
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4900,12 +4900,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7388286075589769819}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d72f5e303e2d534491a0fcac4ca1864, type: 3}
+  m_Script: {fileID: 11500000, guid: d1dca91c6dab6564084083e3e26eb3c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speedFactory: 10
   rigidbody2DComponent: {fileID: 5404112664972228854}
   iff: 1
+  radarRange: 50
+  rotateSpeed: 200
 --- !u!61 &7408553487247332741
 BoxCollider2D:
   m_ObjectHideFlags: 0
