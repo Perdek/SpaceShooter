@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [System.Serializable]
 public class Weapon
@@ -49,6 +50,17 @@ public class Weapon
     public void CachePlayerShootingController(PlayerShootingController playerShootingController)
     {
         CachedPlayerShootingController = playerShootingController;
+    }
+
+    public void ClearReload()
+    {
+        BulletLeftInMagazine.SetValue(WeaponInformation.MagazineCapacity);
+
+        ReloadingMagazineTimer?.EndCounting();
+        BoltReloadCycleTimer?.EndCounting();
+
+        IsReloadingMagazine.SetValue(false);
+        IsBoltReloadCycle.SetValue(false);
     }
 
     public void UpgradeWeapon()

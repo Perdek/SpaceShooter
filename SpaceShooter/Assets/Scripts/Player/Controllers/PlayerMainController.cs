@@ -56,10 +56,12 @@ public class PlayerMainController : MonoBehaviour
 
     private void RefreshView()
     {
-        if(PlayerStatisticsController.CurrentShieldPoints > 0)
+        if (PlayerStatisticsController.CurrentShieldPoints > 0)
         {
             PlayerVisualisationController.TurnOnForceShield();
         }
+
+        PlayerShootingController.ClearWeaponsReload();
     }
 
     private void AttachInterControllersEvents()

@@ -47,6 +47,14 @@ public class PlayerShootingController
         InitializeWeapons();
     }
 
+    public void ClearWeaponsReload()
+    {
+        for (int i = 0; i < Weapons.Count; i++)
+        {
+            Weapons[i].ClearReload();
+        }
+    }
+
     public void NotifyKillEnemy(EnemyInformation killedEnemyInformation)
     {
         OnKillEnemy(killedEnemyInformation);
