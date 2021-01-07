@@ -308,7 +308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolObjectTag: 1
   firstSpawnDelayInSeconds: 0.5
-  delayBetweenSpawnsInSeconds: 1
+  delayBetweenSpawnsInSeconds: 2
   spawnObjectsLimit: 10
 --- !u!4 &282857032
 Transform:
@@ -726,7 +726,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolObjectTag: 1
   firstSpawnDelayInSeconds: 2
-  delayBetweenSpawnsInSeconds: 1
+  delayBetweenSpawnsInSeconds: 2
   spawnObjectsLimit: 10
 --- !u!1 &1705413089
 GameObject:
@@ -792,7 +792,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolObjectTag: 1
   firstSpawnDelayInSeconds: 1
-  delayBetweenSpawnsInSeconds: 1
+  delayBetweenSpawnsInSeconds: 2
   spawnObjectsLimit: 10
 --- !u!4 &1942837022
 Transform:

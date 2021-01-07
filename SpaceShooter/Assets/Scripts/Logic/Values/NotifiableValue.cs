@@ -4,6 +4,7 @@ public abstract class NotifiableValue<T>
 {
     #region MEMBERS
 
+    public event Action<T> OnBeforeValueSet = delegate { };
     public event Action<T> OnValueSet = delegate { };
 
     private T value;
@@ -23,6 +24,7 @@ public abstract class NotifiableValue<T>
 
     public void SetValue(T newValue)
     {
+        OnBeforeValueSet(Value);
         Value = newValue;
         OnValueSet(Value);
     }

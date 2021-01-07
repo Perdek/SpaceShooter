@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyInformation: {fileID: 11400000, guid: b0e93257d8477574196f4a51674e2830, type: 2}
   movementComponent:
-    speedFactory: 8
+    speedFactory: 2
     speedLotteryRangeFactor: 2
     rigidbody2DComponent: {fileID: 5404112664972228854}
     directionLotteryRange: 0.4

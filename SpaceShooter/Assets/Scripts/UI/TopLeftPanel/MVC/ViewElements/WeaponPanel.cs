@@ -34,16 +34,16 @@ public class WeaponPanel
 
     #region FUNCTIONS
 
-    public void RegisterWeapon(WeaponValue weapon)
+    public void RegisterWeapon(WeaponValue weaponSlot)
     {
         UnregisterWeapon();
 
-        PlayerCurrentWeapon = weapon;
+        PlayerCurrentWeapon = weaponSlot;
 
-        weapon.OnValueSet += RefreshView;
+        weaponSlot.OnBeforeValueSet += DetachEventsFromOldWeapon;
+        weaponSlot.OnValueSet += PrepareViewForNewWeapon;
 
-        RefreshView(weapon.Value);
-        RefreshReloadingText(weapon.Value.IsReloadingMagazine.Value);
+        RefreshView(weaponSlot.Value);
 
         AttachEvents();
     }
@@ -53,15 +53,24 @@ public class WeaponPanel
         if (PlayerCurrentWeapon != null)
         {
             PlayerCurrentWeapon.OnValueSet -= RefreshView;
+            PlayerCurrentWeapon.OnBeforeValueSet -= DetachEventsFromOldWeapon;
         }
 
         DetachEvents();
+    }
+
+    private void PrepareViewForNewWeapon(Weapon newWeapon)
+    {
+        RefreshView(newWeapon);
+        AttachEvents();
     }
 
     private void RefreshView(Weapon weapon)
     {
         WeaponIconImage.sprite = weapon.WeaponInformation.BulletSprite;
         WeaponNameText.text = weapon.WeaponInformation.WeaponName;
+
+        RefreshReloadingText(weapon.IsReloadingMagazine.Value);
     }
 
     private void AttachEvents()
@@ -75,10 +84,15 @@ public class WeaponPanel
     {
         if (PlayerCurrentWeapon != null)
         {
-            PlayerCurrentWeapon.Value.IsReloadingMagazine.OnValueSet -= RefreshReloadingText;
-            PlayerCurrentWeapon.Value.BulletLeftInMagazine.OnValueSet -= RefreshMagazineText;
-            PlayerCurrentWeapon.Value.BulletLeftInMagazine.OnRemoveValue -= RefreshRemoveMagazineText;
+            DetachEventsFromOldWeapon(PlayerCurrentWeapon.Value);
         }
+    }
+
+    private void DetachEventsFromOldWeapon(Weapon oldWeapon)
+    {
+        oldWeapon.IsReloadingMagazine.OnValueSet -= RefreshReloadingText;
+        oldWeapon.BulletLeftInMagazine.OnValueSet -= RefreshMagazineText;
+        oldWeapon.BulletLeftInMagazine.OnRemoveValue -= RefreshRemoveMagazineText;
     }
 
     private void RefreshMagazineText(int bulletLeft)
