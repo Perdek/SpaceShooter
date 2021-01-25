@@ -9,7 +9,7 @@ public class HomingMissile : Bullet
     private const float DEFAULT_HOMING_MISSILE_RANGE = 50;
 
     [SerializeField] private float radarRange = DEFAULT_HOMING_MISSILE_RANGE;
-    [SerializeField] private float rotateSpeed = 200f;
+    [SerializeField] private float rotateSpeed = 1000f;
 
     #endregion
 
@@ -55,7 +55,7 @@ public class HomingMissile : Bullet
 
     private bool IsAnyEnemyTracking()
     {
-        return TrackedOpponent != null && TrackedOpponent.State == PoolObjectStateEnum.WAITING_FOR_USE;
+        return TrackedOpponent != null && TrackedOpponent.State == PoolObjectStateEnum.IN_USE;
     }
 
     private void GuidToTrackedEnemy()

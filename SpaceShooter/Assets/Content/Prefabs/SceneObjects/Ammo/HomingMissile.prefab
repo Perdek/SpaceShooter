@@ -4907,7 +4907,7 @@ MonoBehaviour:
   rigidbody2DComponent: {fileID: 5404112664972228854}
   iff: 1
   radarRange: 50
-  rotateSpeed: 200
+  rotateSpeed: 1000
 --- !u!61 &7408553487247332741
 BoxCollider2D:
   m_ObjectHideFlags: 0
