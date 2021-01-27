@@ -54,6 +54,7 @@ public class WeaponPanel
         {
             PlayerCurrentWeapon.OnValueSet -= RefreshView;
             PlayerCurrentWeapon.OnBeforeValueSet -= DetachEventsFromOldWeapon;
+            PlayerCurrentWeapon.OnValueSet -= PrepareViewForNewWeapon;
         }
 
         DetachEvents();

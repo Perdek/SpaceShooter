@@ -57,9 +57,7 @@ public class Bullet : BasePoolObject
 	{
 		Vector2 localForwardVector = new Vector2(transform.up.x, transform.up.y);
 
-		Rigidbody2DComponent.MovePosition(Rigidbody2DComponent.position + localForwardVector * Time.fixedDeltaTime * SpeedFactory);
-
-		Debug.Log(localForwardVector);
+		Rigidbody2DComponent.MovePosition(Rigidbody2DComponent.position + localForwardVector * Time.fixedDeltaTime * SpeedFactory);		
 	}
 
 	private void HandleCollision(Collider2D hittedObjectCollider)
