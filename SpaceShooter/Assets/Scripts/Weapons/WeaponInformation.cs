@@ -9,6 +9,15 @@ public class WeaponInformation : ScriptableObject
     #region FIELDS
 
     [SerializeField]
+    private AnimationCurve damageCurve;
+    [SerializeField]
+    private AnimationCurve magazineCapacityCurve;
+    [SerializeField]
+    private AnimationCurve timeInSecondBetweenShootsCurve;
+    [SerializeField]
+    private AnimationCurve reloadingTimeInSecondsCurve;
+
+    [SerializeField]
     private string weaponName = "weapon";
     [SerializeField]
     private int magazineCapacity = 5;
