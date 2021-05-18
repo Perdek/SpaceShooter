@@ -1,23 +1,22 @@
 using UnityEngine.Events;
 using UnityEngine;
 using UI.WaitingRoom;
-using System;
 
 public class WaitingRoomView : View
 {
 	#region MEMBERS
 
-	[SerializeField] private UI.WaitingRoom.WeaponPanel weaponPanel = default;
-	[SerializeField] private UI.WaitingRoom.StatisticsPanel statisticsPanel = default;
-	[SerializeField] private UI.WaitingRoom.ButtonsPanel buttonsPanel = default;
+	[SerializeField] private WeaponPanel weaponPanel = default;
+	[SerializeField] private StatisticsPanel statisticsPanel = default;
+	[SerializeField] private ButtonsPanel buttonsPanel = default;
 
 	#endregion
 
 	#region PROPERTIES
 
-	private UI.WaitingRoom.WeaponPanel WeaponPanel => weaponPanel;
-	private UI.WaitingRoom.StatisticsPanel StatisticsPanel => statisticsPanel;
-	private UI.WaitingRoom.ButtonsPanel ButtonsPanel => buttonsPanel;
+	private WeaponPanel WeaponPanel => weaponPanel;
+	private StatisticsPanel StatisticsPanel => statisticsPanel;
+	private ButtonsPanel ButtonsPanel => buttonsPanel;
 
 	#endregion
 

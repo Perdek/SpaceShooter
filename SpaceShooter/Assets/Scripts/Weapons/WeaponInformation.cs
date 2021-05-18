@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Weapon Information", menuName = "Weapon Information")]
 public class WeaponInformation : ScriptableObject
@@ -9,24 +6,16 @@ public class WeaponInformation : ScriptableObject
     #region FIELDS
 
     [SerializeField]
-    private AnimationCurve damageCurve;
-    [SerializeField]
     private AnimationCurve magazineCapacityCurve;
     [SerializeField]
     private AnimationCurve timeInSecondBetweenShootsCurve;
     [SerializeField]
     private AnimationCurve reloadingTimeInSecondsCurve;
+    [SerializeField]
+    private AnimationCurve damageCurve;
 
     [SerializeField]
     private string weaponName = "weapon";
-    [SerializeField]
-    private int magazineCapacity = 5;
-    [SerializeField]
-    private float timeInSecondBetweenShoots = 1f;
-    [SerializeField]
-    private float reloadingTimeInSeconds = 3f;
-    [SerializeField]
-    private int damage = 10;
     [SerializeField]
     private Sprite bulletSprite = null;
 
@@ -34,20 +23,20 @@ public class WeaponInformation : ScriptableObject
 
     #region PROPERTIES
 
+	public AnimationCurve MagazineCapacityCurve => magazineCapacityCurve;
+	public AnimationCurve TimeInSecondBetweenShootsCurve => timeInSecondBetweenShootsCurve;
+	public AnimationCurve ReloadingTimeInSecondsCurve => reloadingTimeInSecondsCurve;
+	public AnimationCurve DamageCurve => damageCurve;
     public string WeaponName => weaponName;
-    public float ReloadingTimeInSeconds => reloadingTimeInSeconds;
-    public float TimeInSecondBetweenShoots => timeInSecondBetweenShoots;
-    public int MagazineCapacity => magazineCapacity;
-    public int Damage => damage;
     public Sprite BulletSprite => bulletSprite;
 
-    #endregion
+	#endregion
 
-    #region METHODS
+	#region METHODS
 
-    #endregion
+	#endregion
 
-    #region ENUMS
+	#region ENUMS
 
-    #endregion
+	#endregion
 }

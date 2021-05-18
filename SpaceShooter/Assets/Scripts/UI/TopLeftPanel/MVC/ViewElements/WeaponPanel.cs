@@ -1,126 +1,127 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[System.Serializable]
-public class WeaponPanel
+namespace UI.TopLeftPanel
 {
-    #region MEMBERS
-
-    [SerializeField]
-    private Image weaponIconImage = null;
-    [SerializeField]
-    private TMPro.TMP_Text reloadText = null;
-    [SerializeField]
-    private TMPro.TMP_Text weaponNameText = null;
-
-    #endregion
-
-    #region PROPERTIES
-
-    private TMPro.TMP_Text ReloadText => reloadText;
-    private Image WeaponIconImage => weaponIconImage;
-    private TMP_Text WeaponNameText => weaponNameText;
-
-    private WeaponValue PlayerCurrentWeapon {
-        get;
-        set;
-    }
-
-    #endregion
-
-    #region FUNCTIONS
-
-    public void RegisterWeapon(WeaponValue weaponSlot)
+    [System.Serializable]
+    public class WeaponPanel
     {
-        UnregisterWeapon();
+        #region MEMBERS
 
-        PlayerCurrentWeapon = weaponSlot;
+        [SerializeField]
+        private Image weaponIconImage = null;
+        [SerializeField]
+        private TMPro.TMP_Text reloadText = null;
+        [SerializeField]
+        private TMPro.TMP_Text weaponNameText = null;
 
-        weaponSlot.OnBeforeValueSet += DetachEventsFromOldWeapon;
-        weaponSlot.OnValueSet += PrepareViewForNewWeapon;
+        #endregion
 
-        RefreshView(weaponSlot.Value);
+        #region PROPERTIES
 
-        AttachEvents();
-    }
+        private TMPro.TMP_Text ReloadText => reloadText;
+        private Image WeaponIconImage => weaponIconImage;
+        private TMP_Text WeaponNameText => weaponNameText;
 
-    public void UnregisterWeapon()
-    {
-        if (PlayerCurrentWeapon != null)
-        {
-            PlayerCurrentWeapon.OnValueSet -= RefreshView;
-            PlayerCurrentWeapon.OnBeforeValueSet -= DetachEventsFromOldWeapon;
-            PlayerCurrentWeapon.OnValueSet -= PrepareViewForNewWeapon;
+        private WeaponValue PlayerCurrentWeapon {
+            get;
+            set;
         }
 
-        DetachEvents();
-    }
+        #endregion
 
-    private void PrepareViewForNewWeapon(Weapon newWeapon)
-    {
-        RefreshView(newWeapon);
-        AttachEvents();
-    }
+        #region FUNCTIONS
 
-    private void RefreshView(Weapon weapon)
-    {
-        WeaponIconImage.sprite = weapon.WeaponInformation.BulletSprite;
-        WeaponNameText.text = weapon.WeaponInformation.WeaponName;
-
-        RefreshReloadingText(weapon.IsReloadingMagazine.Value);
-    }
-
-    private void AttachEvents()
-    {
-        PlayerCurrentWeapon.Value.IsReloadingMagazine.OnValueSet += RefreshReloadingText;
-        PlayerCurrentWeapon.Value.BulletLeftInMagazine.OnValueSet += RefreshMagazineText;
-        PlayerCurrentWeapon.Value.BulletLeftInMagazine.OnRemoveValue += RefreshRemoveMagazineText;
-    }
-
-    private void DetachEvents()
-    {
-        if (PlayerCurrentWeapon != null)
+        public void RegisterWeapon(WeaponValue weaponSlot)
         {
-            DetachEventsFromOldWeapon(PlayerCurrentWeapon.Value);
+            UnregisterWeapon();
+
+            PlayerCurrentWeapon = weaponSlot;
+
+            weaponSlot.OnBeforeValueSet += DetachEventsFromOldWeapon;
+            weaponSlot.OnValueSet += PrepareViewForNewWeapon;
+
+            RefreshView(weaponSlot.Value);
+
+            AttachEvents();
         }
-    }
 
-    private void DetachEventsFromOldWeapon(Weapon oldWeapon)
-    {
-        oldWeapon.IsReloadingMagazine.OnValueSet -= RefreshReloadingText;
-        oldWeapon.BulletLeftInMagazine.OnValueSet -= RefreshMagazineText;
-        oldWeapon.BulletLeftInMagazine.OnRemoveValue -= RefreshRemoveMagazineText;
-    }
-
-    private void RefreshMagazineText(int bulletLeft)
-    {
-        ReloadText.text = bulletLeft.ToString();
-    }
-
-    private void RefreshRemoveMagazineText(int removedBullets)
-    {
-        ReloadText.text = PlayerCurrentWeapon.Value.BulletLeftInMagazine.Value.ToString();
-    }
-
-    private void RefreshReloadingText(bool isReloading)
-    {
-        if (isReloading == true)
+        public void UnregisterWeapon()
         {
-            ReloadText.text = "Reloading";
+            if (PlayerCurrentWeapon != null)
+            {
+                PlayerCurrentWeapon.OnValueSet -= RefreshView;
+                PlayerCurrentWeapon.OnBeforeValueSet -= DetachEventsFromOldWeapon;
+                PlayerCurrentWeapon.OnValueSet -= PrepareViewForNewWeapon;
+            }
+
+            DetachEvents();
         }
-        else
+
+        private void PrepareViewForNewWeapon(Weapon newWeapon)
+        {
+            RefreshView(newWeapon);
+            AttachEvents();
+        }
+
+        private void RefreshView(Weapon weapon)
+        {
+            WeaponIconImage.sprite = weapon.WeaponInformation.BulletSprite;
+            WeaponNameText.text = weapon.WeaponInformation.WeaponName;
+
+            RefreshReloadingText(weapon.IsReloadingMagazine.Value);
+        }
+
+        private void AttachEvents()
+        {
+            PlayerCurrentWeapon.Value.IsReloadingMagazine.OnValueSet += RefreshReloadingText;
+            PlayerCurrentWeapon.Value.BulletLeftInMagazine.OnValueSet += RefreshMagazineText;
+            PlayerCurrentWeapon.Value.BulletLeftInMagazine.OnRemoveValue += RefreshRemoveMagazineText;
+        }
+
+        private void DetachEvents()
+        {
+            if (PlayerCurrentWeapon != null)
+            {
+                DetachEventsFromOldWeapon(PlayerCurrentWeapon.Value);
+            }
+        }
+
+        private void DetachEventsFromOldWeapon(Weapon oldWeapon)
+        {
+            oldWeapon.IsReloadingMagazine.OnValueSet -= RefreshReloadingText;
+            oldWeapon.BulletLeftInMagazine.OnValueSet -= RefreshMagazineText;
+            oldWeapon.BulletLeftInMagazine.OnRemoveValue -= RefreshRemoveMagazineText;
+        }
+
+        private void RefreshMagazineText(int bulletLeft)
+        {
+            ReloadText.text = bulletLeft.ToString();
+        }
+
+        private void RefreshRemoveMagazineText(int removedBullets)
         {
             ReloadText.text = PlayerCurrentWeapon.Value.BulletLeftInMagazine.Value.ToString();
         }
+
+        private void RefreshReloadingText(bool isReloading)
+        {
+            if (isReloading == true)
+            {
+                ReloadText.text = "Reloading";
+            }
+            else
+            {
+                ReloadText.text = PlayerCurrentWeapon.Value.BulletLeftInMagazine.Value.ToString();
+            }
+        }
+
+        #endregion
+
+        #region CLASS_ENUMS
+
+        #endregion
     }
 
-    #endregion
-
-    #region CLASS_ENUMS
-
-    #endregion
 }
