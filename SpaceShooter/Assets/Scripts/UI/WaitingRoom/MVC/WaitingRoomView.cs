@@ -6,16 +6,16 @@ public class WaitingRoomView : View
 {
 	#region MEMBERS
 
-	[SerializeField] private WeaponPanel weaponPanel = default;
 	[SerializeField] private StatisticsPanel statisticsPanel = default;
+	[SerializeField] private WeaponPanel weaponPanel = default;
 	[SerializeField] private ButtonsPanel buttonsPanel = default;
 
 	#endregion
 
 	#region PROPERTIES
 
-	private WeaponPanel WeaponPanel => weaponPanel;
 	private StatisticsPanel StatisticsPanel => statisticsPanel;
+	private WeaponPanel WeaponPanel => weaponPanel;
 	private ButtonsPanel ButtonsPanel => buttonsPanel;
 
 	#endregion
