@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,19 +6,16 @@ namespace UI.WaitingRoom
 {
     public class WeaponInformation : MonoBehaviour
     {
-        #region FIELDS
+        #region MEMBERS
 
-        [SerializeField] private IntValueTMP weaponUpgradeCostText = default;
-        [SerializeField] private List<Image> levelImages = new List<Image>();
+        [SerializeField] private TMPro.TMP_Text weaponNameText = default;
+        [SerializeField] private TMPro.TMP_Text upgradeWeaponCostText = default;
+        [SerializeField] private List<Toggle> weaponsProgressLevelToggles = new List<Toggle>();
         [SerializeField] private Button upgradeButton = default;
 
         #endregion
 
         #region PROPERTIES
-
-        private IntValueTMP WeaponUpgradeCostText => weaponUpgradeCostText;
-        private List<Image> LevelImages => levelImages;
-        private Button UpgradeButton => upgradeButton;
 
         #endregion
 
