@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface ISpawnableCollection<U, T> where U : SpawnableElement<T>
+public interface ISpawnableCollection<U, T> where U : ISpawnableElement<T>
 {
     #region MEMBERS
 

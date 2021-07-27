@@ -1,4 +1,4 @@
-public interface SpawnableElement<T> : IAttachable
+public interface ISpawnableElement<T> : IAttachable
 {
     #region MEMBERS
 
