@@ -22,9 +22,9 @@ public class WaitingRoomView : View
 
 	#region METHODS
 
-	public void RefreshWeaponPanel()
+	public void RefreshWeaponPanel(PlayerShootingController playerShootingController)
 	{
-
+		WeaponPanel.RefreshPanel(playerShootingController.Weapons);
 	}
 
 	public void RefreshStatisticsPanel(PlayerStatisticsController playerStatisticsController)

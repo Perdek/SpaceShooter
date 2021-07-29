@@ -26,6 +26,11 @@ public class WaitingRoomModel : Model
 		return PlayerManager.Instance.PlayerStatisticsController;
 	}
 
+	public PlayerShootingController GetPlayerShootingController()
+    {
+		return PlayerManager.Instance.PlayerShootingController;
+    }
+
 	public void Save()
 	{
 

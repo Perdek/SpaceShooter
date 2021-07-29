@@ -33,6 +33,7 @@ public class PlayerManager : BaseMonoBehaviourSingletonManager<PlayerManager>
 	{
 		PlayerStatisticsController.ReloadStatistics();
 		PlayerMovementController.ResetPosition();
+		PlayerShootingController.ResetShooting();
 	}
 
 	public void BuyHP(int value, int cost)

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public interface ISpawnableElement<T> : IAttachable
 {
     #region MEMBERS
@@ -11,6 +13,10 @@ public interface ISpawnableElement<T> : IAttachable
     #endregion
 
     #region METHODS
+
+    public void RefreshElement();
+    public GameObject GetGameObject();
+    public void HandleDestroy();
 
     #endregion
 }

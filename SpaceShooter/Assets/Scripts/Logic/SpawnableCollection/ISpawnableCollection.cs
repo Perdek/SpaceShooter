@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public interface ISpawnableCollection<U, T> where U : ISpawnableElement<T>
@@ -12,12 +13,13 @@ public interface ISpawnableCollection<U, T> where U : ISpawnableElement<T>
 
     #region METHODS
 
-    public void SetValueReference(T newValue);
-    public void RefreshElement();
-    public GameObject GetGameObject();
-    public void AttachEvents();
-    public void DetachEvents();
-    public void HandleDestroy();
+    public CountTrackCollection<T> GetSpawnedCollection();
+
+    public void RefreshSection(List<T> collection);
+
+    public void AddElement(T newElement);
+
+    public void RemoveElement(T elementToRemove);
 
     #endregion
 }

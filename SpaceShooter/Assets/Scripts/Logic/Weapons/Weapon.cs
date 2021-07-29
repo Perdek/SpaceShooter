@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [System.Serializable]
 public class Weapon
@@ -18,26 +17,23 @@ public class Weapon
 	public WeaponInformation WeaponInformation => weaponInformation;
 	public BoolValue IsReloadingMagazine { get; private set; } = new BoolValue(false);
 	public IntValue BulletLeftInMagazine { get; private set; } = new IntValue();
+	public IntValue WeaponLevel { get; set; } = new IntValue(1);
 	private Transform BulletSpawnPoint { get; set; }
 	private Timer ReloadingMagazineTimer { get; set; }
 	private Timer BoltReloadCycleTimer { get; set; }
-	private int WeaponLevel { get; set; } = 1;
 	private BoolValue IsBoltReloadCycle { get; set; } = new BoolValue(false);
 
-	private int GetCurrentReloadingTimeInSeconds() => (int)WeaponInformation.ReloadingTimeInSecondsCurve.Evaluate(WeaponLevel);
-	private int GetCurrentTimeInSecondBetweenShoots() => (int)WeaponInformation.TimeInSecondBetweenShootsCurve.Evaluate(WeaponLevel);
-	private int GetCurrentMagazineCapacity() => (int)WeaponInformation.MagazineCapacityCurve.Evaluate(WeaponLevel);
-	private int GetCurrentDamageCurve() => (int)WeaponInformation.DamageCurve.Evaluate(WeaponLevel);
 
 	private PlayerShootingController CachedPlayerShootingController {
 		get;
 		set;
 	}
 
-
 	#endregion
 
 	#region METHODS
+
+	public int GetCurrentUpgradingCostCurve() => (int)WeaponInformation.UpgradingCostCurve.Evaluate(WeaponLevel.Value);
 
 	public void InitializeBulletTransform(Transform bulletSpawnPointTransform)
 	{
@@ -46,7 +42,7 @@ public class Weapon
 
 	public void InitializeWeapon()
 	{
-		BulletLeftInMagazine.SetValue((int)WeaponInformation.MagazineCapacityCurve.Evaluate(WeaponLevel));
+		BulletLeftInMagazine.SetValue((int)WeaponInformation.MagazineCapacityCurve.Evaluate(WeaponLevel.Value));
 
 		ReloadingMagazineTimer = new Timer(0, GetCurrentReloadingTimeInSeconds(), FinishReloading);
 		BoltReloadCycleTimer = new Timer(0, GetCurrentTimeInSecondBetweenShoots(), FinishBoltCycle);
@@ -70,12 +66,12 @@ public class Weapon
 
 	public void UpgradeWeapon()
 	{
-		WeaponLevel++;
+		WeaponLevel.AddValue(1);
 	}
 
 	public void ResetWeaponLevel()
 	{
-		WeaponLevel = 1;
+		WeaponLevel.SetValue(1);
 	}
 
 	public void Shoot()
@@ -120,6 +116,11 @@ public class Weapon
 			bullet.OnKillTarget += CachedPlayerShootingController.NotifyKillEnemy;
 		}
 	}
+
+	private int GetCurrentReloadingTimeInSeconds() => (int)WeaponInformation.ReloadingTimeInSecondsCurve.Evaluate(WeaponLevel.Value);
+	private int GetCurrentTimeInSecondBetweenShoots() => (int)WeaponInformation.TimeInSecondBetweenShootsCurve.Evaluate(WeaponLevel.Value);
+	private int GetCurrentMagazineCapacity() => (int)WeaponInformation.MagazineCapacityCurve.Evaluate(WeaponLevel.Value);
+	private int GetCurrentDamageCurve() => (int)WeaponInformation.DamageCurve.Evaluate(WeaponLevel.Value);
 
 	#endregion
 

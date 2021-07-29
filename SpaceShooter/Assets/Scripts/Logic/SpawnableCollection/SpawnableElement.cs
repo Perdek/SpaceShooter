@@ -18,5 +18,11 @@ public abstract class SpawnableElement<T> : MonoBehaviour, ISpawnableElement<T>
 
     public abstract void DetachEvents();
 
+    public abstract GameObject GetGameObject();
+
+    public abstract void HandleDestroy();
+
+    public abstract void RefreshElement();
+
     #endregion
 }

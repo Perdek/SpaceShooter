@@ -13,7 +13,8 @@ public class WeaponInformation : ScriptableObject
     private AnimationCurve reloadingTimeInSecondsCurve;
     [SerializeField]
     private AnimationCurve damageCurve;
-
+    [SerializeField]
+    private AnimationCurve upgradingCostCurve;
     [SerializeField]
     private string weaponName = "weapon";
     [SerializeField]
@@ -27,16 +28,18 @@ public class WeaponInformation : ScriptableObject
 	public AnimationCurve TimeInSecondBetweenShootsCurve => timeInSecondBetweenShootsCurve;
 	public AnimationCurve ReloadingTimeInSecondsCurve => reloadingTimeInSecondsCurve;
 	public AnimationCurve DamageCurve => damageCurve;
+    public AnimationCurve UpgradingCostCurve => upgradingCostCurve;
     public string WeaponName => weaponName;
     public Sprite BulletSprite => bulletSprite;
 
-	#endregion
 
-	#region METHODS
+    #endregion
 
-	#endregion
+    #region METHODS
 
-	#region ENUMS
+    #endregion
 
-	#endregion
+    #region ENUMS
+
+    #endregion
 }

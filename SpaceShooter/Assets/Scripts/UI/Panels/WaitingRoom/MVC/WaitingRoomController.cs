@@ -11,13 +11,8 @@ public class WaitingRoomController : Controller
 
 	#region PROPERTIES
 
-	private WaitingRoomModel Model {
-		get => GetModel<WaitingRoomModel>();
-	}
-
-	private WaitingRoomView View {
-		get => GetView<WaitingRoomView>();
-	}
+	private WaitingRoomModel Model => GetModel<WaitingRoomModel>();
+	private WaitingRoomView View => GetView<WaitingRoomView>();
 
     #endregion
 
@@ -28,6 +23,7 @@ public class WaitingRoomController : Controller
         base.Initialize();
 
         View.RefreshStatisticsPanel(Model.GetPlayerStatistics());
+        View.RefreshWeaponPanel(Model.GetPlayerShootingController());
         View.AddListenerToSaveButton(Model.Save);
         View.AddListenerToReadyButton(Model.Ready);
         View.AddListenerToExitButton(Model.Exit);

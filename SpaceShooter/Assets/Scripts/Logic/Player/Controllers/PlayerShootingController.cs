@@ -42,7 +42,6 @@ public class PlayerShootingController
 
     public void Initialize()
     {
-        InitializeKeys();
         ChooseFirstWeapon();
         InitializeWeapons();
     }
@@ -55,7 +54,12 @@ public class PlayerShootingController
         }
     }
 
-    public void NotifyKillEnemy(EnemyInformation killedEnemyInformation)
+	public void ResetShooting()
+	{
+		InitializeKeys();
+	}
+
+	public void NotifyKillEnemy(EnemyInformation killedEnemyInformation)
     {
         OnKillEnemy(killedEnemyInformation);
     }
@@ -67,9 +71,10 @@ public class PlayerShootingController
 
     private void InitializeKeys()
     {
-        GameMainManager.Instance.OnGameStart += AttachKeysForShooting;
-        GameMainManager.Instance.OnWaitingOpen += DetachKeysForShooting;
-        GameMainManager.Instance.OnMainOpen += DetachKeysForShooting;
+
+        LevelManager.Instance.OnLevelStart += AttachKeysForShooting;
+        LevelManager.Instance.OnLevelEnd += DetachKeysForShooting;
+        LevelManager.Instance.OnLevelEnd += DetachKeysForShooting;
     }
 
     private void InitializeWeapons()
