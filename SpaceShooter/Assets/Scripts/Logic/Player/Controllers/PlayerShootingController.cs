@@ -46,6 +46,14 @@ public class PlayerShootingController
         InitializeWeapons();
     }
 
+    public void AttachEventForUpdateWeapon(Action<int> onUpdate)
+    {
+        for (int i = 0; i < Weapons.Count; i++)
+        {
+            Weapons[i].OnUgradeWeapon += onUpdate;
+        }
+    }
+
     public void ClearWeaponsReload()
     {
         for (int i = 0; i < Weapons.Count; i++)
@@ -71,7 +79,6 @@ public class PlayerShootingController
 
     private void InitializeKeys()
     {
-
         LevelManager.Instance.OnLevelStart += AttachKeysForShooting;
         LevelManager.Instance.OnLevelEnd += DetachKeysForShooting;
         LevelManager.Instance.OnLevelEnd += DetachKeysForShooting;

@@ -26,13 +26,13 @@ namespace UI.WaitingRoom
         public override void AttachEvents()
         {
             upgradeButton.onClick.AddListener(UpgradeWeapon);
-            ValueReference.WeaponLevel.OnValueSet += RefreshOnUpgradeWeapon;
+            ValueReference.WeaponLevel.OnAddValue += RefreshOnUpgradeWeapon;
         }
 
         public override void DetachEvents()
         {
             upgradeButton.onClick.RemoveListener(UpgradeWeapon);
-            ValueReference.WeaponLevel.OnValueSet -= RefreshOnUpgradeWeapon;
+            ValueReference.WeaponLevel.OnAddValue -= RefreshOnUpgradeWeapon;
         }
 
         public override GameObject GetGameObject()
@@ -49,6 +49,16 @@ namespace UI.WaitingRoom
         {
             weaponNameText.text = ValueReference.WeaponInformation.WeaponName;
             upgradeWeaponCostText.text = ValueReference.GetCurrentUpgradingCostCurve().ToString();
+
+            RefreshTogglesLevelInformation();
+        }
+
+        private void RefreshTogglesLevelInformation()
+        {
+            for (int i = 0; i < weaponsProgressLevelToggles.Count; i++)
+            {
+                weaponsProgressLevelToggles[i].isOn = ValueReference.WeaponLevel.Value > i;
+            }
         }
 
         private void UpgradeWeapon()

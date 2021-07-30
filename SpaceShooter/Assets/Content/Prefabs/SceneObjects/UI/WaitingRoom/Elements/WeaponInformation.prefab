@@ -1523,7 +1523,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponNameText: {fileID: 1965173404502667950}
   upgradeWeaponCostText: {fileID: 4435918340915726883}
-  weaponsProgressLevelToggles: []
+  weaponsProgressLevelToggles:
+  - {fileID: 9050355939894672896}
+  - {fileID: 7131134778992493159}
+  - {fileID: 6365195059516384240}
+  - {fileID: 1803413099836372415}
   upgradeButton: {fileID: 8718308222615757736}
 --- !u!1 &8632255853532240468
 GameObject:

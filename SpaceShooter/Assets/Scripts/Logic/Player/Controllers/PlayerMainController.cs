@@ -52,6 +52,8 @@ public class PlayerMainController : MonoBehaviour
         GameMainManager.Instance.OnMainOpen += DetachInterControllersEvents;
         GameMainManager.Instance.OnWaitingOpen += DetachInterControllersEvents;
         PlayerStatisticsController.OnPlayerDead += GameMainManager.Instance.GameOver;
+
+        PlayerShootingController.AttachEventForUpdateWeapon(PlayerStatisticsController.MoneyPoints.RemoveValue);
     }
 
     private void RefreshView()
