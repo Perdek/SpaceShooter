@@ -62,12 +62,12 @@ public class PlayerShootingController
         }
     }
 
-	public void ResetShooting()
-	{
-		InitializeKeys();
-	}
+    public void ResetShooting()
+    {
+        InitializeKeys();
+    }
 
-	public void NotifyKillEnemy(EnemyInformation killedEnemyInformation)
+    public void NotifyKillEnemy(EnemyInformation killedEnemyInformation)
     {
         OnKillEnemy(killedEnemyInformation);
     }
@@ -112,14 +112,42 @@ public class PlayerShootingController
 
     private void NextWeapon()
     {
-        ActiveWeaponIndex = Weapons.Count == ActiveWeaponIndex + 1 ? ActiveWeaponIndex = 0 : ActiveWeaponIndex + 1;
-        ActiveWeapon.SetValue(Weapons[ActiveWeaponIndex]);
+        bool nextWeaponFounded = false;
+        int nextWeaponIndex = Weapons.Count == ActiveWeaponIndex + 1 ? ActiveWeaponIndex = 0 : ActiveWeaponIndex + 1;
+
+        do
+        {
+            nextWeaponIndex = Weapons.Count == nextWeaponIndex + 1 ? nextWeaponIndex = 0 : nextWeaponIndex + 1;
+            Weapon weaponProposition = Weapons[ActiveWeaponIndex];
+
+            if (weaponProposition.IsWeaponAvailable() == true || ActiveWeaponIndex == nextWeaponIndex)
+            {
+                nextWeaponFounded = true;
+                ActiveWeaponIndex = nextWeaponIndex;
+                ActiveWeapon.SetValue(weaponProposition);
+            }
+
+        } while (nextWeaponFounded == false);
     }
 
     private void PrevWeapon()
     {
-        ActiveWeaponIndex = ActiveWeaponIndex == 0 ? ActiveWeaponIndex = Weapons.Count - 1 : ActiveWeaponIndex - 1;
-        ActiveWeapon.SetValue(Weapons[ActiveWeaponIndex]);
+        bool prevWeaponFounded = false;
+        int prevWeaponIndex = ActiveWeaponIndex == 0 ? ActiveWeaponIndex = Weapons.Count - 1 : ActiveWeaponIndex - 1;
+
+        do
+        {
+            prevWeaponIndex = prevWeaponIndex == 0 ? prevWeaponIndex = Weapons.Count - 1 : prevWeaponIndex - 1;
+            Weapon weaponProposition = Weapons[ActiveWeaponIndex];
+
+            if (weaponProposition.IsWeaponAvailable() == true || ActiveWeaponIndex == prevWeaponIndex)
+            {
+                prevWeaponFounded = true;
+                ActiveWeaponIndex = prevWeaponIndex;
+                ActiveWeapon.SetValue(weaponProposition);
+            }
+
+        } while (prevWeaponFounded == false);
     }
 
     private void ChooseFirstWeapon()

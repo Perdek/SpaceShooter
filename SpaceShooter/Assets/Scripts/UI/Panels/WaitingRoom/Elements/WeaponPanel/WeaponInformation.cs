@@ -26,6 +26,7 @@ namespace UI.WaitingRoom
         public override void AttachEvents()
         {
             upgradeButton.onClick.AddListener(UpgradeWeapon);
+            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnValueSet += RefreshOnUpgradeWeapon;
             ValueReference.WeaponLevel.OnAddValue += RefreshOnUpgradeWeapon;
         }
 
@@ -33,6 +34,7 @@ namespace UI.WaitingRoom
         {
             upgradeButton.onClick.RemoveListener(UpgradeWeapon);
             ValueReference.WeaponLevel.OnAddValue -= RefreshOnUpgradeWeapon;
+            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnValueSet -= RefreshOnUpgradeWeapon;
         }
 
         public override GameObject GetGameObject()
@@ -42,7 +44,7 @@ namespace UI.WaitingRoom
 
         public override void HandleDestroy()
         {
-            
+
         }
 
         public override void RefreshElement()
@@ -51,6 +53,19 @@ namespace UI.WaitingRoom
             upgradeWeaponCostText.text = ValueReference.GetCurrentUpgradingCostCurve().ToString();
 
             RefreshTogglesLevelInformation();
+
+            SetUpgradeButton();
+        }
+
+        private void SetUpgradeButton()
+        {
+            if (ValueReference.IsLastLevel() == true)
+            {
+                return;
+            }
+
+            bool canPlayerAffordUpgradingWeapon = PlayerManager.Instance.PlayerStatisticsController.CurrentMoneyPoints >= ValueReference.GetCurrentUpgradingCostCurve();
+            upgradeButton.interactable = canPlayerAffordUpgradingWeapon;
         }
 
         private void RefreshTogglesLevelInformation()

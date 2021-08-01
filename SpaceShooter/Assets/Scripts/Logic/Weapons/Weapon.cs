@@ -20,7 +20,7 @@ public class Weapon
     public WeaponInformation WeaponInformation => weaponInformation;
     public BoolValue IsReloadingMagazine { get; private set; } = new BoolValue(false);
     public IntValue BulletLeftInMagazine { get; private set; } = new IntValue();
-    public IntValue WeaponLevel { get; set; } = new IntValue(1);
+    public IntValue WeaponLevel { get; set; } = new IntValue(0);
     private Transform BulletSpawnPoint { get; set; }
     private Timer ReloadingMagazineTimer { get; set; }
     private Timer BoltReloadCycleTimer { get; set; }
@@ -49,6 +49,11 @@ public class Weapon
 
         ReloadingMagazineTimer = new Timer(0, GetCurrentReloadingTimeInSeconds(), FinishReloading);
         BoltReloadCycleTimer = new Timer(0, GetCurrentTimeInSecondBetweenShoots(), FinishBoltCycle);
+    }
+
+    public bool IsLastLevel()
+    {
+        return WeaponLevel.Value == Constants.MAX_WEAPONS_LEVEL;
     }
 
     public void CachePlayerShootingController(PlayerShootingController playerShootingController)
@@ -98,6 +103,11 @@ public class Weapon
         }
     }
 
+    public bool IsWeaponAvailable()
+    {
+        return WeaponLevel.Value > 0;
+    }
+
     private void FinishBoltCycle()
     {
         IsBoltReloadCycle.SetValue(false);
@@ -123,6 +133,7 @@ public class Weapon
 
     private int GetCurrentReloadingTimeInSeconds() => (int)WeaponInformation.ReloadingTimeInSecondsCurve.Evaluate(WeaponLevel.Value);
     private int GetCurrentTimeInSecondBetweenShoots() => (int)WeaponInformation.TimeInSecondBetweenShootsCurve.Evaluate(WeaponLevel.Value);
+
     private int GetCurrentMagazineCapacity() => (int)WeaponInformation.MagazineCapacityCurve.Evaluate(WeaponLevel.Value);
     private int GetCurrentDamageCurve() => (int)WeaponInformation.DamageCurve.Evaluate(WeaponLevel.Value);
 

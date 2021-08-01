@@ -144,5 +144,56 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  upgradingCostCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 15
+      inSlope: 4.6417103
+      outSlope: 4.6417103
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.14359084
+    - serializedVersion: 3
+      time: 1
+      value: 20
+      inSlope: 5
+      outSlope: 20
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 2
+      value: 40
+      inSlope: 20
+      outSlope: 10
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 3
+      value: 50
+      inSlope: 10
+      outSlope: 10
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 4
+      value: 60
+      inSlope: 10
+      outSlope: -3.1991246
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.11731493
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   weaponName: Homing Missile
   bulletSprite: {fileID: 21300000, guid: 8d514622932e7b440aa0331c97a672d1, type: 3}
