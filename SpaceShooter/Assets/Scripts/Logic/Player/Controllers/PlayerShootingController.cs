@@ -42,7 +42,7 @@ public class PlayerShootingController
 
     public void Initialize()
     {
-        ChooseFirstWeapon();
+        ChooseDefaultWeapon();
         InitializeWeapons();
     }
 
@@ -113,12 +113,12 @@ public class PlayerShootingController
     private void NextWeapon()
     {
         bool nextWeaponFounded = false;
-        int nextWeaponIndex = Weapons.Count == ActiveWeaponIndex + 1 ? ActiveWeaponIndex = 0 : ActiveWeaponIndex + 1;
+        int nextWeaponIndex = 0;
 
         do
         {
             nextWeaponIndex = Weapons.Count == nextWeaponIndex + 1 ? nextWeaponIndex = 0 : nextWeaponIndex + 1;
-            Weapon weaponProposition = Weapons[ActiveWeaponIndex];
+            Weapon weaponProposition = Weapons[nextWeaponIndex];
 
             if (weaponProposition.IsWeaponAvailable() == true || ActiveWeaponIndex == nextWeaponIndex)
             {
@@ -133,12 +133,12 @@ public class PlayerShootingController
     private void PrevWeapon()
     {
         bool prevWeaponFounded = false;
-        int prevWeaponIndex = ActiveWeaponIndex == 0 ? ActiveWeaponIndex = Weapons.Count - 1 : ActiveWeaponIndex - 1;
+        int prevWeaponIndex = 0;
 
         do
         {
             prevWeaponIndex = prevWeaponIndex == 0 ? prevWeaponIndex = Weapons.Count - 1 : prevWeaponIndex - 1;
-            Weapon weaponProposition = Weapons[ActiveWeaponIndex];
+            Weapon weaponProposition = Weapons[prevWeaponIndex];
 
             if (weaponProposition.IsWeaponAvailable() == true || ActiveWeaponIndex == prevWeaponIndex)
             {
@@ -150,10 +150,11 @@ public class PlayerShootingController
         } while (prevWeaponFounded == false);
     }
 
-    private void ChooseFirstWeapon()
+    private void ChooseDefaultWeapon()
     {
         ActiveWeaponIndex = 0;
         ActiveWeapon = new WeaponValue(Weapons[ActiveWeaponIndex]);
+        ActiveWeapon.Value.WeaponLevel.AddValue(1);
     }
 
     #endregion

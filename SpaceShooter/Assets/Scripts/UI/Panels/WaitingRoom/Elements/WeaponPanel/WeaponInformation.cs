@@ -27,14 +27,18 @@ namespace UI.WaitingRoom
         {
             upgradeButton.onClick.AddListener(UpgradeWeapon);
             PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnValueSet += RefreshOnUpgradeWeapon;
+            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnAddValue += RefreshOnUpgradeWeapon;
+            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnRemoveValue += RefreshOnUpgradeWeapon;
             ValueReference.WeaponLevel.OnAddValue += RefreshOnUpgradeWeapon;
         }
 
         public override void DetachEvents()
         {
             upgradeButton.onClick.RemoveListener(UpgradeWeapon);
-            ValueReference.WeaponLevel.OnAddValue -= RefreshOnUpgradeWeapon;
             PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnValueSet -= RefreshOnUpgradeWeapon;
+            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnAddValue -= RefreshOnUpgradeWeapon;
+            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnRemoveValue -= RefreshOnUpgradeWeapon;
+            ValueReference.WeaponLevel.OnAddValue -= RefreshOnUpgradeWeapon;
         }
 
         public override GameObject GetGameObject()
