@@ -72,6 +72,11 @@ public class WaitingRoomView : View
 		StatisticsPanel.RefreshHPButtonInteractivity(value);
 	}
 
+	protected virtual void OnDestroy()
+    {
+		WeaponPanel.ClearPanel();
+    }
+
 	#endregion
 
 	#region CLASS_ENUMS

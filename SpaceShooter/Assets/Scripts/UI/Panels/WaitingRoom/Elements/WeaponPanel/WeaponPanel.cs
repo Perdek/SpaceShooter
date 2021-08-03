@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +25,11 @@ namespace UI.WaitingRoom
         public void RefreshPanel(List<Weapon> weaponList)
         {
             WeaponInformationCollection.RefreshSection(weaponList);
+        }
+
+        public void ClearPanel()
+        {
+            WeaponInformationCollection.ClearSection();
         }
 
         #endregion
