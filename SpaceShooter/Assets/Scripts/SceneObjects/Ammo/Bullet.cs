@@ -3,88 +3,103 @@ using System;
 
 public class Bullet : BasePoolObject
 {
-	#region FIELDS
+    #region FIELDS
 
-	public event Action<EnemyInformation> OnKillTarget = delegate { };
+    public event Action<EnemyInformation> OnKillTarget = delegate { };
 
-	[SerializeField]
-	private uint speedFactory = 10;
+    [SerializeField]
+    private uint speedFactory = 10;
 
-	[SerializeField]
-	private Rigidbody2D rigidbody2DComponent = null;
+    [SerializeField]
+    private Rigidbody2D rigidbody2DComponent = null;
 
-	[SerializeField]
-	private IdentificationFriendOrFoeEnum iff = IdentificationFriendOrFoeEnum.FOE;
+    [SerializeField]
+    private IdentificationFriendOrFoeEnum iff = IdentificationFriendOrFoeEnum.FOE;
 
-	#endregion
+    #endregion
 
-	#region PROPERTIES
+    #region PROPERTIES
 
-	public Rigidbody2D Rigidbody2DComponent => rigidbody2DComponent;
-	public uint SpeedFactory => speedFactory;
-	public IdentificationFriendOrFoeEnum Iff => iff;
+    public Rigidbody2D Rigidbody2DComponent => rigidbody2DComponent;
+    public uint SpeedFactory => speedFactory;
+    public IdentificationFriendOrFoeEnum Iff => iff;
 
-	#endregion
+    #endregion
 
-	#region METHODS
+    #region METHODS
 
-	public override void HandleObjectSpawn()
-	{
-		if (State == PoolObjectStateEnum.WAITING_FOR_USE)
-		{
-			UpdateManager.Instance.OnUpdatePhysic += Move;
-		}
-	}
-
-	public override void Deactivation()
-	{
-		base.Deactivation();
-		OnKillTarget = null;
-		UpdateManager.Instance.OnUpdatePhysic -= Move;
-	}
-
-	public void NotifyComfirmKill(EnemyInformation enemyInformation)
+    public override void HandleObjectSpawn()
     {
-		OnKillTarget(enemyInformation);
+        if (State == PoolObjectStateEnum.WAITING_FOR_USE)
+        {
+            UpdateManager.Instance.OnUpdatePhysic += Move;
+        }
     }
 
-	protected virtual void OnTriggerEnter2D(Collider2D other)
-	{
-		HandleCollision(other);
-	}
+    public override void Deactivation()
+    {
+        base.Deactivation();
+        OnKillTarget = null;
+        UpdateManager.Instance.OnUpdatePhysic -= Move;
+    }
 
-	public void Move()
-	{
-		Vector2 localForwardVector = new Vector2(transform.up.x, transform.up.y);
-
-		Rigidbody2DComponent.MovePosition(Rigidbody2DComponent.position + localForwardVector * Time.fixedDeltaTime * SpeedFactory);		
-	}
-
-	private void HandleCollision(Collider2D hittedObjectCollider)
-	{
-		if (CheckCollisionWithPlayer(hittedObjectCollider) == true)
-		{
-			return;
-		}
-
-		Enemy enemy = hittedObjectCollider.GetComponentInChildren<Enemy>();
-
-		if (enemy != null)
+    public void NotifyComfirmKill(EnemyInformation enemyInformation)
+    {
+        if (this == null)
         {
-			NotifyComfirmKill(enemy.EnemyInformation);
-		}
+            Debug.Log("THIS == null");
+        }
 
-		Deactivation();
-	}
+        if (enemyInformation == null)
+        {
+            Debug.Log("enemyInformation == null");
+        }
 
-	private bool CheckCollisionWithPlayer(Collider2D other)
-	{
-		return other.GetComponentInChildren<PlayerColliderController>() != null;
-	}
+        if (OnKillTarget == null)
+        {
+            Debug.Log("OnKillTarget == null");
+        }
 
-	#endregion
+        OnKillTarget(enemyInformation);
+    }
 
-	#region ENUMS
+    protected virtual void OnTriggerEnter2D(Collider2D other)
+    {
+        HandleCollision(other);
+    }
 
-	#endregion
+    public void Move()
+    {
+        Vector2 localForwardVector = new Vector2(transform.up.x, transform.up.y);
+
+        Rigidbody2DComponent.MovePosition(Rigidbody2DComponent.position + localForwardVector * Time.fixedDeltaTime * SpeedFactory);
+    }
+
+    private void HandleCollision(Collider2D hittedObjectCollider)
+    {
+        if (CheckCollisionWithPlayer(hittedObjectCollider) == true)
+        {
+            return;
+        }
+
+        Enemy enemy = hittedObjectCollider.GetComponentInChildren<Enemy>();
+
+        if (enemy != null)
+        {
+            NotifyComfirmKill(enemy.EnemyInformation);
+        }
+
+        Deactivation();
+    }
+
+    private bool CheckCollisionWithPlayer(Collider2D other)
+    {
+        return other.GetComponentInChildren<PlayerColliderController>() != null;
+    }
+
+    #endregion
+
+    #region ENUMS
+
+    #endregion
 }
