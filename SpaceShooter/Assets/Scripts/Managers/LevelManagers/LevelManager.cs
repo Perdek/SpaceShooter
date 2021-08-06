@@ -11,12 +11,15 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 
     [SerializeField]
     private List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
+    [SerializeField]
+    private List<ParallaxGroup> parallaxGroups = new List<ParallaxGroup>();
 
     #endregion
 
     #region PROPERTIES
 
     public List<SpawnPoint> SpawnPoints => spawnPoints;
+    public List<ParallaxGroup> ParallaxGroups => parallaxGroups;
 
     public LevelState State {
         get;
@@ -43,6 +46,11 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
         {
             SpawnPoints[i].OnSpawn += HandleEnemySpawn;
             SpawnPoints[i].OnSpawnEnd += UpdateFinishedSpawnPoints;
+        }
+
+        for (int i = 0; i < ParallaxGroups.Count; i++)
+        {
+            UpdateManager.Instance.OnUpdateView += ParallaxGroups[i].UpdateParallaxEffects;
         }
     }
 
@@ -73,6 +81,11 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
             SpawnPoints[i].OnSpawn -= HandleEnemySpawn;
             SpawnPoints[i].OnSpawnEnd -= UpdateFinishedSpawnPoints;
             SpawnPoints[i].Reset();
+        }
+
+        for (int i = 0; i < ParallaxGroups.Count; i++)
+        {
+            UpdateManager.Instance.OnUpdateView -= ParallaxGroups[i].UpdateParallaxEffects;
         }
 
         OnLevelEnd();
