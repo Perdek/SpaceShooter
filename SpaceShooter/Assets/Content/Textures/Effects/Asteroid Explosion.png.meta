@@ -1,7 +1,28 @@
 fileFormatVersion: 2
 guid: f8cf749c63a1f1843880ffcb86f51e9d
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 5907668732150601121
+    second: Asteroid Explosion_0
+  - first:
+      213: 5988234374785810423
+    second: Asteroid Explosion_1
+  - first:
+      213: 912061549562466935
+    second: Asteroid Explosion_2
+  - first:
+      213: 95427440854959924
+    second: Asteroid Explosion_3
+  - first:
+      213: 2549561951245821732
+    second: Asteroid Explosion_4
+  - first:
+      213: 2910362184834719079
+    second: Asteroid Explosion_5
+  - first:
+      213: 1692196413799414562
+    second: Asteroid Explosion_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
