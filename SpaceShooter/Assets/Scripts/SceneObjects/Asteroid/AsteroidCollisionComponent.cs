@@ -1,76 +1,77 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class AsteroidCollisionComponent
 {
-	#region MEMBERS
+    #region MEMBERS
 
-	public event Action OnHit = delegate { };	
+    public event Action OnHit = delegate { };
+    public event Action OnKillByPlayer = delegate { };
 
-	#endregion
+    #endregion
 
-	#region PROPERTIES
+    #region PROPERTIES
 
-	private int DamageCollisionValue {
-		get;
-		set;
-	} = 1;
+    private int DamageCollisionValue {
+        get;
+        set;
+    } = 1;
 
-	private EnemyInformation CachedEnemyInformation {
-		get;
-		set;
+    private EnemyInformation CachedEnemyInformation {
+        get;
+        set;
     }
 
-	#endregion
+    #endregion
 
-	#region METHODS
+    #region METHODS
 
-	public void SetDamageCollisionValue(int newValue)
-	{
-		DamageCollisionValue = newValue;
-	}
-
-	public void SetAsteroidInformation(EnemyInformation cachedEnemyInformation)
+    public void SetDamageCollisionValue(int newValue)
     {
-		CachedEnemyInformation = cachedEnemyInformation;
-	}
+        DamageCollisionValue = newValue;
+    }
 
-	public void HandleCollision(Collider2D other)
-	{
-		Bullet bullet = other.GetComponent<Bullet>();
+    public void SetAsteroidInformation(EnemyInformation cachedEnemyInformation)
+    {
+        CachedEnemyInformation = cachedEnemyInformation;
+    }
 
-		if (bullet != null)
+    public void HandleCollision(Collider2D other)
+    {
+        Bullet bullet = other.GetComponent<Bullet>();
+
+        if (bullet != null)
         {
-			OnHit();
-			return;
+            OnHit();
+            OnKillByPlayer();
+            return;
         }
 
-		if (other.GetComponent<SceneBottonCollider>() != null)
-		{
-			OnHit();
-		}
+        if (other.GetComponent<SceneBottonCollider>() != null)
+        {
+            OnHit();
+        }
 
-		PlayerColliderController playerCollider = other.GetComponentInChildren<PlayerColliderController>();
+        PlayerColliderController playerCollider = other.GetComponentInChildren<PlayerColliderController>();
 
-		if (playerCollider != null)
-		{
-			playerCollider.DamageCollision(DamageCollisionValue);
-			OnHit();
-		}
-	}
+        if (playerCollider != null)
+        {
+            playerCollider.DamageCollision(DamageCollisionValue);
+            OnHit();
+        }
+    }
 
-	private bool CheckCollisionWithPlayerBullet(Collider2D other)
-	{
-		Bullet bullet = other.GetComponentInChildren<Bullet>();
+    private bool CheckCollisionWithPlayerBullet(Collider2D other)
+    {
+        Bullet bullet = other.GetComponentInChildren<Bullet>();
 
-		return bullet != null ? false : bullet.Iff == IdentificationFriendOrFoeEnum.FRIEND;
-	}
+        return bullet != null ? false : bullet.Iff == IdentificationFriendOrFoeEnum.FRIEND;
+    }
 
-	#endregion
+    #endregion
 
-	#region CLASS_ENUMS
+    #region CLASS_ENUMS
 
-	#endregion
+    #endregion
 }

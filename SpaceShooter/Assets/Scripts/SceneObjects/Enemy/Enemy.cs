@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : BasePoolObject
+public abstract class Enemy : BasePoolObject
 {
 	#region MEMBERS
 

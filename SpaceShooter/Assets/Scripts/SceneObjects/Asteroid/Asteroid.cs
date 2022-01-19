@@ -1,79 +1,113 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Asteroid : Enemy
 {
-	#region FIELDS
+    #region FIELDS
 
-	[SerializeField]
-	private AsteroidCollisionComponent collisionComponent = null;
-	[SerializeField]
-	private AsteroidMovementComponent movementComponent = null;
-	[SerializeField]
-	private AsteroidViewComponent viewComponent = null;
+    [SerializeField]
+    private AsteroidCollisionComponent collisionComponent = null;
+    [SerializeField]
+    private AsteroidMovementComponent movementComponent = null;
+    [SerializeField]
+    private AsteroidViewComponent viewComponent = null;
 
-	#endregion
+    private bool isBreakable = true;
 
-	#region PROPERTIES
+    #endregion
 
-	private AsteroidCollisionComponent CollisionComponent => collisionComponent;
-	private AsteroidMovementComponent MovementComponent => movementComponent;
-	private AsteroidViewComponent ViewComponent => viewComponent;
+    #region PROPERTIES
 
-	#endregion
+    private AsteroidCollisionComponent CollisionComponent => collisionComponent;
+    private AsteroidMovementComponent MovementComponent => movementComponent;
+    private AsteroidViewComponent ViewComponent => viewComponent;
 
-	#region METHODS
+    #endregion
 
-	public void AttachEvents()
-	{
-		CollisionComponent.OnHit += Deactivation;
+    #region METHODS
 
-		MovementComponent.AttachEvents();
-	}
+    public void AttachEvents()
+    {
+        CollisionComponent.OnHit += Deactivation;
 
-	public void DetachEvents()
-	{
-		CollisionComponent.OnHit -= Deactivation;
+        if (isBreakable == true)
+        {
+            CollisionComponent.OnKillByPlayer += BreakAsteroid;
+        }
 
-		MovementComponent.DetachEvents();
-	}
+        MovementComponent.AttachEvents();
+    }
 
-	public override void HandleObjectSpawn()
-	{
-		base.HandleObjectSpawn();
+    public void DetachEvents()
+    {
+        CollisionComponent.OnHit -= Deactivation;
 
-		AttachEvents();
-		Initialize();
-	}
+        MovementComponent.DetachEvents();
+    }
 
-	public override void Deactivation()
-	{
-		base.Deactivation();
+    public override void HandleObjectSpawn()
+    {
+        base.HandleObjectSpawn();
 
-		Terminate();
-		DetachEvents();
-	}
+        AttachEvents();
+        Initialize();
+    }
 
-	protected virtual void OnTriggerEnter2D(Collider2D other)
-	{
-		CollisionComponent.HandleCollision(other);
-	}
+    public override void Deactivation()
+    {
+        base.Deactivation();
 
-	private void Initialize()
-	{
-		MovementComponent.Initialize();
-		ViewComponent.SetAsteroidTranform(this.transform);
-		CollisionComponent.SetAsteroidInformation(EnemyInformation);
-	}
+        Terminate();
+        DetachEvents();
+    }
 
-	private void Terminate()
-	{
-		ViewComponent.Explosion();
-	}
+    public void SetIsBreakable(bool newValue)
+    {
+        isBreakable = newValue;
 
-	#endregion
+        if (isBreakable == false)
+        {
+            CollisionComponent.OnKillByPlayer -= BreakAsteroid;
+        }
+    }
 
-	#region ENUMS
+    protected virtual void OnTriggerEnter2D(Collider2D other)
+    {
+        CollisionComponent.HandleCollision(other);
+    }
 
-	#endregion
+    private void Initialize()
+    {
+        MovementComponent.Initialize();
+        ViewComponent.SetAsteroidTranform(this.transform);
+        CollisionComponent.SetAsteroidInformation(EnemyInformation);
+        isBreakable = true;
+    }
+
+    private void Terminate()
+    {
+        ViewComponent.Explosion();
+    }
+
+    private void BreakAsteroid()
+    {
+        int amountOfRandomParts = Random.Range(0, Constants.AMOUNT_OF_MAX_PARTS_OF_ASTEROID);
+
+        for (int i = 0; i < amountOfRandomParts; i++)
+        {
+            SpawnOneLittleAsteroid();
+        }
+    }
+
+    private void SpawnOneLittleAsteroid()
+    {
+        BasePoolObject basePoolObject = PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.LITTLE_ASTEROID_TAG, this.transform.position, this.transform.rotation);
+        Asteroid littleAsteroid = basePoolObject as Asteroid;
+        littleAsteroid.SetIsBreakable(false);
+    }
+
+    #endregion
+
+    #region ENUMS
+
+    #endregion
 }
