@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -67,6 +68,22 @@ MonoBehaviour:
   - tag: 5
     size: 20
     poolPrefab: {fileID: 9061181864618376374, guid: 442db12f05a7b6d4da280d36a15d4c1b,
+      type: 3}
+  - tag: 6
+    size: 20
+    poolPrefab: {fileID: 5871493446619282462, guid: 77ea4996cdb636f4d919e5853938a012,
+      type: 3}
+  - tag: 7
+    size: 20
+    poolPrefab: {fileID: 5878218851956428709, guid: c802dfa57b0bd0c44808ab9e3b6804df,
+      type: 3}
+  - tag: 8
+    size: 20
+    poolPrefab: {fileID: 5878218851956428709, guid: a6d08dd2d66a3ef40a2c37b14c516e1a,
+      type: 3}
+  - tag: 9
+    size: 20
+    poolPrefab: {fileID: 5878218851956428709, guid: bf9f37a5ca787a4459eb67856e6eb4a9,
       type: 3}
   poolObjectsParentPrefab: {fileID: 4211724078361536507, guid: 74ef8775db1e70b49904981d41e01c79,
     type: 3}

@@ -26,7 +26,10 @@ public class TagManager : BaseSingletonManager<TagManager>
 		PLAYER_GUN_BULLET_TAG,
 		PLAYER_MISSILE_TAG,
 		PLAYER_HOMING_MISSILE_TAG,
-		LITTLE_ASTEROID_TAG
+		LITTLE_ASTEROID_TAG,
+		HP_BONUS,
+		SHIELD_BONUS,
+		WEAPON_BONUS
 	}
 
 	#endregion

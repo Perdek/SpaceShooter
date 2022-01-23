@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Assets.Scripts.SceneObjects.Bonuses
+namespace SceneObjects.Bonuses
 {
     public class BonusMovementComponent : MonoBehaviour
     {

@@ -31,7 +31,7 @@ public class Asteroid : Enemy
 
         if (isBreakable == true)
         {
-            CollisionComponent.OnKillByPlayer += BreakAsteroid;
+            CollisionComponent.OnKillByPlayer += HandleKillByPlayer;
         }
 
         MovementComponent.AttachEvents();
@@ -66,7 +66,7 @@ public class Asteroid : Enemy
 
         if (isBreakable == false)
         {
-            CollisionComponent.OnKillByPlayer -= BreakAsteroid;
+            CollisionComponent.OnKillByPlayer -= HandleKillByPlayer;
         }
     }
 
@@ -86,6 +86,20 @@ public class Asteroid : Enemy
     private void Terminate()
     {
         ViewComponent.Explosion();
+    }
+
+    private void HandleKillByPlayer()
+    {
+        SpawnBonus();
+        BreakAsteroid();
+    }
+
+    private void SpawnBonus()
+    {
+        if (isBreakable == false)
+        {
+            PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.HP_BONUS, this.transform.position, this.transform.rotation);
+        }
     }
 
     private void BreakAsteroid()
