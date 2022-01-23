@@ -40,7 +40,6 @@ public class Bonus : BasePoolObject
         base.HandleObjectSpawn();
 
         AttachEvents();
-        Initialize();
     }
 
     public override void Deactivation()
@@ -53,11 +52,6 @@ public class Bonus : BasePoolObject
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         CollisionComponent.HandleCollision(other);
-    }
-
-    private void Initialize()
-    {
-        MovementComponent.Initialize();
     }
 
     #endregion
