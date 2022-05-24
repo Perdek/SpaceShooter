@@ -5,6 +5,8 @@ public class PoolManager : BaseMonoBehaviourSingletonManager<PoolManager>
 {
 	#region FIELDS
 
+	public static int id;
+
 	[SerializeField]
 	private List<Pool> poolList = new List<Pool>();
 

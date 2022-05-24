@@ -9,6 +9,8 @@ public class AsteroidCollisionComponent
     public event Action OnHit = delegate { };
     public event Action OnKillByPlayer = delegate { };
 
+    [SerializeField] private BoxCollider2D collider;
+
     #endregion
 
     #region PROPERTIES
@@ -35,6 +37,16 @@ public class AsteroidCollisionComponent
     public void SetAsteroidInformation(EnemyInformation cachedEnemyInformation)
     {
         CachedEnemyInformation = cachedEnemyInformation;
+    }
+
+    public void DeactivateCollider()
+    {
+        collider.enabled = false;
+    }
+
+    public void ActivateCollider()
+    {
+         collider.enabled = true;
     }
 
     public void HandleCollision(Collider2D other)

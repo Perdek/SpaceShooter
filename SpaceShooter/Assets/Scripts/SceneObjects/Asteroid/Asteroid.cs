@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class Asteroid : Enemy
 {
@@ -50,6 +51,13 @@ public class Asteroid : Enemy
 
         AttachEvents();
         Initialize();
+        StartCoroutine(ActivateCollider());
+    }
+
+    private IEnumerator ActivateCollider()
+    {
+        yield return new WaitForSeconds(1f);
+        CollisionComponent.ActivateCollider();
     }
 
     public override void Deactivation()
@@ -58,6 +66,7 @@ public class Asteroid : Enemy
 
         Terminate();
         DetachEvents();
+        CollisionComponent.DeactivateCollider();
     }
 
     public void SetIsBreakable(bool newValue)

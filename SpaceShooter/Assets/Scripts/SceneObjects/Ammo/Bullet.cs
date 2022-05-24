@@ -5,6 +5,8 @@ public class Bullet : BasePoolObject
 {
     #region FIELDS
 
+    private int id;
+
     public event Action<EnemyInformation> OnKillTarget = delegate { };
 
     [SerializeField]
@@ -26,6 +28,16 @@ public class Bullet : BasePoolObject
 
     #endregion
 
+    #region UNITY_METHODS
+
+    protected virtual void Awake()
+    {
+        id = PoolManager.id;
+        PoolManager.id++;
+    }
+
+    #endregion
+
     #region METHODS
 
     public override void HandleObjectSpawn()
@@ -40,6 +52,8 @@ public class Bullet : BasePoolObject
     {
         base.Deactivation();
         OnKillTarget = null;
+        Debug.Log("Deactivation " + id);
+
         UpdateManager.Instance.OnUpdatePhysic -= Move;
     }
 
@@ -57,14 +71,17 @@ public class Bullet : BasePoolObject
 
         if (OnKillTarget == null)
         {
-            Debug.Log("OnKillTarget == null");
+            Debug.Log("OnKillTarget == null " + id);
         }
+
+        Debug.Log("Notify Confirm kil " + id);
 
         OnKillTarget(enemyInformation);
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("OnTriggerEnter " + id + " " + other.gameObject.name);
         HandleCollision(other);
     }
 
