@@ -52,36 +52,24 @@ public class Bullet : BasePoolObject
     {
         base.Deactivation();
         OnKillTarget = null;
-        Debug.Log("Deactivation " + id);
 
         UpdateManager.Instance.OnUpdatePhysic -= Move;
     }
 
     public void NotifyComfirmKill(EnemyInformation enemyInformation)
     {
-        if (this == null)
-        {
-            Debug.Log("THIS == null");
-        }
-
-        if (enemyInformation == null)
-        {
-            Debug.Log("enemyInformation == null");
-        }
-
         if (OnKillTarget == null)
         {
             Debug.Log("OnKillTarget == null " + id);
         }
-
-        Debug.Log("Notify Confirm kil " + id);
-
-        OnKillTarget(enemyInformation);
+        else
+        {
+            OnKillTarget(enemyInformation);
+        }
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("OnTriggerEnter " + id + " " + other.gameObject.name);
         HandleCollision(other);
     }
 
