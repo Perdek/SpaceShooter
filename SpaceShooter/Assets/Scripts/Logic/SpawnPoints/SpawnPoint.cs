@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Managers.GameManagers;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class SpawnPoint : MonoBehaviour
 {
 	#region FIELDS
 
-	public event System.Action<BasePoolObject> OnSpawn = delegate { };
-	public event System.Action OnSpawnEnd = delegate { };
+	public event Action<BasePoolObject> OnSpawn = delegate { };
+	public event Action OnSpawnEnd = delegate { };
 
 	[SerializeField]
-	private TagManager.TagsEnum poolObjectTag = TagManager.TagsEnum.PLAYER_BULLET_TAG;
+	private SpawnableObjectsTagsEnum poolObjectTag = SpawnableObjectsTagsEnum.PLAYER_BULLET_TAG;
 
 	[SerializeField]
 	private float firstSpawnDelayInSeconds = 0f;
@@ -21,11 +23,14 @@ public class SpawnPoint : MonoBehaviour
 	[SerializeField]
 	private int spawnObjectsLimit = 1;
 
+	private IPoolManager poolManager;
+	private IUpdateManager updateManager;
+
 	#endregion
 
 	#region PROPERTIES
 
-	public TagManager.TagsEnum PoolObjectTag => poolObjectTag;
+	public SpawnableObjectsTagsEnum PoolObjectTag => poolObjectTag;
 	public float FirstSpawnDelayInSeconds => firstSpawnDelayInSeconds;
 	public float DelayBetweenSpawnsInSeconds => delayBetweenSpawnsInSeconds;
 	public int SpawnObjectsLimit => spawnObjectsLimit;
@@ -45,19 +50,26 @@ public class SpawnPoint : MonoBehaviour
 		set;
 	} = new List<BasePoolObject>();
 
-	#endregion
+    #endregion
 
-	#region METHODS
+    #region METHODS
+
+    [Inject]
+	public void InjectDependencies(IPoolManager poolManager, IUpdateManager updateManager)
+    {
+		this.poolManager = poolManager;
+		this.updateManager = updateManager;
+    }
 
 	public void StartSpawn()
 	{
-		SpawningTimer = new Timer(FirstSpawnDelayInSeconds, DelayBetweenSpawnsInSeconds, Spawn, true);
+		SpawningTimer = new Timer(updateManager, FirstSpawnDelayInSeconds, DelayBetweenSpawnsInSeconds, Spawn, true);
 		SpawningTimer.StartCounting();
 	}
 
 	public void Spawn()
 	{
-		BasePoolObject basePoolObject = PoolManager.Instance.GetPoolObject(PoolObjectTag, this.transform.position, this.transform.rotation);
+		BasePoolObject basePoolObject = poolManager.GetPoolObject(PoolObjectTag, this.transform.position, this.transform.rotation);
         basePoolObject.OnDeactivation += DeactiveSpawnedObject;
 		CurrentSpawnedObjectNumber++;
 		ActiveSpawnedObjects.Add(basePoolObject);

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Managers.GameManagers;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 {
@@ -13,6 +15,8 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
     private List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
     [SerializeField]
     private List<ParallaxGroup> parallaxGroups = new List<ParallaxGroup>();
+
+    private IUpdateManager updateManager;
 
     #endregion
 
@@ -36,9 +40,27 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
         set;
     } = 0;
 
+    public SpawnPoint SpawnPoint {
+        get => default;
+        set {
+        }
+    }
+
+    public ParallaxGroup ParallaxGroup {
+        get => default;
+        set {
+        }
+    }
+
     #endregion
 
     #region METHODS
+
+    [Inject]
+    public void InjectDependencies(IUpdateManager newUpdateManager)
+    {
+        updateManager = newUpdateManager;
+    }
 
     public override void Initialize()
     {
@@ -50,7 +72,7 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 
         for (int i = 0; i < ParallaxGroups.Count; i++)
         {
-            UpdateManager.Instance.OnUpdateView += ParallaxGroups[i].UpdateParallaxEffects;
+            updateManager.OnUpdateView += ParallaxGroups[i].UpdateParallaxEffects;
         }
     }
 
@@ -85,7 +107,7 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 
         for (int i = 0; i < ParallaxGroups.Count; i++)
         {
-            UpdateManager.Instance.OnUpdateView -= ParallaxGroups[i].UpdateParallaxEffects;
+            updateManager.OnUpdateView -= ParallaxGroups[i].UpdateParallaxEffects;
         }
 
         OnLevelEnd();

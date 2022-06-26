@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using Zenject;
+using Managers.GameManagers;
 
 public class ParticleEffect : BasePoolObject
 {
@@ -10,6 +12,8 @@ public class ParticleEffect : BasePoolObject
     private float lifeTime = 1.0f;
     [SerializeField]
     private ParticleSystem particleSystemReference = null;
+
+    private IUpdateManager updateManager;
 
     #endregion
 
@@ -25,7 +29,7 @@ public class ParticleEffect : BasePoolObject
 
     #endregion
 
-    #region FUNCTIONS
+    #region UNITY_METHODS
 
     protected virtual void Awake()
     {
@@ -35,6 +39,16 @@ public class ParticleEffect : BasePoolObject
     protected virtual void OnDestroy()
     {
         DetachEvents();
+    }
+
+    #endregion
+
+    #region METHODS
+
+    [Inject]
+    public void InjectDependencies(IUpdateManager updateManager)
+    {
+        this.updateManager = updateManager;
     }
 
     private void AttachEvents()
@@ -54,7 +68,7 @@ public class ParticleEffect : BasePoolObject
 
     private void HandleLifeTime()
     {
-        LifeTimer = new Timer(0, LifeTime, Deactivation);
+        LifeTimer = new Timer(updateManager, 0, LifeTime, Deactivation);
         LifeTimer.StartCounting();
     }
 

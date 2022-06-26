@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Managers.GameManagers;
+using Zenject;
 
 public class LevelEndPanelModel : Model
 {
     #region MEMBERS
+
+    private IGameMainManager gameMainManager;
 
     #endregion
 
@@ -15,16 +15,22 @@ public class LevelEndPanelModel : Model
 
     #region METHODS
 
+    [Inject]
+    public void InjectDependencies(IGameMainManager gameMainManager)
+    {
+        this.gameMainManager = gameMainManager;
+    }
+
     public void BackToMenu()
     {
         LevelManager.Instance.EndLevel();
-        GameMainManager.Instance.OpenMenu();
+        gameMainManager.OpenMenu();
     }
 
     public void Continue()
     {
         LevelManager.Instance.EndLevel();
-        GameMainManager.Instance.OpenWaitingRoom();
+        gameMainManager.OpenWaitingRoom();
     }
 
     #endregion

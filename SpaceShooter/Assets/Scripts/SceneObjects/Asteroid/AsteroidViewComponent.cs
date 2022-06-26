@@ -1,42 +1,47 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Managers.GameManagers;
 using UnityEngine;
 
 [System.Serializable]
 public class AsteroidViewComponent
 {
-	#region MEMBERS
+    #region MEMBERS
 
-	#endregion
+    private IPoolManager poolManager;
 
-	#region PROPERTIES
+    #endregion
 
-	private Transform AsteroidTransform {
-		get;
-		set;
-	} = null;
+    #region PROPERTIES
 
-	#endregion
+    private Transform AsteroidTransform {
+        get;
+        set;
+    } = null;
 
-	#region METHODS
+    #endregion
 
-	public void SetAsteroidTranform(Transform asteroidTransform)
-	{
-		AsteroidTransform = asteroidTransform;
-	}
+    #region METHODS
 
-	public void Explosion()
-	{
-		if (PoolManager.Instance != null && LevelManager.Instance != null && LevelManager.Instance.IsEndedLevel() == false)
-		{
-			PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.ASTEROID_EXPLOSION_TAG, AsteroidTransform.position, AsteroidTransform.rotation);
-		}
-	}
+    public void InjectDependencies(IPoolManager poolManager)
+    {
+        this.poolManager = poolManager;
+    }
 
-	#endregion
+    public void SetAsteroidTranform(Transform asteroidTransform)
+    {
+        AsteroidTransform = asteroidTransform;
+    }
 
-	#region CLASS_ENUMS
+    public void Explosion()
+    {
+        if (LevelManager.Instance != null && LevelManager.Instance.IsEndedLevel() == false)
+        {
+            poolManager.GetPoolObject(SpawnableObjectsTagsEnum.ASTEROID_EXPLOSION_TAG, AsteroidTransform.position, AsteroidTransform.rotation);
+        }
+    }
 
-	#endregion
+    #endregion
+
+    #region CLASS_ENUMS
+
+    #endregion
 }

@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Managers.GameManagers;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using Zenject;
 
 public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 {
@@ -10,7 +9,7 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 	[SerializeField]
 	private StatisticsPanelController statisticPanel = null;
 	[SerializeField]
-	private LevelEndPanelController centerPanel = null;
+	private LevelEndPanelController centerPanel = null;    
 
 	#endregion
 
@@ -18,6 +17,13 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 
 	public StatisticsPanelController StatisticsPanel => statisticPanel;
 	private LevelEndPanelController CenterPanel => centerPanel;
+
+	[Inject]
+	private IKeyboardManager keyboardManager;
+	[Inject]
+	private IPlayerManager playerManager;
+    [Inject]
+	private IGameMainManager gameMainManager;
 
 	private int KeyIdForOpenMenu {
 		get;
@@ -30,7 +36,7 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 
 	public void RefreshUI()
 	{
-		StatisticsPanel.RefreshPanel(PlayerManager.Instance.PlayerStatisticsController);
+		StatisticsPanel.RefreshPanel(playerManager.PlayerStatisticsController);
 	}
 
 	protected void Awake()
@@ -45,22 +51,16 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 
     private void AttachEvents()
 	{
-		GameMainManager.Instance.OnGameOver += CenterPanel.ShowGameOver;
-		KeyIdForOpenMenu = KeyboardManager.Instance.AddKey(KeyCode.Escape, OpenLevelMenu);
+		gameMainManager.OnGameOver += CenterPanel.ShowGameOver;
+		KeyIdForOpenMenu = keyboardManager.AddKey(KeyCode.Escape, OpenLevelMenu);
 		LevelManager.Instance.OnLevelEnd += CenterPanel.ShowLevelEndPanel;
 	}
 
 	public void DetachEvents()
 	{
-		if (GameMainManager.IsInstantiated == true)
-		{
-			GameMainManager.Instance.OnGameOver -= CenterPanel.ShowGameOver;
-		}
+		gameMainManager.OnGameOver -= CenterPanel.ShowGameOver;
 
-		if (KeyboardManager.IsInstantiated == true)
-		{
-			KeyboardManager.Instance.RemoveKey(KeyIdForOpenMenu);
-		}
+		keyboardManager.RemoveKey(KeyIdForOpenMenu);
 
 		if (LevelManager.IsInstantiated == true)
 		{

@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Managers.GameManagers;
+using System;
 using UnityEngine;
+using Zenject;
 
-[System.Serializable]
 public class Timer
 {
 	#region FIELDS
 
-	public event System.Action OnCountingEnd = delegate { };
+	public event Action OnCountingEnd = delegate { };
+	    
+	private IUpdateManager updateManager;
 
 	#endregion
 
@@ -32,12 +35,13 @@ public class Timer
 		set;
 	} = 0f;
 
-	#endregion
+    #endregion
 
-	#region METHODS
+    #region METHODS
 
-	public Timer(float newFirstDelay, float newTargetTime, Action methodToInvokeOnCountingEnd, bool isRepeatable = false)
+	public Timer(IUpdateManager updateManager, float newFirstDelay, float newTargetTime, Action methodToInvokeOnCountingEnd, bool isRepeatable = false)
 	{
+		this.updateManager = updateManager;
 		FirstDelay = newFirstDelay;
 		TargetTime = newTargetTime;
 		OnCountingEnd = methodToInvokeOnCountingEnd;
@@ -48,18 +52,12 @@ public class Timer
 	{
 		ResetCounter();
 
-		if (UpdateManager.Instance != null)
-        {
-			UpdateManager.Instance.OnDataChange += Counting;
-		}
+		updateManager.OnDataChange += Counting;
 	}
 
 	public void EndCounting()
 	{
-		if (UpdateManager.Instance != null)
-        {
-			UpdateManager.Instance.OnDataChange -= Counting;
-		}
+		updateManager.OnDataChange -= Counting;
 	}
 
 	private void Counting()

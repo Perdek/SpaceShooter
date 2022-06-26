@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Managers.GameManagers;
+using UnityEngine;
+using Zenject;
 
 namespace SceneObjects.Bonuses
 {
@@ -13,6 +15,8 @@ namespace SceneObjects.Bonuses
         [SerializeField]
         private Vector2 calculatedDirection = new Vector2(0,-1);
 
+        private IUpdateManager updateManager;
+
         #endregion
 
         #region PROPERTIES
@@ -21,14 +25,20 @@ namespace SceneObjects.Bonuses
 
         #region METHODS
 
+        [Inject]
+        public void InjectDependencies(IUpdateManager newUpdateManager)
+        {
+            updateManager = newUpdateManager;
+        }
+
         public void AttachEvents()
         {
-            UpdateManager.Instance.OnUpdatePhysic += Move;
+            updateManager.OnUpdatePhysic += Move;
         }
 
         public void DetachEvents()
         {
-            UpdateManager.Instance.OnUpdatePhysic -= Move;
+            updateManager.OnUpdatePhysic -= Move;
         }
 
         private void Move()

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Managers.GameManagers;
+using System;
 using UnityEngine;
+using Zenject;
 
 [System.Serializable]
 public class Weapon
@@ -9,9 +11,12 @@ public class Weapon
     public event Action<int> OnUgradeWeapon = delegate { };
 
     [SerializeField]
-    private TagManager.TagsEnum bulletTag = TagManager.TagsEnum.PLAYER_BULLET_TAG;
+    private SpawnableObjectsTagsEnum bulletTag = SpawnableObjectsTagsEnum.PLAYER_BULLET_TAG;
     [SerializeField]
     private WeaponInformation weaponInformation = null;
+    
+    private IPoolManager poolManager;
+    private IUpdateManager updateManager;
 
     #endregion
 
@@ -36,6 +41,12 @@ public class Weapon
 
     #region METHODS
 
+    public void InjectDependencies(IUpdateManager updateManager, IPoolManager poolManager)
+    {
+        this.poolManager = poolManager;
+        this.updateManager = updateManager;
+    }
+
     public int GetCurrentUpgradingCostCurve() => (int)WeaponInformation.UpgradingCostCurve.Evaluate(WeaponLevel.Value);
 
     public void InitializeBulletTransform(Transform bulletSpawnPointTransform)
@@ -46,9 +57,8 @@ public class Weapon
     public void InitializeWeapon()
     {
         BulletLeftInMagazine.SetValue((int)WeaponInformation.MagazineCapacityCurve.Evaluate(WeaponLevel.Value));
-
-        ReloadingMagazineTimer = new Timer(0, GetCurrentReloadingTimeInSeconds(), FinishReloading);
-        BoltReloadCycleTimer = new Timer(0, GetCurrentTimeInSecondBetweenShoots(), FinishBoltCycle);
+        ReloadingMagazineTimer = new Timer(updateManager, 0, GetCurrentReloadingTimeInSeconds(), FinishReloading);
+        BoltReloadCycleTimer = new Timer(updateManager, 0, GetCurrentTimeInSecondBetweenShoots(), FinishBoltCycle);
     }
 
     public bool IsLastLevel()
@@ -121,14 +131,11 @@ public class Weapon
 
     private void EjectBullet()
     {
-        if (PoolManager.Instance != null)
-        {
-            BasePoolObject poolObject = PoolManager.Instance.GetPoolObject(bulletTag, BulletSpawnPoint.position, BulletSpawnPoint.rotation);
+        BasePoolObject poolObject = poolManager.GetPoolObject(bulletTag, BulletSpawnPoint.position, BulletSpawnPoint.rotation);
 
-            Bullet bullet = poolObject as Bullet;
+        Bullet bullet = poolObject as Bullet;
 
-            bullet.OnKillTarget += CachedPlayerShootingController.NotifyKillEnemy;
-        }
+        bullet.OnKillTarget += CachedPlayerShootingController.NotifyKillEnemy;
     }
 
     private int GetCurrentReloadingTimeInSeconds() => (int)WeaponInformation.ReloadingTimeInSecondsCurve.Evaluate(WeaponLevel.Value);

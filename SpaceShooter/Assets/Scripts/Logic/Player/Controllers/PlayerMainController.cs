@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Managers.GameManagers;
 using UnityEngine;
+using Zenject;
 
 public class PlayerMainController : MonoBehaviour
 {
@@ -19,6 +18,8 @@ public class PlayerMainController : MonoBehaviour
     [SerializeField]
     private PlayerVisualisationController playerVisualisationController = null;
 
+    private IGameMainManager gameMainManager;
+
     #endregion
 
     #region PROPERTIES
@@ -32,6 +33,14 @@ public class PlayerMainController : MonoBehaviour
     #endregion
 
     #region METHODS
+
+    [Inject]
+    public void InjectDependencies(IGameMainManager gameMainManager, IUpdateManager updateManager, IKeyboardManager keyboardManager, IInputManager inputManager, IPoolManager poolManager)
+    {
+        this.gameMainManager = gameMainManager;
+        playerMovementController.InjectDependencies(updateManager, keyboardManager, gameMainManager, inputManager);
+        PlayerShootingController.InjectDependencies(keyboardManager, updateManager, poolManager);
+    }
 
     public void Initialize()
     {
@@ -47,11 +56,11 @@ public class PlayerMainController : MonoBehaviour
 
     private void AttachEvents()
     {
-        GameMainManager.Instance.OnGameStart += AttachInterControllersEvents;
-        GameMainManager.Instance.OnGameStart += RefreshView;
-        GameMainManager.Instance.OnMainOpen += DetachInterControllersEvents;
-        GameMainManager.Instance.OnWaitingOpen += DetachInterControllersEvents;
-        PlayerStatisticsController.OnPlayerDead += GameMainManager.Instance.GameOver;
+        gameMainManager.OnGameStart += AttachInterControllersEvents;
+        gameMainManager.OnGameStart += RefreshView;
+        gameMainManager.OnMainOpen += DetachInterControllersEvents;
+        gameMainManager.OnWaitingOpen += DetachInterControllersEvents;
+        PlayerStatisticsController.OnPlayerDead += gameMainManager.GameOver;
 
         PlayerShootingController.AttachEventForUpdateWeapon(PlayerStatisticsController.MoneyPoints.RemoveValue);
     }

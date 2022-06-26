@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using Managers.GameManagers;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 [System.Serializable]
 public class PlayerMovementController
@@ -22,6 +23,11 @@ public class PlayerMovementController
 	private Rigidbody2D playerRigidBody2D = null;
 
 	private MovingStateEnum state = MovingStateEnum.IDLE;
+
+	private IUpdateManager updateManager;
+	private IKeyboardManager keyboardManager;
+	private IGameMainManager gameMainManager;
+	private IInputManager inputManager;
 
 	#endregion
 
@@ -57,6 +63,14 @@ public class PlayerMovementController
 	#endregion
 
 	#region METHODS
+
+	public void InjectDependencies(IUpdateManager updateManager, IKeyboardManager keyboardManager, IGameMainManager gameMainManager, IInputManager inputManager)
+	{
+		this.updateManager = updateManager;
+		this.keyboardManager = keyboardManager;
+		this.gameMainManager = gameMainManager;
+		this.inputManager = inputManager;
+	}
 
 	public void Initialize()
 	{
@@ -132,36 +146,36 @@ public class PlayerMovementController
 
 	private void InitializeKeys()
 	{
-		GameMainManager.Instance.OnGameStart += AttachKeysForMovement;
-		GameMainManager.Instance.OnWaitingOpen += DetachKeysForMovement;
-		GameMainManager.Instance.OnMainOpen += DetachKeysForMovement;
+		gameMainManager.OnGameStart += AttachKeysForMovement;
+		gameMainManager.OnWaitingOpen += DetachKeysForMovement;
+		gameMainManager.OnMainOpen += DetachKeysForMovement;
 	}
 
 	private void AttachKeysForMovement()
 	{
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveUp(), SetMoveUp));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveDown(), SetMoveDown));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveLeft(), SetMoveLeft));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveRight(), SetMoveRight));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveUpRight(), SetMoveUpRight));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveUpLeft(), SetMoveUpLeft));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveDownRight(), SetMoveDownRight));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveDownLeft(), SetMoveDownLeft));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMovement(), SetBreak, KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum.KEY_HAS_NOT_OCCUR));
+		KeysIds.Add(keyboardManager.AddKey(GetKeyCodeMoveUp(), SetMoveUp));
+		KeysIds.Add(keyboardManager.AddKey(GetKeyCodeMoveDown(), SetMoveDown));
+		KeysIds.Add(keyboardManager.AddKey(GetKeyCodeMoveLeft(), SetMoveLeft));
+		KeysIds.Add(keyboardManager.AddKey(GetKeyCodeMoveRight(), SetMoveRight));
+		KeysIds.Add(keyboardManager.AddKey(GetKeysCodeMoveUpRight(), SetMoveUpRight));
+		KeysIds.Add(keyboardManager.AddKey(GetKeysCodeMoveUpLeft(), SetMoveUpLeft));
+		KeysIds.Add(keyboardManager.AddKey(GetKeysCodeMoveDownRight(), SetMoveDownRight));
+		KeysIds.Add(keyboardManager.AddKey(GetKeysCodeMoveDownLeft(), SetMoveDownLeft));
+		KeysIds.Add(keyboardManager.AddKey(GetKeysCodeMovement(), SetBreak, KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum.KEY_HAS_NOT_OCCUR));
 	}
 
 	private void DetachKeysForMovement()
 	{
 		for (int i = KeysIds.Count - 1; i >= 0; i--)
 		{
-			KeyboardManager.Instance.RemoveKey(KeysIds[i]);
+			keyboardManager.RemoveKey(KeysIds[i]);
 			KeysIds.RemoveAt(i);
 		}
 	}
 
 	private void InitializeUpdate()
 	{
-		UpdateManager.Instance.OnDataChange += HandleState;
+		updateManager.OnDataChange += HandleState;
 	}
 
 	private void SetState(MovingStateEnum newState)
@@ -251,22 +265,22 @@ public class PlayerMovementController
 
 	private KeyCode GetKeyCodeMoveUp()
 	{
-		return InputManager.Instance.KeyCodeMoveUp;
+		return inputManager.KeyCodeMoveUp;
 	}
 
 	private KeyCode GetKeyCodeMoveDown()
 	{
-		return InputManager.Instance.KeyCodeMoveDown;
+		return inputManager.KeyCodeMoveDown;
 	}
 
 	private KeyCode GetKeyCodeMoveLeft()
 	{
-		return InputManager.Instance.KeyCodeMoveLeft;
+		return inputManager.KeyCodeMoveLeft;
 	}
 
 	private KeyCode GetKeyCodeMoveRight()
 	{
-		return InputManager.Instance.KeyCodeMoveRight;
+		return inputManager.KeyCodeMoveRight;
 	}
 
 	private List<KeyCode> GetKeysCodeMoveUpRight()

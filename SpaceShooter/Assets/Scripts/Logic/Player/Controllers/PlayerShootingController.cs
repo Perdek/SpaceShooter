@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Managers.GameManagers;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 [System.Serializable]
 public class PlayerShootingController
@@ -36,14 +38,27 @@ public class PlayerShootingController
         set;
     } = 0;
 
+    [Inject]
+    private IKeyboardManager keyboardManager;
+
     #endregion
 
     #region METHODS
 
+    public void InjectDependencies(IKeyboardManager keyboardManager, IUpdateManager updateManager, IPoolManager poolManager)
+    {
+        this.keyboardManager = keyboardManager;
+
+        for (int i = 0; i < Weapons.Count; i++)
+        {
+            Weapons[i].InjectDependencies(updateManager, poolManager);
+        }
+    }
+
     public void Initialize()
     {
-        ChooseDefaultWeapon();
         InitializeWeapons();
+        ChooseDefaultWeapon();
     }
 
     public void AttachEventForUpdateWeapon(Action<int> onUpdate)
@@ -96,16 +111,16 @@ public class PlayerShootingController
 
     private void AttachKeysForShooting()
     {
-        KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN, KeyInput.CheckingModeEnum.DISJUNCTION));
-        KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.E, NextWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
-        KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.Q, PrevWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
+        KeysIds.Add(keyboardManager.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN, KeyInput.CheckingModeEnum.DISJUNCTION));
+        KeysIds.Add(keyboardManager.AddKey(KeyCode.E, NextWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
+        KeysIds.Add(keyboardManager.AddKey(KeyCode.Q, PrevWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
     }
 
     private void DetachKeysForShooting()
     {
         for (int i = KeysIds.Count - 1; i >= 0; i--)
         {
-            KeyboardManager.Instance.RemoveKey(KeysIds[i]);
+            keyboardManager.RemoveKey(KeysIds[i]);
             KeysIds.RemoveAt(i);
         }
     }

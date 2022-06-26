@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [System.Serializable]
 public class Pool
@@ -8,7 +6,7 @@ public class Pool
 	#region FIELDS
 
 	[SerializeField]
-	private TagManager.TagsEnum tag = TagManager.TagsEnum.PLAYER_BULLET_TAG;
+	private SpawnableObjectsTagsEnum tag = SpawnableObjectsTagsEnum.PLAYER_BULLET_TAG;
 	[SerializeField]
 	private int size = 0;
 	[SerializeField]
@@ -18,7 +16,7 @@ public class Pool
 
 	#region PROPERTIES
 
-	public TagManager.TagsEnum Tag {
+	public SpawnableObjectsTagsEnum Tag {
 		get => tag;
 		private set => tag = value;
 	}

@@ -1,6 +1,8 @@
+using Managers.GameManagers;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace UI.WaitingRoom
 {
@@ -13,6 +15,8 @@ namespace UI.WaitingRoom
         [SerializeField] private List<Toggle> weaponsProgressLevelToggles = new List<Toggle>();
         [SerializeField] private Button upgradeButton = default;
 
+        private IPlayerManager playerManager;
+
         #endregion
 
         #region PROPERTIES
@@ -23,21 +27,27 @@ namespace UI.WaitingRoom
 
         #region METHODS
 
+        [Inject]
+        public void InjectDependencies(IPlayerManager playerManager)
+        {
+            this.playerManager = playerManager;
+        }
+
         public override void AttachEvents()
         {
             upgradeButton.onClick.AddListener(UpgradeWeapon);
-            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnValueSet += RefreshOnUpgradeWeapon;
-            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnAddValue += RefreshOnUpgradeWeapon;
-            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnRemoveValue += RefreshOnUpgradeWeapon;
+            playerManager.PlayerStatisticsController.MoneyPoints.OnValueSet += RefreshOnUpgradeWeapon;
+            playerManager.PlayerStatisticsController.MoneyPoints.OnAddValue += RefreshOnUpgradeWeapon;
+            playerManager.PlayerStatisticsController.MoneyPoints.OnRemoveValue += RefreshOnUpgradeWeapon;
             ValueReference.WeaponLevel.OnAddValue += RefreshOnUpgradeWeapon;
         }
 
         public override void DetachEvents()
         {
             upgradeButton.onClick.RemoveListener(UpgradeWeapon);
-            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnValueSet -= RefreshOnUpgradeWeapon;
-            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnAddValue -= RefreshOnUpgradeWeapon;
-            PlayerManager.Instance.PlayerStatisticsController.MoneyPoints.OnRemoveValue -= RefreshOnUpgradeWeapon;
+            playerManager.PlayerStatisticsController.MoneyPoints.OnValueSet -= RefreshOnUpgradeWeapon;
+            playerManager.PlayerStatisticsController.MoneyPoints.OnAddValue -= RefreshOnUpgradeWeapon;
+            playerManager.PlayerStatisticsController.MoneyPoints.OnRemoveValue -= RefreshOnUpgradeWeapon;
             ValueReference.WeaponLevel.OnAddValue -= RefreshOnUpgradeWeapon;
         }
 
@@ -68,7 +78,7 @@ namespace UI.WaitingRoom
                 return;
             }
 
-            bool canPlayerAffordUpgradingWeapon = PlayerManager.Instance.PlayerStatisticsController.CurrentMoneyPoints >= ValueReference.GetCurrentUpgradingCostCurve();
+            bool canPlayerAffordUpgradingWeapon = playerManager.PlayerStatisticsController.CurrentMoneyPoints >= ValueReference.GetCurrentUpgradingCostCurve();
             upgradeButton.interactable = canPlayerAffordUpgradingWeapon;
         }
 

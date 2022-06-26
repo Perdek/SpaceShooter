@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Zenject;
+using Managers.GameManagers;
 
 public class Asteroid : Enemy
 {
@@ -13,6 +15,7 @@ public class Asteroid : Enemy
     private AsteroidViewComponent viewComponent = null;
 
     private bool isBreakable = true;
+    private IPoolManager poolManager;
 
     #endregion
 
@@ -25,6 +28,13 @@ public class Asteroid : Enemy
     #endregion
 
     #region METHODS
+
+    [Inject]
+    public void InjectDependencies(IPoolManager poolManager)
+    {
+        viewComponent.InjectDependencies(poolManager);
+        this.poolManager = poolManager;
+    }
 
     public void AttachEvents()
     {
@@ -107,7 +117,7 @@ public class Asteroid : Enemy
     {
         if (isBreakable == false)
         {
-            PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.HP_BONUS, this.transform.position, this.transform.rotation);
+            poolManager.GetPoolObject(SpawnableObjectsTagsEnum.HP_BONUS, this.transform.position, this.transform.rotation);
         }
     }
 
@@ -123,7 +133,7 @@ public class Asteroid : Enemy
 
     private void SpawnOneLittleAsteroid()
     {
-        BasePoolObject basePoolObject = PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.LITTLE_ASTEROID_TAG, this.transform.position, this.transform.rotation);
+        BasePoolObject basePoolObject = poolManager.GetPoolObject(SpawnableObjectsTagsEnum.LITTLE_ASTEROID_TAG, this.transform.position, this.transform.rotation);
         Asteroid littleAsteroid = basePoolObject as Asteroid;
         littleAsteroid.SetIsBreakable(false);
     }

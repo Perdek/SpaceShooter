@@ -1,23 +1,29 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Managers.GameManagers;
+using Zenject;
 
 public class MainMenuModel : Model
 {
-	#region FIELDS
+    #region FIELDS
 
-	#endregion
+    private IGameMainManager gameMainManager;
 
-	#region PROPERTIES
+    #endregion
 
-	#endregion
+    #region PROPERTIES
 
-	#region METHODS
+    #endregion
+
+    #region METHODS
+
+    [Inject]
+	public void InjectDependencies(IGameMainManager gameMainManager)
+    {
+        this.gameMainManager = gameMainManager;
+    }
 
 	public void StartGame()
 	{
-		GameMainManager.Instance.StartGame();
+		gameMainManager.StartGame();
 	}
 
 	#endregion

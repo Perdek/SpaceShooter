@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Managers.GameManagers;
+using Zenject;
 
 public class LevelEndPanelController : Controller
 {
 	#region MEMBERS
+
+	private IUpdateManager updateManager;
+	private IGameMainManager gameMainManager;
 
 	#endregion
 
@@ -25,17 +26,21 @@ public class LevelEndPanelController : Controller
 
 	#region METHODS
 
+	[Inject]
+	public void InjectDependencies(IUpdateManager updateManager, IGameMainManager gameMainManager)
+	{
+		this.updateManager = updateManager;
+		this.gameMainManager = gameMainManager;
+	}
+
 	public void AttachEvents()
 	{
-		GameMainManager.Instance.OnGameOver += View.ShowEndLevelPanel;
+		gameMainManager.OnGameOver += View.ShowEndLevelPanel;
 	}
 
 	public void DetachEvents()
 	{
-		if (GameMainManager.IsInstantiated == true)
-		{
-			GameMainManager.Instance.OnGameOver -= View.ShowEndLevelPanel;
-		}
+		gameMainManager.OnGameOver -= View.ShowEndLevelPanel;
 	}
 
 	public bool IsShowedCenterPanel()
@@ -45,13 +50,13 @@ public class LevelEndPanelController : Controller
 
 	public void ShowLevelEndPanel()
 	{
-		UpdateManager.Instance.PauseTime();
+		updateManager.PauseTime();
 		View.ShowEndLevelPanel();
 	}
 
 	public void ShowGameOver()
     {
-		UpdateManager.Instance.PauseTime();
+		updateManager.PauseTime();
 		View.ShowGameOverPanel();
 	}
 
