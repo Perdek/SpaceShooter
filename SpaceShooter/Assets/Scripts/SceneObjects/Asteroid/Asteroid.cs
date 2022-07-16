@@ -21,38 +21,35 @@ public class Asteroid : Enemy
 
     #region PROPERTIES
 
-    private AsteroidCollisionComponent CollisionComponent => collisionComponent;
-    private AsteroidMovementComponent MovementComponent => movementComponent;
-    private AsteroidViewComponent ViewComponent => viewComponent;
-
     #endregion
 
     #region METHODS
 
     [Inject]
-    public void InjectDependencies(IPoolManager poolManager)
+    public void InjectDependencies(IPoolManager poolManager, IUpdateManager updateManager)
     {
         viewComponent.InjectDependencies(poolManager);
+        movementComponent.InjectDependencies(updateManager);
         this.poolManager = poolManager;
     }
 
     public void AttachEvents()
     {
-        CollisionComponent.OnHit += Deactivation;
+        collisionComponent.OnHit += Deactivation;
 
         if (isBreakable == true)
         {
-            CollisionComponent.OnKillByPlayer += HandleKillByPlayer;
+            collisionComponent.OnKillByPlayer += HandleKillByPlayer;
         }
 
-        MovementComponent.AttachEvents();
+        movementComponent.AttachEvents();
     }
 
     public void DetachEvents()
     {
-        CollisionComponent.OnHit -= Deactivation;
+        collisionComponent.OnHit -= Deactivation;
 
-        MovementComponent.DetachEvents();
+        movementComponent.DetachEvents();
     }
 
     public override void HandleObjectSpawn()
@@ -67,7 +64,7 @@ public class Asteroid : Enemy
     private IEnumerator ActivateCollider()
     {
         yield return new WaitForSeconds(1f);
-        CollisionComponent.ActivateCollider();
+        collisionComponent.ActivateCollider();
     }
 
     public override void Deactivation()
@@ -76,7 +73,7 @@ public class Asteroid : Enemy
 
         Terminate();
         DetachEvents();
-        CollisionComponent.DeactivateCollider();
+        collisionComponent.DeactivateCollider();
     }
 
     public void SetIsBreakable(bool newValue)
@@ -85,26 +82,26 @@ public class Asteroid : Enemy
 
         if (isBreakable == false)
         {
-            CollisionComponent.OnKillByPlayer -= HandleKillByPlayer;
+            collisionComponent.OnKillByPlayer -= HandleKillByPlayer;
         }
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
-        CollisionComponent.HandleCollision(other);
+        collisionComponent.HandleCollision(other);
     }
 
     private void Initialize()
     {
-        MovementComponent.Initialize();
-        ViewComponent.SetAsteroidTranform(this.transform);
-        CollisionComponent.SetAsteroidInformation(EnemyInformation);
+        movementComponent.Initialize();
+        viewComponent.SetAsteroidTranform(this.transform);
+        collisionComponent.SetAsteroidInformation(EnemyInformation);
         isBreakable = true;
     }
 
     private void Terminate()
     {
-        ViewComponent.Explosion();
+        viewComponent.Explosion();
     }
 
     private void HandleKillByPlayer()
@@ -133,7 +130,7 @@ public class Asteroid : Enemy
 
     private void SpawnOneLittleAsteroid()
     {
-        BasePoolObject basePoolObject = poolManager.GetPoolObject(SpawnableObjectsTagsEnum.LITTLE_ASTEROID_TAG, this.transform.position, this.transform.rotation);
+        IBasePoolObject basePoolObject = poolManager.GetPoolObject(SpawnableObjectsTagsEnum.LITTLE_ASTEROID_TAG, this.transform.position, this.transform.rotation);
         Asteroid littleAsteroid = basePoolObject as Asteroid;
         littleAsteroid.SetIsBreakable(false);
     }

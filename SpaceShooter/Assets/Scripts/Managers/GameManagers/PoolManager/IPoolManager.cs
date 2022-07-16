@@ -9,7 +9,7 @@ namespace Managers.GameManagers
 
         public List<Pool> PoolList { get; }
         public PoolObjectsParent PoolObjectsParentPrefab { get; }
-        public Dictionary<string, Queue<BasePoolObject>> PoolDictionary { get; }
+        public Dictionary<string, Queue<IBasePoolObject>> PoolDictionary { get; }
         public Pool Pool { get; }
         public PoolObjectsParent PoolObjectsParent { get; }
 
@@ -19,7 +19,7 @@ namespace Managers.GameManagers
 
         public void Initialize();
         public void DeactivateAllObjects();
-        public BasePoolObject GetPoolObject(SpawnableObjectsTagsEnum tag, Vector3 newPosition, Quaternion newRotation);
+        public IBasePoolObject GetPoolObject(SpawnableObjectsTagsEnum tag, Vector3 newPosition, Quaternion newRotation);
 
         #endregion
 

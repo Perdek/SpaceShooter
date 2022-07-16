@@ -1,6 +1,5 @@
 ﻿using Managers.GameManagers;
 using UnityEngine;
-using Zenject;
 
 [System.Serializable]
 public class AsteroidMovementComponent
@@ -42,7 +41,6 @@ public class AsteroidMovementComponent
 
 	#region METHODS
 
-	[Inject]
 	public void InjectDependencies(IUpdateManager newUpdateManager)
 	{
 		updateManager = newUpdateManager;

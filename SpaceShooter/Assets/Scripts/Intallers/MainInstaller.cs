@@ -22,6 +22,10 @@ public class MainInstaller : MonoInstaller
         Container.Bind<IInputManager>().To<InputManager>().AsSingle();
         Container.Bind<IPlayerManager>().To(typeof(PlayerManager)).FromInstance(playerManager).AsSingle();
 
+
         Container.Bind<Weapon>().AsTransient();
+        Container.Bind<BasePoolObjectsFactory>().AsCached();
+
+        Container.BindFactory<UnityEngine.Object, IBasePoolObject, IBasePoolObject.Factory>().FromFactory<BasePoolObjectsFactory>();
     }
 }

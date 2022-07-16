@@ -8,7 +8,7 @@ public class SpawnPoint : MonoBehaviour
 {
 	#region FIELDS
 
-	public event Action<BasePoolObject> OnSpawn = delegate { };
+	public event Action<IBasePoolObject> OnSpawn = delegate { };
 	public event Action OnSpawnEnd = delegate { };
 
 	[SerializeField]
@@ -45,10 +45,10 @@ public class SpawnPoint : MonoBehaviour
 		set;
 	} = 0;
 
-	private List<BasePoolObject> ActiveSpawnedObjects {
+	private List<IBasePoolObject> ActiveSpawnedObjects {
 		get;
 		set;
-	} = new List<BasePoolObject>();
+	} = new List<IBasePoolObject>();
 
     #endregion
 
@@ -69,7 +69,7 @@ public class SpawnPoint : MonoBehaviour
 
 	public void Spawn()
 	{
-		BasePoolObject basePoolObject = poolManager.GetPoolObject(PoolObjectTag, this.transform.position, this.transform.rotation);
+		IBasePoolObject basePoolObject = poolManager.GetPoolObject(PoolObjectTag, this.transform.position, this.transform.rotation);
         basePoolObject.OnDeactivation += DeactiveSpawnedObject;
 		CurrentSpawnedObjectNumber++;
 		ActiveSpawnedObjects.Add(basePoolObject);

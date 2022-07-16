@@ -131,7 +131,7 @@ public class Weapon
 
     private void EjectBullet()
     {
-        BasePoolObject poolObject = poolManager.GetPoolObject(bulletTag, BulletSpawnPoint.position, BulletSpawnPoint.rotation);
+        IBasePoolObject poolObject = poolManager.GetPoolObject(bulletTag, BulletSpawnPoint.position, BulletSpawnPoint.rotation);
 
         Bullet bullet = poolObject as Bullet;
 

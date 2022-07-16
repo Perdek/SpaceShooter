@@ -1,134 +1,145 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Managers.GameManagers
 {
 
-	public class PoolManager : MonoBehaviour, IPoolManager
-	{
-		#region FIELDS
+    public class PoolManager : MonoBehaviour, IPoolManager
+    {
+        #region FIELDS
 
-		[SerializeField]
-		private List<Pool> poolList = new List<Pool>();
+        [SerializeField]
+        private List<Pool> poolList = new List<Pool>();
 
-		[SerializeField]
-		private PoolObjectsParent poolObjectsParentPrefab = null;
+        [SerializeField]
+        private PoolObjectsParent poolObjectsParentPrefab = null;
 
-		#endregion
+        private BasePoolObjectsFactory basePoolObjectsFactory = null;
 
-		#region PROPERTIES
+        #endregion
 
-		public List<Pool> PoolList {
-			get => poolList;
-			private set => poolList = value;
-		}
+        #region PROPERTIES
 
-		public PoolObjectsParent PoolObjectsParentPrefab => poolObjectsParentPrefab;
+        public List<Pool> PoolList {
+            get => poolList;
+            private set => poolList = value;
+        }
 
-		public Dictionary<string, Queue<BasePoolObject>> PoolDictionary {
-			get;
-			private set;
-		} = new Dictionary<string, Queue<BasePoolObject>>();
+        public PoolObjectsParent PoolObjectsParentPrefab => poolObjectsParentPrefab;
 
-		public Pool Pool {
-			get => default;
-			set {
-			}
-		}
+        public Dictionary<string, Queue<IBasePoolObject>> PoolDictionary {
+            get;
+            private set;
+        } = new Dictionary<string, Queue<IBasePoolObject>>();
 
-		public PoolObjectsParent PoolObjectsParent {
-			get => default;
-			set {
-			}
-		}
+        public Pool Pool {
+            get => default;
+            set {
+            }
+        }
+
+        public PoolObjectsParent PoolObjectsParent {
+            get => default;
+            set {
+            }
+        }
 
 
-		#endregion
+        #endregion
 
-		#region METHODS
+        #region METHODS
 
-		public void Initialize()
-		{
-			//InitializePools();
-		}
+        [Inject]
+        public void InjectDependecies(BasePoolObjectsFactory basePoolObjectsFactory)
+        {
+            this.basePoolObjectsFactory = basePoolObjectsFactory;
+        }
 
-		public void DeactivateAllObjects()
-		{
-			foreach (KeyValuePair<string, Queue<BasePoolObject>> pool in PoolDictionary)
-			{
-				foreach (BasePoolObject basePoolObject in pool.Value)
-				{
-					basePoolObject.Deactivation();
-				}
-			}
-		}
+        public void Initialize()
+        {
+            InitializePools();
+        }
 
-		public BasePoolObject GetPoolObject(SpawnableObjectsTagsEnum tag, Vector3 newPosition, Quaternion newRotation)
-		{
-			if (PoolDictionary.ContainsKey(tag.ToString()) == false)
-			{
-				return null;
-			}
+        public void DeactivateAllObjects()
+        {
+            foreach (KeyValuePair<string, Queue<IBasePoolObject>> pool in PoolDictionary)
+            {
+                foreach (BasePoolObject basePoolObject in pool.Value)
+                {
+                    basePoolObject.Deactivation();
+                }
+            }
+        }
 
-			BasePoolObject poolObject = PoolDictionary[tag.ToString()].Dequeue();
+        public IBasePoolObject GetPoolObject(SpawnableObjectsTagsEnum tag, Vector3 newPosition, Quaternion newRotation)
+        {
+            if (PoolDictionary.ContainsKey(tag.ToString()) == false)
+            {
+                return null;
+            }
 
-			if (poolObject == null)
-			{
-				return null;
-			}
+            IBasePoolObject poolObject = PoolDictionary[tag.ToString()].Dequeue();
 
-			SetPoolObject(poolObject, newPosition, newRotation);
+            if (poolObject == null)
+            {
+                return null;
+            }
 
-			PoolDictionary[tag.ToString()].Enqueue(poolObject);
+            SetPoolObject(poolObject, newPosition, newRotation);
 
-			return poolObject;
-		}
+            PoolDictionary[tag.ToString()].Enqueue(poolObject);
 
-		private void SetPoolObject(BasePoolObject poolObject, Vector3 newPosition, Quaternion newRotation)
-		{
-			poolObject.transform.position = newPosition;
-			poolObject.transform.rotation = newRotation;
-			poolObject.gameObject.SetActive(true);
-			poolObject.HandleObjectSpawn();
-			poolObject.SetState(BasePoolObject.PoolObjectStateEnum.IN_USE);
-		}
+            return poolObject;
+        }
 
-		private void SetPoolObjectsParent(PoolObjectsParent newPoolObjectsParent, Pool pool)
-		{
-			newPoolObjectsParent.name = pool.Tag.ToString();
-			newPoolObjectsParent.SetTag(pool.Tag.ToString());
-			newPoolObjectsParent.transform.SetParent(this.transform);
-		}
+        private void SetPoolObject(IBasePoolObject poolObject, Vector3 newPosition, Quaternion newRotation)
+        {
+            poolObject.GetGameObject.transform.position = newPosition;
+            poolObject.GetGameObject.transform.rotation = newRotation;
+            poolObject.GetGameObject.gameObject.SetActive(true);
+            poolObject.HandleObjectSpawn();
+            poolObject.SetState(IBasePoolObject.PoolObjectStateEnum.IN_USE);
+        }
 
-		private void InitializePools()
-		{
-			PoolObjectsParent poolObjectsParent = null;
-			Pool pool = null;
+        private void SetPoolObjectsParent(PoolObjectsParent newPoolObjectsParent, Pool pool)
+        {
+            newPoolObjectsParent.name = pool.Tag.ToString();
+            newPoolObjectsParent.SetTag(pool.Tag.ToString());
+            newPoolObjectsParent.transform.SetParent(this.transform);
+        }
 
-			for (int i = 0; i < PoolList.Count; i++)
-			{
-				Queue<BasePoolObject> poolQueue = new Queue<BasePoolObject>();
-				pool = PoolList[i];
+        private void InitializePools()
+        {
+            PoolObjectsParent poolObjectsParent = null;
+            Pool pool = null;
 
-				poolObjectsParent = GameObject.Instantiate(PoolObjectsParentPrefab, this.transform);
-				SetPoolObjectsParent(poolObjectsParent, pool);
+            for (int i = 0; i < PoolList.Count; i++)
+            {
+                Queue<IBasePoolObject> poolQueue = new Queue<IBasePoolObject>();
+                pool = PoolList[i];
 
-				for (int j = 0; j < pool.Size; j++)
-				{
-					BasePoolObject poolObject = GameObject.Instantiate(pool.PoolPrefab, poolObjectsParent.transform);
-					poolObject.gameObject.SetActive(false);
-					poolObject.SetState(BasePoolObject.PoolObjectStateEnum.WAITING_FOR_USE);
-					poolQueue.Enqueue(poolObject);
-				}
+                //Do by zenject
+                poolObjectsParent = GameObject.Instantiate(PoolObjectsParentPrefab, this.transform);
+                SetPoolObjectsParent(poolObjectsParent, pool);
 
-				PoolDictionary.Add(pool.Tag.ToString(), poolQueue);
-			}
-		}
+                for (int j = 0; j < pool.Size; j++)
+                {
+                    IBasePoolObject poolObject = basePoolObjectsFactory.Create(pool.PoolPrefab);
+                    poolObject.GetGameObject.transform.parent = poolObjectsParent.transform;
+                    poolObject.GetGameObject.SetActive(false);
+                    poolObject.SetState(IBasePoolObject.PoolObjectStateEnum.WAITING_FOR_USE);
+                    poolQueue.Enqueue(poolObject);
+                }
 
-		#endregion
+                PoolDictionary.Add(pool.Tag.ToString(), poolQueue);
+            }
+        }
 
-		#region ENUMS
+        #endregion
 
-		#endregion
-	}
+        #region ENUMS
+
+        #endregion
+    }
 }

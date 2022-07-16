@@ -125,17 +125,17 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
         HandleCheckLevelEnd();
     }
 
-    private void HandleEnemySpawn(BasePoolObject spawnedEnemy)
+    private void HandleEnemySpawn(IBasePoolObject spawnedEnemy)
     {
         spawnedEnemy.OnDeactivation += HandleEnemyDeactivation;
     }
 
-    private void HandleEnemyDeactivationDetachEvents(BasePoolObject destroyedEnemy)
+    private void HandleEnemyDeactivationDetachEvents(IBasePoolObject destroyedEnemy)
     {
         destroyedEnemy.OnDeactivation -= HandleEnemyDeactivation;
     }
 
-    private void HandleEnemyDeactivation(BasePoolObject destroyedEnemy)
+    private void HandleEnemyDeactivation(IBasePoolObject destroyedEnemy)
     {
         destroyedEnemy.OnDeactivation -= HandleEnemyDeactivation;
         DecreaseEnemyCount();

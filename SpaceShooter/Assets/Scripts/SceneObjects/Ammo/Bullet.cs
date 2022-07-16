@@ -2,6 +2,7 @@
 using System;
 using Zenject;
 using Managers.GameManagers;
+using static IBasePoolObject;
 
 public class Bullet : BasePoolObject
 {
