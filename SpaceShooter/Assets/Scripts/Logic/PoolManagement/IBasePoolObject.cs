@@ -40,7 +40,7 @@ public interface IBasePoolObject
 
     #region FACTORY
 
-    public class Factory : PlaceholderFactory<UnityEngine.Object, IBasePoolObject>
+    public class Factory : PlaceholderFactory<UnityEngine.Object, UnityEngine.Transform, IBasePoolObject>
     {
 
     }

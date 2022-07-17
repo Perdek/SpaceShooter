@@ -16,6 +16,7 @@ namespace Managers.GameManagers
         private PoolObjectsParent poolObjectsParentPrefab = null;
 
         private BasePoolObjectsFactory basePoolObjectsFactory = null;
+        private PoolObjectsParentFactory poolObjectsParentPrefabFactory = null;
 
         #endregion
 
@@ -51,9 +52,10 @@ namespace Managers.GameManagers
         #region METHODS
 
         [Inject]
-        public void InjectDependecies(BasePoolObjectsFactory basePoolObjectsFactory)
+        public void InjectDependecies(BasePoolObjectsFactory basePoolObjectsFactory, PoolObjectsParentFactory poolObjectsParentPrefabFactory)
         {
             this.basePoolObjectsFactory = basePoolObjectsFactory;
+            this.poolObjectsParentPrefabFactory = poolObjectsParentPrefabFactory;
         }
 
         public void Initialize()
@@ -119,14 +121,12 @@ namespace Managers.GameManagers
                 Queue<IBasePoolObject> poolQueue = new Queue<IBasePoolObject>();
                 pool = PoolList[i];
 
-                //Do by zenject
-                poolObjectsParent = GameObject.Instantiate(PoolObjectsParentPrefab, this.transform);
+                poolObjectsParent = poolObjectsParentPrefabFactory.Create(PoolObjectsParentPrefab, this.transform);
                 SetPoolObjectsParent(poolObjectsParent, pool);
 
                 for (int j = 0; j < pool.Size; j++)
                 {
-                    IBasePoolObject poolObject = basePoolObjectsFactory.Create(pool.PoolPrefab);
-                    poolObject.GetGameObject.transform.parent = poolObjectsParent.transform;
+                    IBasePoolObject poolObject = basePoolObjectsFactory.Create(pool.PoolPrefab, poolObjectsParent.transform);
                     poolObject.GetGameObject.SetActive(false);
                     poolObject.SetState(IBasePoolObject.PoolObjectStateEnum.WAITING_FOR_USE);
                     poolQueue.Enqueue(poolObject);

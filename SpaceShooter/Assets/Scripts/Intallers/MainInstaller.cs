@@ -25,7 +25,9 @@ public class MainInstaller : MonoInstaller
 
         Container.Bind<Weapon>().AsTransient();
         Container.Bind<BasePoolObjectsFactory>().AsCached();
+        Container.Bind<PoolObjectsParentFactory>().AsCached();
 
-        Container.BindFactory<UnityEngine.Object, IBasePoolObject, IBasePoolObject.Factory>().FromFactory<BasePoolObjectsFactory>();
+        Container.BindFactory<UnityEngine.Object, UnityEngine.Transform, IBasePoolObject, IBasePoolObject.Factory>().FromFactory<BasePoolObjectsFactory>();
+        Container.BindFactory<UnityEngine.Object, UnityEngine.Transform, PoolObjectsParent, PoolObjectsParent.Factory>().FromFactory<PoolObjectsParentFactory>();
     }
 }

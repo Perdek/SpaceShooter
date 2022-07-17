@@ -1,14 +1,14 @@
 ﻿using Zenject;
 
-public class BasePoolObjectsFactory : IFactory<UnityEngine.Object, IBasePoolObject>
+public class BasePoolObjectsFactory : IFactory<UnityEngine.Object, UnityEngine.Transform, IBasePoolObject>
 {
     [Inject]
-    readonly DiContainer container;
+    private DiContainer container;
 
     //constructor?
 
-    public IBasePoolObject Create(UnityEngine.Object prefab)
+    public IBasePoolObject Create(UnityEngine.Object prefab, UnityEngine.Transform parentTransform)
     {
-        return container.InstantiatePrefabForComponent<IBasePoolObject>(prefab);
+        return container.InstantiatePrefabForComponent<IBasePoolObject>(prefab, parentTransform);
     }
 }
