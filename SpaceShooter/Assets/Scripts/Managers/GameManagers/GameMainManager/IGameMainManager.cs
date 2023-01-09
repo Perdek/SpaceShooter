@@ -13,19 +13,8 @@ namespace Managers.GameManagers
 
         #endregion
 
-        #region PROPERTIES
-
-        public GameMainManager.GameState State { get; }
-
-        #endregion
-
-        #region UNITY_METHODS
-
-        #endregion
-
         #region METHODS
-
-        public void SetGameState(GameMainManager.GameState newState);
+        
         public void StartGame();
         public void StartNextLevel();
         public void GameOver();

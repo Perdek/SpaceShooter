@@ -18,15 +18,12 @@ namespace Managers.GameManagers
 		private IUpdateManager updateManager;
 		private IKeyboardManager keyboardManager;
 		private SpawnableObjectsTagsEnum tagManager;
+		
+		private GameState _state = GameState.MENU;
 
 		#endregion
 
 		#region PROPERTIES
-
-		public GameState State {
-			get;
-			set;
-		} = GameState.MENU;
 
 		private int LevelNumber {
 			get;
@@ -61,15 +58,10 @@ namespace Managers.GameManagers
             this.playerManager = playerManager;
 		}
 
-		public void SetGameState(GameState newState)
-		{
-			State = newState;
-		}
-
 		public void StartGame()
 		{
 			SceneManager.LoadScene(Constants.Level01);
-			SetGameState(GameState.GAME);
+			_state = GameState.GAME;
 			ResetLevelNumber();
 			OnGameStart();
 		}
@@ -77,7 +69,7 @@ namespace Managers.GameManagers
 		public void StartNextLevel()
 		{
 			SceneManager.LoadScene(Constants.Level01);
-			SetGameState(GameState.GAME);
+			_state = GameState.GAME;
 			IncreaseLevelNumber();
 			OnGameStart();
 		}
@@ -92,7 +84,7 @@ namespace Managers.GameManagers
 		{
 			updateManager.UnPauseTime();
 			SceneManager.LoadScene(Constants.MainSceneName);
-			SetGameState(GameState.MENU);
+			_state = GameState.MENU;
 			DetachInGameEvents();
 			OnMainOpen();
 		}
@@ -101,7 +93,7 @@ namespace Managers.GameManagers
 		{
 			updateManager.UnPauseTime();
 			SceneManager.LoadScene(Constants.WaitingRoom);
-			SetGameState(GameState.WAITING_ROOM);
+			_state = GameState.WAITING_ROOM;
 			DetachInGameEvents();
 			OnWaitingOpen();
 		}
