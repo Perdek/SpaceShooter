@@ -16,7 +16,6 @@ namespace Managers.GameManagers
 
 		private IPlayerManager playerManager;
 		private IPoolManager poolManager;
-		private IInputManager inputManager;
 		private IUpdateManager updateManager;
 		private IKeyboardManager keyboardManager;
 		private SpawnableObjectsTagsEnum tagManager;
@@ -56,13 +55,12 @@ namespace Managers.GameManagers
 		#region METHODS
 
 		[Inject]
-		public void InjectDependencies(IUpdateManager updateManager, IKeyboardManager keyboardManager, IPlayerManager playerManager, IPoolManager poolManager, IInputManager inputManager)
+		public void InjectDependencies(IUpdateManager updateManager, IKeyboardManager keyboardManager, IPlayerManager playerManager, IPoolManager poolManager)
 		{
 			this.updateManager = updateManager;
 			this.keyboardManager = keyboardManager;
             this.playerManager = playerManager;
             this.poolManager = poolManager;
-            this.inputManager = inputManager;
 		}
 
 		public void SetGameState(GameState newState)

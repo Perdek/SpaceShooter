@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: -5253910802507995136}
   - component: {fileID: -337836980697730512}
   - component: {fileID: -8902956796749175010}
-  - component: {fileID: 3862250385493157310}
   - component: {fileID: -928192563758708881}
   m_Layer: 0
   m_Name: ProjectContext
@@ -37,7 +36,7 @@ Transform:
   - {fileID: 5375506495753149271}
   - {fileID: 2916329999677940626}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5938230905037485812
 MonoBehaviour:
@@ -82,7 +81,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameMainManager: {fileID: -337836980697730512}
   poolManager: {fileID: -8902956796749175010}
-  updateManager: {fileID: 3862250385493157310}
   playerManager: {fileID: -928192563758708881}
 --- !u!114 &-337836980697730512
 MonoBehaviour:
@@ -150,18 +148,6 @@ MonoBehaviour:
     poolPrefab: {fileID: 5878218851956428709, guid: bf9f37a5ca787a4459eb67856e6eb4a9,
       type: 3}
   poolObjectsParentPrefab: {fileID: 3060862712329042181}
---- !u!114 &3862250385493157310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 372069837828592489}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa3d84c83a8a9904dac8b717af08a3db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-928192563758708881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,7 +210,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 706674480295354553}
     m_Modifications:
     - target: {fileID: 664811274800005387, guid: 49889a9e07fb16c4e98ef5efcd54bdff,
@@ -308,7 +294,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49889a9e07fb16c4e98ef5efcd54bdff, type: 3}
 --- !u!114 &5375506495753149270 stripped
 MonoBehaviour:

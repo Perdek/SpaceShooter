@@ -1,8 +1,9 @@
 using UnityEngine;
+using Zenject;
 
 namespace Managers.GameManagers
 {
-    public class UpdateManager : MonoBehaviour, IUpdateManager
+    public class UpdateManager : IUpdateManager, ITickable, IFixedTickable
     {
         #region FIELDS
 
@@ -17,14 +18,14 @@ namespace Managers.GameManagers
 
         #endregion
 
-        #region UNITY_METHODS
+        #region ZENJECT_METHODS
 
-        protected virtual void Update()
+        public void Tick()
         {
             HandleOnUpdateInputInformation();
         }
 
-        protected virtual void FixedUpdate()
+        public void FixedTick()
         {
             HandleOnDataChange();
             HandleOnUpdatePhysic();
