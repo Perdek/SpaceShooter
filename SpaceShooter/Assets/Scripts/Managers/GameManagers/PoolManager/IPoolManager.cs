@@ -16,8 +16,6 @@ namespace Managers.GameManagers
         #endregion
 
         #region METHODS
-
-        public void Initialize();
         public void DeactivateAllObjects();
         public IBasePoolObject GetPoolObject(SpawnableObjectsTagsEnum tag, Vector3 newPosition, Quaternion newRotation);
 

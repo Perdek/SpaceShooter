@@ -15,7 +15,6 @@ namespace Managers.GameManagers
 		public event Action OnWaitingOpen = delegate { };
 
 		private IPlayerManager playerManager;
-		private IPoolManager poolManager;
 		private IUpdateManager updateManager;
 		private IKeyboardManager keyboardManager;
 		private SpawnableObjectsTagsEnum tagManager;
@@ -55,12 +54,11 @@ namespace Managers.GameManagers
 		#region METHODS
 
 		[Inject]
-		public void InjectDependencies(IUpdateManager updateManager, IKeyboardManager keyboardManager, IPlayerManager playerManager, IPoolManager poolManager)
+		public void InjectDependencies(IUpdateManager updateManager, IKeyboardManager keyboardManager, IPlayerManager playerManager)
 		{
 			this.updateManager = updateManager;
 			this.keyboardManager = keyboardManager;
             this.playerManager = playerManager;
-            this.poolManager = poolManager;
 		}
 
 		public void SetGameState(GameState newState)
@@ -155,7 +153,6 @@ namespace Managers.GameManagers
 		private void ManagersInitialize()
 		{
 			playerManager.Initialize();
-			poolManager.Initialize();
 		}
 
 		private void IncreaseLevelNumber()

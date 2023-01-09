@@ -14,7 +14,7 @@ public class MainInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.Bind<IGameMainManager>().To(typeof(GameMainManager)).FromInstance(gameMainManager).AsSingle();
-        Container.Bind<IPoolManager>().To(typeof(PoolManager)).FromInstance(poolManager).AsSingle();
+        Container.BindInterfacesAndSelfTo<PoolManager>().FromInstance(poolManager).AsSingle();
         Container.Bind<IKeyboardManager>().To<KeyboardManager>().AsSingle();
         Container.Bind<IInputManager>().To<InputManager>().AsSingle();
         Container.Bind<IPlayerManager>().To(typeof(PlayerManager)).FromInstance(playerManager).AsSingle();

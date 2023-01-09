@@ -5,7 +5,7 @@ using Zenject;
 namespace Managers.GameManagers
 {
 
-    public class PoolManager : MonoBehaviour, IPoolManager
+    public class PoolManager : MonoBehaviour, IPoolManager, IInitializable
     {
         #region FIELDS
 
