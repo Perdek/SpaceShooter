@@ -1,4 +1,5 @@
-﻿using Managers.GameManagers;
+﻿using System;
+using Managers.GameManagers;
 using UnityEngine;
 using Zenject;
 
@@ -25,10 +26,10 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
     [Inject]
 	private IGameMainManager gameMainManager;
 
-	private int KeyIdForOpenMenu {
+	private Guid KeyIdForOpenMenu {
 		get;
 		set;
-	} = 0;
+	}
 
 	#endregion
 

@@ -121,11 +121,13 @@ namespace Managers.GameManagers
 		private void AttachInGameEvents()
 		{
 			SceneManager.sceneLoaded += OnSceneLoaded;
+			updateManager.OnUpdateInputInformation += keyboardManager.CheckKeys;
 		}
 
 		private void DetachInGameEvents()
 		{
 			SceneManager.sceneLoaded -= OnSceneLoaded;
+			updateManager.OnUpdateInputInformation -= keyboardManager.CheckKeys;
 		}
 
 		private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -152,7 +154,6 @@ namespace Managers.GameManagers
 
 		private void ManagersInitialize()
 		{
-			keyboardManager.Initialize();
 			playerManager.Initialize();
 			poolManager.Initialize();
 		}

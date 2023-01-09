@@ -13,10 +13,10 @@ public class KeyInput
 
 	#region PROPERTIES
 
-	public int Id {
+	public Guid Id {
 		get;
 		private set;
-	} = -1;
+	}
 
 	public List<KeyCode> KeyCodes {
 		get;
@@ -60,7 +60,7 @@ public class KeyInput
 		OccurrenceMode = newOccurrenceMode;
 	}
 
-	public void SetId(int newId)
+	public void SetId(Guid newId)
 	{
 		Id = newId;
 	}

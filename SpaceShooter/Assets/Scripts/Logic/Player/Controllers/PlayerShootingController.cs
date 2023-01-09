@@ -28,10 +28,10 @@ public class PlayerShootingController
         private set;
     }
 
-    private List<int> KeysIds {
+    private List<Guid> KeysIds {
         get;
         set;
-    } = new List<int>();
+    } = new List<Guid>();
 
     private int ActiveWeaponIndex {
         get;

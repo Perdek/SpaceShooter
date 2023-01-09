@@ -55,10 +55,10 @@ public class PlayerMovementController
 		set => state = value;
 	}
 
-	private List<int> KeysIds {
+	private List<Guid> KeysIds {
 		get;
 		set;
-	} = new List<int>();
+	} = new List<Guid>();
 
 	#endregion
 
