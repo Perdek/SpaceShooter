@@ -1,4 +1,5 @@
 ﻿using Managers.GameManagers;
+using Managers.LevelManagers;
 using Zenject;
 
 public class LevelEndPanelModel : Model
@@ -6,6 +7,7 @@ public class LevelEndPanelModel : Model
     #region MEMBERS
 
     private IGameMainManager gameMainManager;
+    private LevelEventsCommunicator _levelEventsCommunicator;
 
     #endregion
 
@@ -16,20 +18,21 @@ public class LevelEndPanelModel : Model
     #region METHODS
 
     [Inject]
-    public void InjectDependencies(IGameMainManager gameMainManager)
+    public void InjectDependencies(IGameMainManager gameMainManager, LevelEventsCommunicator levelEventsCommunicator)
     {
         this.gameMainManager = gameMainManager;
+        _levelEventsCommunicator = levelEventsCommunicator;
     }
 
     public void BackToMenu()
     {
-        LevelManager.Instance.EndLevel();
+        _levelEventsCommunicator.NotifyOnRequestLevelEnd();
         gameMainManager.OpenMenu();
     }
 
     public void Continue()
     {
-        LevelManager.Instance.EndLevel();
+        _levelEventsCommunicator.NotifyOnRequestLevelEnd();
         gameMainManager.OpenWaitingRoom();
     }
 

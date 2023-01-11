@@ -1,22 +1,21 @@
 ﻿using Managers.GameManagers;
 using System;
 using System.Collections.Generic;
+using Managers.LevelManagers;
 using UnityEngine;
 using Zenject;
 
-public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
+public class LevelManager : MonoBehaviour
 {
     #region FIELDS
-
-    public event Action OnLevelStart = delegate { };
-    public event Action OnLevelEnd = delegate { };
 
     [SerializeField]
     private List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
     [SerializeField]
     private List<ParallaxGroup> parallaxGroups = new List<ParallaxGroup>();
 
-    private IUpdateManager updateManager;
+    private IUpdateManager _updateManager;
+    private LevelEventsCommunicator _levelEventsCommunicator;
 
     #endregion
 
@@ -53,16 +52,26 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
     }
 
     #endregion
+    
+    #region UNITY_METHODS
+
+    protected virtual void Awake()
+    {
+        Initialize();
+    }
+    
+    #endregion
 
     #region METHODS
 
     [Inject]
-    public void InjectDependencies(IUpdateManager newUpdateManager)
+    public void InjectDependencies(IUpdateManager newUpdateManager, LevelEventsCommunicator levelEventsCommunicator)
     {
-        updateManager = newUpdateManager;
+        _updateManager = newUpdateManager;
+        _levelEventsCommunicator = levelEventsCommunicator;
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         for (int i = 0; i < SpawnPoints.Count; i++)
         {
@@ -72,8 +81,12 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 
         for (int i = 0; i < ParallaxGroups.Count; i++)
         {
-            updateManager.OnUpdateView += ParallaxGroups[i].UpdateParallaxEffects;
+            _updateManager.OnUpdateView += ParallaxGroups[i].UpdateParallaxEffects;
         }
+
+        _levelEventsCommunicator.IsLevelEnded += IsEndedLevel;
+        _levelEventsCommunicator.OnRequestLevelEnd += EndLevel;
+        _levelEventsCommunicator.OnRequestLevelStart += StartLevel;
     }
 
     public bool IsEndedLevel()
@@ -91,7 +104,7 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
             AddEnemyCount(SpawnPoints[i].SpawnObjectsLimit);
         }
 
-        OnLevelStart();
+        _levelEventsCommunicator.NotifyOnLevelStart();
     }
 
     public void EndLevel()
@@ -107,16 +120,10 @@ public class LevelManager : BaseMonoBehaviourSingletonManager<LevelManager>
 
         for (int i = 0; i < ParallaxGroups.Count; i++)
         {
-            updateManager.OnUpdateView -= ParallaxGroups[i].UpdateParallaxEffects;
+            _updateManager.OnUpdateView -= ParallaxGroups[i].UpdateParallaxEffects;
         }
-
-        OnLevelEnd();
-    }
-
-    protected virtual void Awake()
-    {
-        SingletonInitialization();
-        Initialize();
+        
+        _levelEventsCommunicator.NotifyOnLevelEnd();
     }
 
     private void UpdateFinishedSpawnPoints()

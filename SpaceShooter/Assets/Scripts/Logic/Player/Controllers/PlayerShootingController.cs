@@ -1,6 +1,7 @@
 ﻿using Managers.GameManagers;
 using System;
 using System.Collections.Generic;
+using Managers.LevelManagers;
 using UnityEngine;
 using Zenject;
 
@@ -15,6 +16,9 @@ public class PlayerShootingController
     private Transform bulletSpawnPointTransform = null;
     [SerializeField]
     private List<Weapon> weapons = new List<Weapon>();
+    
+    private IKeyboardManager keyboardManager;
+    private LevelEventsCommunicator _levelEventsCommunicator;
 
     #endregion
 
@@ -38,16 +42,14 @@ public class PlayerShootingController
         set;
     } = 0;
 
-    [Inject]
-    private IKeyboardManager keyboardManager;
-
     #endregion
 
     #region METHODS
 
-    public void InjectDependencies(IKeyboardManager keyboardManager, IUpdateManager updateManager, IPoolManager poolManager)
+    public void InjectDependencies(IKeyboardManager keyboardManager, IUpdateManager updateManager, IPoolManager poolManager, LevelEventsCommunicator levelEventsCommunicator)
     {
         this.keyboardManager = keyboardManager;
+        _levelEventsCommunicator = levelEventsCommunicator;
 
         for (int i = 0; i < Weapons.Count; i++)
         {
@@ -94,9 +96,9 @@ public class PlayerShootingController
 
     private void InitializeKeys()
     {
-        LevelManager.Instance.OnLevelStart += AttachKeysForShooting;
-        LevelManager.Instance.OnLevelEnd += DetachKeysForShooting;
-        LevelManager.Instance.OnLevelEnd += DetachKeysForShooting;
+        _levelEventsCommunicator.OnLevelStart += AttachKeysForShooting;
+        _levelEventsCommunicator.OnLevelEnd += DetachKeysForShooting;
+        _levelEventsCommunicator.OnLevelEnd += DetachKeysForShooting;
     }
 
     private void InitializeWeapons()

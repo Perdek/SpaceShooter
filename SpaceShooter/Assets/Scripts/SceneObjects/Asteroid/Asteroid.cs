@@ -2,6 +2,7 @@
 using System.Collections;
 using Zenject;
 using Managers.GameManagers;
+using Managers.LevelManagers;
 
 public class Asteroid : Enemy
 {
@@ -26,9 +27,9 @@ public class Asteroid : Enemy
     #region METHODS
 
     [Inject]
-    public void InjectDependencies(IPoolManager poolManager, IUpdateManager updateManager)
+    public void InjectDependencies(IPoolManager poolManager, IUpdateManager updateManager, LevelEventsCommunicator levelEventsCommunicator)
     {
-        viewComponent.InjectDependencies(poolManager);
+        viewComponent.InjectDependencies(poolManager, levelEventsCommunicator);
         movementComponent.InjectDependencies(updateManager);
         this.poolManager = poolManager;
     }
@@ -94,7 +95,7 @@ public class Asteroid : Enemy
     private void Initialize()
     {
         movementComponent.Initialize();
-        viewComponent.SetAsteroidTranform(this.transform);
+        viewComponent.SetAsteroidTransform(this.transform);
         collisionComponent.SetAsteroidInformation(EnemyInformation);
         isBreakable = true;
     }

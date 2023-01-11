@@ -1,4 +1,5 @@
 ﻿using Managers.GameManagers;
+using Managers.LevelManagers;
 using UnityEngine;
 
 [System.Serializable]
@@ -7,6 +8,7 @@ public class AsteroidViewComponent
     #region MEMBERS
 
     private IPoolManager poolManager;
+    private LevelEventsCommunicator _levelEventsCommunicator;
 
     #endregion
 
@@ -21,19 +23,20 @@ public class AsteroidViewComponent
 
     #region METHODS
 
-    public void InjectDependencies(IPoolManager poolManager)
+    public void InjectDependencies(IPoolManager poolManager, LevelEventsCommunicator levelEventsCommunicator)
     {
         this.poolManager = poolManager;
+        _levelEventsCommunicator = levelEventsCommunicator;
     }
 
-    public void SetAsteroidTranform(Transform asteroidTransform)
+    public void SetAsteroidTransform(Transform asteroidTransform)
     {
         AsteroidTransform = asteroidTransform;
     }
 
     public void Explosion()
     {
-        if (LevelManager.Instance != null && LevelManager.Instance.IsEndedLevel() == false)
+        if (_levelEventsCommunicator.NotifyOnIsLevelEnded() == false)
         {
             poolManager.GetPoolObject(SpawnableObjectsTagsEnum.ASTEROID_EXPLOSION_TAG, AsteroidTransform.position, AsteroidTransform.rotation);
         }

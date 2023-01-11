@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using Managers.LevelManagers;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -17,6 +18,7 @@ namespace Managers.GameManagers
 		private IPlayerManager playerManager;
 		private IUpdateManager updateManager;
 		private IKeyboardManager keyboardManager;
+		private LevelEventsCommunicator _levelEventsCommunicator;
 		private SpawnableObjectsTagsEnum tagManager;
 		
 		private GameState _state = GameState.MENU;
@@ -51,7 +53,7 @@ namespace Managers.GameManagers
 		#region METHODS
 
 		[Inject]
-		public void InjectDependencies(IUpdateManager updateManager, IKeyboardManager keyboardManager, IPlayerManager playerManager)
+		public void InjectDependencies(IUpdateManager updateManager, IKeyboardManager keyboardManager, IPlayerManager playerManager, LevelEventsCommunicator levelEventsCommunicator)
 		{
 			this.updateManager = updateManager;
 			this.keyboardManager = keyboardManager;
@@ -139,7 +141,7 @@ namespace Managers.GameManagers
 				playerManager.PlayerShootingController.ResetShooting();
 			}
 
-			LevelManager.Instance.StartLevel();
+			_levelEventsCommunicator.NotifyOnRequestLevelStart();
 		}
 
 		private void ManagersInitialize()

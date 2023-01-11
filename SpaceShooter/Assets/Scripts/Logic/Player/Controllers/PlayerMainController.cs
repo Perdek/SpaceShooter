@@ -1,4 +1,5 @@
 ﻿using Managers.GameManagers;
+using Managers.LevelManagers;
 using UnityEngine;
 using Zenject;
 
@@ -35,11 +36,11 @@ public class PlayerMainController : MonoBehaviour
     #region METHODS
 
     [Inject]
-    public void InjectDependencies(IGameMainManager gameMainManager, IUpdateManager updateManager, IKeyboardManager keyboardManager, IInputManager inputManager, IPoolManager poolManager)
+    public void InjectDependencies(IGameMainManager gameMainManager, IUpdateManager updateManager, IKeyboardManager keyboardManager, IInputManager inputManager, IPoolManager poolManager, LevelEventsCommunicator levelEventsCommunicator)
     {
         this.gameMainManager = gameMainManager;
         playerMovementController.InjectDependencies(updateManager, keyboardManager, gameMainManager, inputManager);
-        PlayerShootingController.InjectDependencies(keyboardManager, updateManager, poolManager);
+        PlayerShootingController.InjectDependencies(keyboardManager, updateManager, poolManager, levelEventsCommunicator);
     }
 
     public void Initialize()
