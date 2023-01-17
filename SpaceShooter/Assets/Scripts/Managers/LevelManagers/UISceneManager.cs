@@ -4,7 +4,7 @@ using Managers.LevelManagers;
 using UnityEngine;
 using Zenject;
 
-public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
+public class UISceneManager : MonoBehaviour
 {
 	#region MEMBERS
 

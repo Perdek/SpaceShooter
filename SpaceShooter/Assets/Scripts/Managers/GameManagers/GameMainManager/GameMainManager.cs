@@ -15,22 +15,18 @@ namespace Managers.GameManagers
 		public event Action OnGameOver = delegate { };
 		public event Action OnWaitingOpen = delegate { };
 
-		private IPlayerManager playerManager;
-		private IUpdateManager updateManager;
-		private IKeyboardManager keyboardManager;
+		private IPlayerManager _playerManager;
+		private IUpdateManager _updateManager;
+		private IKeyboardManager _keyboardManager;
 		private LevelEventsCommunicator _levelEventsCommunicator;
-		private SpawnableObjectsTagsEnum tagManager;
+		private SpawnableObjectsTagsEnum _tagManager;
 		
 		private GameState _state = GameState.MENU;
+		private int _levelNumber = 1;
 
 		#endregion
 
 		#region PROPERTIES
-
-		private int LevelNumber {
-			get;
-			set;
-		} = 1;
 
 		#endregion
 
@@ -55,9 +51,10 @@ namespace Managers.GameManagers
 		[Inject]
 		public void InjectDependencies(IUpdateManager updateManager, IKeyboardManager keyboardManager, IPlayerManager playerManager, LevelEventsCommunicator levelEventsCommunicator)
 		{
-			this.updateManager = updateManager;
-			this.keyboardManager = keyboardManager;
-            this.playerManager = playerManager;
+			_updateManager = updateManager;
+			_keyboardManager = keyboardManager;
+            _playerManager = playerManager;
+            _levelEventsCommunicator = levelEventsCommunicator;
 		}
 
 		public void StartGame()
@@ -78,13 +75,13 @@ namespace Managers.GameManagers
 
 		public void GameOver()
 		{
-			updateManager.PauseTime();
+			_updateManager.PauseTime();
 			OnGameOver();
 		}
 
 		public void OpenMenu()
 		{
-			updateManager.UnPauseTime();
+			_updateManager.UnPauseTime();
 			SceneManager.LoadScene(Constants.MainSceneName);
 			_state = GameState.MENU;
 			DetachInGameEvents();
@@ -93,7 +90,7 @@ namespace Managers.GameManagers
 
 		public void OpenWaitingRoom()
 		{
-			updateManager.UnPauseTime();
+			_updateManager.UnPauseTime();
 			SceneManager.LoadScene(Constants.WaitingRoom);
 			_state = GameState.WAITING_ROOM;
 			DetachInGameEvents();
@@ -113,13 +110,13 @@ namespace Managers.GameManagers
 		private void AttachInGameEvents()
 		{
 			SceneManager.sceneLoaded += OnSceneLoaded;
-			updateManager.OnUpdateInputInformation += keyboardManager.CheckKeys;
+			_updateManager.OnUpdateInputInformation += _keyboardManager.CheckKeys;
 		}
 
 		private void DetachInGameEvents()
 		{
 			SceneManager.sceneLoaded -= OnSceneLoaded;
-			updateManager.OnUpdateInputInformation -= keyboardManager.CheckKeys;
+			_updateManager.OnUpdateInputInformation -= _keyboardManager.CheckKeys;
 		}
 
 		private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -134,11 +131,11 @@ namespace Managers.GameManagers
 		{
 			if (IsFirstLevel() == true)
 			{
-				playerManager.ReloadPlayer();
+				_playerManager.ReloadPlayer();
 			}
 			else
 			{
-				playerManager.PlayerShootingController.ResetShooting();
+				_playerManager.PlayerShootingController.ResetShooting();
 			}
 
 			_levelEventsCommunicator.NotifyOnRequestLevelStart();
@@ -146,22 +143,22 @@ namespace Managers.GameManagers
 
 		private void ManagersInitialize()
 		{
-			playerManager.Initialize();
+			_playerManager.Initialize();
 		}
 
 		private void IncreaseLevelNumber()
 		{
-			LevelNumber++;
+			_levelNumber++;
 		}
 
 		private bool IsFirstLevel()
 		{
-			return LevelNumber == 1;
+			return _levelNumber == 1;
 		}
 
 		private void ResetLevelNumber()
 		{
-			LevelNumber = 1;
+			_levelNumber = 1;
 		}
 
 		#endregion
