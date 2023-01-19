@@ -124,6 +124,10 @@ public class LevelManager : MonoBehaviour
         }
         
         _levelEventsCommunicator.NotifyOnLevelEnd();
+        
+        _levelEventsCommunicator.IsLevelEnded -= IsEndedLevel;
+        _levelEventsCommunicator.OnRequestLevelEnd -= EndLevel;
+        _levelEventsCommunicator.OnRequestLevelStart -= StartLevel;
     }
 
     private void UpdateFinishedSpawnPoints()

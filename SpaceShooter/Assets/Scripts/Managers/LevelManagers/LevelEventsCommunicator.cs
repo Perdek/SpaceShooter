@@ -38,7 +38,7 @@ namespace Managers.LevelManagers
 
         public bool NotifyOnIsLevelEnded()
         {
-            return IsLevelEnded();
+            return IsLevelEnded == null || IsLevelEnded();
         }
 
         #endregion
