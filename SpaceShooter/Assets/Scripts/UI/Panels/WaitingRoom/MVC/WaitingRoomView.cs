@@ -1,6 +1,8 @@
+using Managers.GameManagers;
 using UnityEngine.Events;
 using UnityEngine;
 using UI.WaitingRoom;
+using Zenject;
 
 public class WaitingRoomView : View
 {
@@ -21,6 +23,12 @@ public class WaitingRoomView : View
 	#endregion
 
 	#region METHODS
+
+	[Inject]
+	public void InjectDependencies(DiContainer diContainer)
+	{
+		weaponPanel.InjectDependencies(diContainer);
+	}
 
 	public void RefreshWeaponPanel(PlayerShootingController playerShootingController)
 	{
