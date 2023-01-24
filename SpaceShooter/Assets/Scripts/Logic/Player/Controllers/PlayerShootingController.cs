@@ -1,23 +1,20 @@
-﻿using Managers.GameManagers;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Managers.GameManagers;
 using Managers.LevelManagers;
 using UnityEngine;
-using Zenject;
 
-[System.Serializable]
+[Serializable]
 public class PlayerShootingController
 {
     #region FIELDS
 
     public event Action<EnemyInformation> OnKillEnemy = delegate { };
 
-    [SerializeField]
-    private Transform bulletSpawnPointTransform = null;
-    [SerializeField]
-    private List<Weapon> weapons = new List<Weapon>();
-    
-    private IKeyboardManager keyboardManager;
+    [SerializeField] private Transform bulletSpawnPointTransform = null;
+    [SerializeField] private List<Weapon> weapons = new List<Weapon>();
+
+    private IKeyboardManager _keyboardManager;
     private LevelEventsCommunicator _levelEventsCommunicator;
 
     #endregion
@@ -27,28 +24,20 @@ public class PlayerShootingController
     public Transform BulletSpawnPointTransform => bulletSpawnPointTransform;
     public List<Weapon> Weapons => weapons;
 
-    public WeaponValue ActiveWeapon {
-        get;
-        private set;
-    }
+    public WeaponValue ActiveWeapon { get; private set; }
 
-    private List<Guid> KeysIds {
-        get;
-        set;
-    } = new List<Guid>();
+    private List<Guid> KeysIds { get; set; } = new List<Guid>();
 
-    private int ActiveWeaponIndex {
-        get;
-        set;
-    } = 0;
+    private int ActiveWeaponIndex { get; set; } = 0;
 
     #endregion
 
     #region METHODS
 
-    public void InjectDependencies(IKeyboardManager keyboardManager, IUpdateManager updateManager, IPoolManager poolManager, LevelEventsCommunicator levelEventsCommunicator)
+    public void InjectDependencies(IKeyboardManager keyboardManager, IUpdateManager updateManager,
+        IPoolManager poolManager, LevelEventsCommunicator levelEventsCommunicator)
     {
-        this.keyboardManager = keyboardManager;
+        _keyboardManager = keyboardManager;
         _levelEventsCommunicator = levelEventsCommunicator;
 
         for (int i = 0; i < Weapons.Count; i++)
@@ -113,16 +102,19 @@ public class PlayerShootingController
 
     private void AttachKeysForShooting()
     {
-        KeysIds.Add(keyboardManager.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN, KeyInput.CheckingModeEnum.DISJUNCTION));
-        KeysIds.Add(keyboardManager.AddKey(KeyCode.E, NextWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
-        KeysIds.Add(keyboardManager.AddKey(KeyCode.Q, PrevWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
+        KeysIds.Add(_keyboardManager.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN,
+            KeyInput.CheckingModeEnum.DISJUNCTION));
+        KeysIds.Add(_keyboardManager.AddKey(KeyCode.E, NextWeapon, KeyInput.KeyStateEnum.KEY_RELEASED,
+            KeyInput.CheckingModeEnum.DISJUNCTION));
+        KeysIds.Add(_keyboardManager.AddKey(KeyCode.Q, PrevWeapon, KeyInput.KeyStateEnum.KEY_RELEASED,
+            KeyInput.CheckingModeEnum.DISJUNCTION));
     }
 
     private void DetachKeysForShooting()
     {
         for (int i = KeysIds.Count - 1; i >= 0; i--)
         {
-            keyboardManager.RemoveKey(KeysIds[i]);
+            _keyboardManager.RemoveKey(KeysIds[i]);
             KeysIds.RemoveAt(i);
         }
     }
@@ -143,7 +135,6 @@ public class PlayerShootingController
                 ActiveWeaponIndex = nextWeaponIndex;
                 ActiveWeapon.SetValue(weaponProposition);
             }
-
         } while (nextWeaponFounded == false);
     }
 
@@ -163,7 +154,6 @@ public class PlayerShootingController
                 ActiveWeaponIndex = prevWeaponIndex;
                 ActiveWeapon.SetValue(weaponProposition);
             }
-
         } while (prevWeaponFounded == false);
     }
 

@@ -18,9 +18,12 @@ public class CountTrackCollection<T>
     public int Count => Collection.Count;
 
     public List<T> Collection { get; protected set; } = new List<T>();
-    public T this[int index] {
+
+    public T this[int index]
+    {
         get => Collection[index];
-        set {
+        set
+        {
             if (index >= 0 && index < Count)
             {
                 Collection[index] = value;
@@ -89,5 +92,5 @@ public class CountTrackCollection<T>
         return Collection.GetEnumerator();
     }
 
-    #endregion    
+    #endregion
 }

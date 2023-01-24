@@ -1,37 +1,30 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "New Weapon Information", menuName = "Weapon Information")]
 public class WeaponInformation : ScriptableObject
 {
     #region FIELDS
 
-    [SerializeField]
-    private AnimationCurve magazineCapacityCurve;
-    [SerializeField]
-    private AnimationCurve timeInSecondBetweenShootsCurve;
-    [SerializeField]
-    private AnimationCurve reloadingTimeInSecondsCurve;
-    [SerializeField]
-    private AnimationCurve damageCurve;
-    [SerializeField]
-    private AnimationCurve upgradingCostCurve;
-    [SerializeField]
-    private string weaponName = "weapon";
-    [SerializeField]
-    private Sprite bulletSprite = null;
+    [FormerlySerializedAs("magazineCapacityCurve")] [SerializeField] private AnimationCurve _magazineCapacityCurve;
+    [FormerlySerializedAs("timeInSecondBetweenShootsCurve")] [SerializeField] private AnimationCurve _timeInSecondBetweenShootsCurve;
+    [FormerlySerializedAs("reloadingTimeInSecondsCurve")] [SerializeField] private AnimationCurve _reloadingTimeInSecondsCurve;
+    [FormerlySerializedAs("damageCurve")] [SerializeField] private AnimationCurve _damageCurve;
+    [FormerlySerializedAs("upgradingCostCurve")] [SerializeField] private AnimationCurve _upgradingCostCurve;
+    [FormerlySerializedAs("weaponName")] [SerializeField] private string _weaponName = "weapon";
+    [FormerlySerializedAs("bulletSprite")] [SerializeField] private Sprite _bulletSprite = null;
 
     #endregion
 
     #region PROPERTIES
 
-	public AnimationCurve MagazineCapacityCurve => magazineCapacityCurve;
-	public AnimationCurve TimeInSecondBetweenShootsCurve => timeInSecondBetweenShootsCurve;
-	public AnimationCurve ReloadingTimeInSecondsCurve => reloadingTimeInSecondsCurve;
-	public AnimationCurve DamageCurve => damageCurve;
-    public AnimationCurve UpgradingCostCurve => upgradingCostCurve;
-    public string WeaponName => weaponName;
-    public Sprite BulletSprite => bulletSprite;
-
+    public AnimationCurve MagazineCapacityCurve => _magazineCapacityCurve;
+    public AnimationCurve TimeInSecondBetweenShootsCurve => _timeInSecondBetweenShootsCurve;
+    public AnimationCurve ReloadingTimeInSecondsCurve => _reloadingTimeInSecondsCurve;
+    public AnimationCurve DamageCurve => _damageCurve;
+    public AnimationCurve UpgradingCostCurve => _upgradingCostCurve;
+    public string WeaponName => _weaponName;
+    public Sprite BulletSprite => _bulletSprite;
 
     #endregion
 
