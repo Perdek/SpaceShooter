@@ -1,7 +1,8 @@
-using UnityEngine;
 using System;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-[System.Serializable]
+[Serializable]
 public class PlayerStatisticsController
 {
     #region MEMBERS
@@ -10,15 +11,15 @@ public class PlayerStatisticsController
     public event Action OnTurnOnForceShield = delegate { };
     public event Action OnTurnOffForceShield = delegate { };
 
-    [SerializeField, Range(0, 10)] private int defaultHealthPoints = 5;
-    [SerializeField, Range(0, 10)] private int defaultShieldPoints = 2;
-    [SerializeField, Range(0, 100)] private int defaultScorePoints = 5;
-    [SerializeField, Range(0, 100)] private int defaultMoneyPoints = 2;
+    [FormerlySerializedAs("defaultHealthPoints")] [SerializeField, Range(0, 10)] private int _defaultHealthPoints = 5;
+    [FormerlySerializedAs("defaultShieldPoints")] [SerializeField, Range(0, 10)] private int _defaultShieldPoints = 2;
+    [FormerlySerializedAs("defaultScorePoints")] [SerializeField, Range(0, 100)] private int _defaultScorePoints = 5;
+    [FormerlySerializedAs("defaultMoneyPoints")] [SerializeField, Range(0, 100)] private int _defaultMoneyPoints = 2;
 
-    [SerializeField] private IntValue healthPoints = new IntValue();
-    [SerializeField] private IntValue shieldsPoints = new IntValue();
-    [SerializeField] private IntValue scorePoints = new IntValue();
-    [SerializeField] private IntValue moneyPoints = new IntValue();
+    [SerializeField] private IntValue _healthPoints = new IntValue();
+    [SerializeField] private IntValue _shieldsPoints = new IntValue();
+    [SerializeField] private IntValue _scorePoints = new IntValue();
+    [SerializeField] private IntValue _moneyPoints = new IntValue();
 
     #endregion
 
@@ -29,36 +30,21 @@ public class PlayerStatisticsController
     public int CurrentScorePoints => ScorePoints.Value;
     public int CurrentMoneyPoints => MoneyPoints.Value;
 
-    public IntValue HealthPoints {
-        get => healthPoints;
-        private set => healthPoints = value;
-    }
-
-    public IntValue ShieldsPoints {
-        get => shieldsPoints;
-        private set => shieldsPoints = value;
-    }
-
-    public IntValue ScorePoints {
-        get => scorePoints;
-        private set => scorePoints = value;
-    }
-
-    public IntValue MoneyPoints {
-        get => moneyPoints;
-        private set => moneyPoints = value;
-    }
-
+    public IntValue HealthPoints => _healthPoints;
+    public IntValue ShieldsPoints => _shieldsPoints;
+    public IntValue ScorePoints => _scorePoints;
+    public IntValue MoneyPoints => _moneyPoints;
+    
     #endregion
 
     #region METHODS
 
     public void ReloadStatistics()
     {
-        HealthPoints.SetValue(defaultHealthPoints);
-        ShieldsPoints.SetValue(defaultShieldPoints);
-        ScorePoints.SetValue(defaultScorePoints);
-        MoneyPoints.SetValue(defaultMoneyPoints);
+        HealthPoints.SetValue(_defaultHealthPoints);
+        ShieldsPoints.SetValue(_defaultShieldPoints);
+        ScorePoints.SetValue(_defaultScorePoints);
+        MoneyPoints.SetValue(_defaultMoneyPoints);
     }
 
     public void AddNewShield(int value)
