@@ -54,7 +54,7 @@ public class PlayerShootingController
     {
         for (int i = 0; i < _weapons.Count; i++)
         {
-            _weapons[i].OnUgradeWeapon += onUpdate;
+            _weapons[i].OnUpgradeWeapon += onUpdate;
         }
     }
 
