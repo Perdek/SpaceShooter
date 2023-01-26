@@ -39,8 +39,8 @@ public class Weapon
 
     public void InjectDependencies(IUpdateManager updateManager, IPoolManager poolManager)
     {
-        this._poolManager = poolManager;
-        this._updateManager = updateManager;
+        _poolManager = poolManager;
+        _updateManager = updateManager;
     }
 
     public int GetCurrentUpgradingCostCurve() => (int)WeaponInformation.UpgradingCostCurve.Evaluate(WeaponLevel.Value);

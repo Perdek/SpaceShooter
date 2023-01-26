@@ -21,6 +21,10 @@ namespace Managers.GameManagers
 		[Header("Shooting")]
 		[SerializeField]
 		private KeyCode keyCodeShoot = KeyCode.Space;
+		[SerializeField]
+		private KeyCode keyCodeNextWeapon = KeyCode.E;
+		[SerializeField]
+		private KeyCode keyCodePrevWeapon = KeyCode.Q;
 
 		#endregion
 
@@ -31,6 +35,8 @@ namespace Managers.GameManagers
 		public KeyCode KeyCodeMoveRight => keyCodeMoveRight;
 		public KeyCode KeyCodeMoveDown => keyCodeMoveDown;
 		public KeyCode KeyCodeShoot => keyCodeShoot;
+		public KeyCode KeyCodeNextWeapon => keyCodeNextWeapon;
+		public KeyCode KeyCodePrevWeapon => keyCodePrevWeapon;
 
 		#endregion
 

@@ -20,6 +20,7 @@ public class PlayerShootingController
 
     private IKeyboardManager _keyboardManager;
     private LevelEventsCommunicator _levelEventsCommunicator;
+    private IInputManager _inputManager;
 
     #endregion
 
@@ -32,11 +33,11 @@ public class PlayerShootingController
 
     #region METHODS
 
-    public void InjectDependencies(IKeyboardManager keyboardManager, IUpdateManager updateManager,
-        IPoolManager poolManager, LevelEventsCommunicator levelEventsCommunicator)
+    public void InjectDependencies(IKeyboardManager keyboardManager, IUpdateManager updateManager, IPoolManager poolManager, LevelEventsCommunicator levelEventsCommunicator, IInputManager inputManager)
     {
         _keyboardManager = keyboardManager;
         _levelEventsCommunicator = levelEventsCommunicator;
+        _inputManager = inputManager;
 
         for (int i = 0; i < _weapons.Count; i++)
         {
@@ -100,12 +101,9 @@ public class PlayerShootingController
 
     private void AttachKeysForShooting()
     {
-        _keysIds.Add(_keyboardManager.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN,
-            KeyInput.CheckingModeEnum.DISJUNCTION));
-        _keysIds.Add(_keyboardManager.AddKey(KeyCode.E, NextWeapon, KeyInput.KeyStateEnum.KEY_RELEASED,
-            KeyInput.CheckingModeEnum.DISJUNCTION));
-        _keysIds.Add(_keyboardManager.AddKey(KeyCode.Q, PrevWeapon, KeyInput.KeyStateEnum.KEY_RELEASED,
-            KeyInput.CheckingModeEnum.DISJUNCTION));
+        _keysIds.Add(_keyboardManager.AddKey(_inputManager.KeyCodeShoot, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN, KeyInput.CheckingModeEnum.DISJUNCTION));
+        _keysIds.Add(_keyboardManager.AddKey(_inputManager.KeyCodeNextWeapon, NextWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
+        _keysIds.Add(_keyboardManager.AddKey(_inputManager.KeyCodePrevWeapon, PrevWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
     }
 
     private void DetachKeysForShooting()

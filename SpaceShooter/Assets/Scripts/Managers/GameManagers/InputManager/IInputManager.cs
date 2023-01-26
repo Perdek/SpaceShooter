@@ -11,6 +11,8 @@ namespace Managers.GameManagers
         public KeyCode KeyCodeMoveRight { get; }
         public KeyCode KeyCodeMoveDown { get; }
         public KeyCode KeyCodeShoot { get; }
+        public KeyCode KeyCodeNextWeapon { get; }
+        public KeyCode KeyCodePrevWeapon { get; }
 
         #endregion
 

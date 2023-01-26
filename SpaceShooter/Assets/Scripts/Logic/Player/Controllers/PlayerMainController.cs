@@ -36,10 +36,9 @@ public class PlayerMainController : MonoBehaviour
         IKeyboardManager keyboardManager, IInputManager inputManager, IPoolManager poolManager,
         LevelEventsCommunicator levelEventsCommunicator)
     {
-        this._gameMainManager = gameMainManager;
+        _gameMainManager = gameMainManager;
         _playerMovementController.InjectDependencies(updateManager, keyboardManager, gameMainManager, inputManager);
-        _playerShootingController.InjectDependencies(keyboardManager, updateManager, poolManager,
-            levelEventsCommunicator);
+        _playerShootingController.InjectDependencies(keyboardManager, updateManager, poolManager, levelEventsCommunicator, inputManager);
     }
 
     public void Initialize()
