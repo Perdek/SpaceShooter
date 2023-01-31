@@ -1,5 +1,6 @@
 using Managers.GameManagers;
 using Managers.LevelManagers;
+using SceneObjects.Ammo;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Zenject;
@@ -17,6 +18,7 @@ public class MainInstaller : MonoInstaller
         Container.Bind<IInputManager>().To<InputManager>().AsSingle();
         Container.Bind<IPlayerManager>().To(typeof(PlayerManager)).FromInstance(_playerManager).AsSingle();
         Container.Bind<LevelEventsCommunicator>().AsSingle();
+        Container.Bind<KillingCommunicator>().AsSingle();
 
         Container.BindInterfacesAndSelfTo<PoolManager>().FromInstance(_poolManager).AsSingle();
         Container.BindInterfacesAndSelfTo<UpdateManager>().AsSingle();

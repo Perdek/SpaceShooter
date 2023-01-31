@@ -10,8 +10,6 @@ public class PlayerShootingController
 {
     #region FIELDS
 
-    public event Action<EnemyInformation> OnKillEnemy = delegate { };
-
     [FormerlySerializedAs("bulletSpawnPointTransform")] [SerializeField] private Transform _bulletSpawnPointTransform = null;
     [FormerlySerializedAs("weapons")] [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
     
@@ -72,11 +70,6 @@ public class PlayerShootingController
         InitializeKeys();
     }
 
-    public void NotifyKillEnemy(EnemyInformation killedEnemyInformation)
-    {
-        OnKillEnemy(killedEnemyInformation);
-    }
-
     public void Shoot()
     {
         ActiveWeapon.Value.Shoot();
@@ -94,7 +87,6 @@ public class PlayerShootingController
         for (int i = 0; i < _weapons.Count; i++)
         {
             _weapons[i].InitializeBulletTransform(_bulletSpawnPointTransform);
-            _weapons[i].CachePlayerShootingController(this);
             _weapons[i].InitializeWeapon();
         }
     }

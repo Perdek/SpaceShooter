@@ -22,7 +22,6 @@ public class Weapon
     private Timer _reloadingMagazineTimer;
     private Timer _boltReloadCycleTimer;
     private BoolValue _isBoltReloadCycle = new BoolValue(false);
-    private PlayerShootingController _cachedPlayerShootingController; //TODO is necessary?
 
     #endregion
 
@@ -60,11 +59,6 @@ public class Weapon
     public bool IsLastLevel()
     {
         return WeaponLevel.Value == Constants.MAX_WEAPONS_LEVEL;
-    }
-
-    public void CachePlayerShootingController(PlayerShootingController playerShootingController)
-    {
-        _cachedPlayerShootingController = playerShootingController;
     }
 
     public void ClearReload()
@@ -130,8 +124,6 @@ public class Weapon
         IBasePoolObject poolObject = _poolManager.GetPoolObject(_bulletTag, _bulletSpawnPoint.position, _bulletSpawnPoint.rotation);
 
         Bullet bullet = poolObject as Bullet;
-
-        bullet.OnKillTarget += _cachedPlayerShootingController.NotifyKillEnemy;
     }
 
     private int GetCurrentReloadingTimeInSeconds() => (int)WeaponInformation.ReloadingTimeInSecondsCurve.Evaluate(WeaponLevel.Value);

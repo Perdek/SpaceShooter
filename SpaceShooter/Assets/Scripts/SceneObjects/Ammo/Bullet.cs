@@ -2,6 +2,7 @@
 using System;
 using Zenject;
 using Managers.GameManagers;
+using SceneObjects.Ammo;
 using static IBasePoolObject;
 
 public class Bullet : BasePoolObject
@@ -21,7 +22,8 @@ public class Bullet : BasePoolObject
     [SerializeField]
     private IdentificationFriendOrFoeEnum iff = IdentificationFriendOrFoeEnum.FOE;
 
-    protected IUpdateManager updateManager;
+    protected IUpdateManager _updateManager;
+    protected KillingCommunicator _killingCommunicator;
 
     #endregion
 
@@ -35,21 +37,27 @@ public class Bullet : BasePoolObject
 
     #region UNITY_METHODS
 
+    protected virtual void Awake()
+    {
+        OnKillTarget += _killingCommunicator.NotifyOnKillEnemy;
+    }
+
     #endregion
 
     #region METHODS
 
     [Inject]
-    public void InjectDependencies(IUpdateManager newUpdateManager)
+    public void InjectDependencies(IUpdateManager newUpdateManager, KillingCommunicator killingCommunicator)
     {
-        updateManager = newUpdateManager;
+        _updateManager = newUpdateManager;
+        _killingCommunicator = killingCommunicator;
     }
 
     public override void HandleObjectSpawn()
     {
         if (State == PoolObjectStateEnum.WAITING_FOR_USE)
         {
-            updateManager.OnUpdatePhysic += Move;
+            _updateManager.OnUpdatePhysic += Move;
         }
     }
 
@@ -58,7 +66,7 @@ public class Bullet : BasePoolObject
         base.Deactivation();
         OnKillTarget = null;
 
-        updateManager.OnUpdatePhysic -= Move;
+        _updateManager.OnUpdatePhysic -= Move;
     }
 
     public void NotifyComfirmKill(EnemyInformation enemyInformation)

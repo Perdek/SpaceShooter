@@ -31,14 +31,14 @@ public class HomingMissile : Bullet
     {
         base.HandleObjectSpawn();
 
-        updateManager.OnUpdatePhysic += TrackOpponent;
+        _updateManager.OnUpdatePhysic += TrackOpponent;
     }
 
     public override void Deactivation()
     {
         base.Deactivation();
 
-        updateManager.OnUpdatePhysic -= TrackOpponent;
+        _updateManager.OnUpdatePhysic -= TrackOpponent;
     }
 
     private void TrackOpponent()

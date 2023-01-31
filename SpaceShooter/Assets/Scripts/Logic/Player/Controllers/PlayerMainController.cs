@@ -1,5 +1,6 @@
 ﻿using Managers.GameManagers;
 using Managers.LevelManagers;
+using SceneObjects.Ammo;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Zenject;
@@ -16,6 +17,7 @@ public class PlayerMainController : MonoBehaviour
     [FormerlySerializedAs("playerVisualisationController")] [SerializeField] private PlayerVisualisationController _playerVisualisationController = null;
 
     private IGameMainManager _gameMainManager;
+    private KillingCommunicator _killingCommunicator;
 
     #endregion
 
@@ -34,9 +36,10 @@ public class PlayerMainController : MonoBehaviour
     [Inject]
     public void InjectDependencies(IGameMainManager gameMainManager, IUpdateManager updateManager,
         IKeyboardManager keyboardManager, IInputManager inputManager, IPoolManager poolManager,
-        LevelEventsCommunicator levelEventsCommunicator)
+        LevelEventsCommunicator levelEventsCommunicator, KillingCommunicator killingCommunicator)
     {
         _gameMainManager = gameMainManager;
+        _killingCommunicator = killingCommunicator;
         _playerMovementController.InjectDependencies(updateManager, keyboardManager, gameMainManager, inputManager);
         _playerShootingController.InjectDependencies(keyboardManager, updateManager, poolManager, levelEventsCommunicator, inputManager);
     }
@@ -77,7 +80,7 @@ public class PlayerMainController : MonoBehaviour
     private void AttachInterControllersEvents()
     {
         _playerColliderController.OnDamageCollision += _playerStatisticsController.HandleDamage;
-        _playerShootingController.OnKillEnemy += _playerStatisticsController.RewardForKill;
+        _killingCommunicator.OnKillEnemy += _playerStatisticsController.RewardForKill;
         _playerStatisticsController.OnTurnOnForceShield += _playerVisualisationController.TurnOnForceShield;
         _playerStatisticsController.OnTurnOffForceShield += _playerVisualisationController.TurnOffForceShield;
     }
@@ -85,7 +88,7 @@ public class PlayerMainController : MonoBehaviour
     private void DetachInterControllersEvents()
     {
         _playerColliderController.OnDamageCollision -= _playerStatisticsController.HandleDamage;
-        _playerShootingController.OnKillEnemy -= _playerStatisticsController.RewardForKill;
+        _killingCommunicator.OnKillEnemy -= _playerStatisticsController.RewardForKill;
         _playerStatisticsController.OnTurnOnForceShield -= _playerVisualisationController.TurnOnForceShield;
         _playerStatisticsController.OnTurnOffForceShield -= _playerVisualisationController.TurnOffForceShield;
     }
