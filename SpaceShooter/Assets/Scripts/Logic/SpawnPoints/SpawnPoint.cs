@@ -29,7 +29,7 @@ public class SpawnPoint : MonoBehaviour
 
 	private Timer _spawningTimer;
 	private int _currentSpawnedObjectNumber;
-	private List<IBasePoolObject> _activeSpawnedObjects;
+	private readonly List<IBasePoolObject> _activeSpawnedObjects = new List<IBasePoolObject>();
 
 	#endregion
 

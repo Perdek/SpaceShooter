@@ -37,9 +37,9 @@ public class Bullet : BasePoolObject
 
     #region UNITY_METHODS
 
-    protected virtual void Awake()
+    protected virtual void OnTriggerEnter2D(Collider2D other)
     {
-        OnKillTarget += _killingCommunicator.NotifyOnKillEnemy;
+        HandleCollision(other);
     }
 
     #endregion
@@ -58,6 +58,7 @@ public class Bullet : BasePoolObject
         if (State == PoolObjectStateEnum.WAITING_FOR_USE)
         {
             _updateManager.OnUpdatePhysic += Move;
+            OnKillTarget += _killingCommunicator.NotifyOnKillEnemy;
         }
     }
 
@@ -79,11 +80,6 @@ public class Bullet : BasePoolObject
         {
             OnKillTarget(enemyInformation);
         }
-    }
-
-    protected virtual void OnTriggerEnter2D(Collider2D other)
-    {
-        HandleCollision(other);
     }
 
     public void Move()

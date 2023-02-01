@@ -12,8 +12,8 @@ public class PlayerShootingController
 
     [FormerlySerializedAs("bulletSpawnPointTransform")] [SerializeField] private Transform _bulletSpawnPointTransform = null;
     [FormerlySerializedAs("weapons")] [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
-    
-    private List<Guid> _keysIds;
+
+    private List<Guid> _keysIds = new List<Guid>();
     private int _activeWeaponIndex;
 
     private IKeyboardManager _keyboardManager;
