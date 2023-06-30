@@ -9,9 +9,9 @@ public class IntValueTMPEditor : TMPro.EditorUtilities.TMP_EditorPanelUI
 {
     #region MEMBERS
 
-    private IntValueTMP intValueTMP = default;
-    private SerializedProperty usePrefix = default;
-    private SerializedProperty prefixValue = default;
+    private IntValueTMP _intValueTMP = default;
+    private SerializedProperty _usePrefix = default;
+    private SerializedProperty _prefixValue = default;
 
     #endregion
 
@@ -25,13 +25,13 @@ public class IntValueTMPEditor : TMPro.EditorUtilities.TMP_EditorPanelUI
     {
         base.OnInspectorGUI();
 
-        if (intValueTMP == null)
+        if (_intValueTMP == null)
         {
-            intValueTMP = (IntValueTMP)target;
+            _intValueTMP = (IntValueTMP)target;
         }
 
-        usePrefix = serializedObject.FindProperty("usePrefix");
-        prefixValue = serializedObject.FindProperty("prefixValue");
+        _usePrefix = serializedObject.FindProperty("usePrefix");
+        _prefixValue = serializedObject.FindProperty("prefixValue");
 
         ShowBasicOptions();
     }
@@ -40,8 +40,8 @@ public class IntValueTMPEditor : TMPro.EditorUtilities.TMP_EditorPanelUI
     {
         serializedObject.UpdateIfRequiredOrScript();
 
-        EditorGUILayout.PropertyField(usePrefix, new GUIContent("Use Prefix"));
-        EditorGUILayout.PropertyField(prefixValue, new GUIContent("Prefix Value"));
+        EditorGUILayout.PropertyField(_usePrefix, new GUIContent("Use Prefix"));
+        EditorGUILayout.PropertyField(_prefixValue, new GUIContent("Prefix Value"));
 
         serializedObject.ApplyModifiedProperties();
     }

@@ -1,9 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using Managers.GameManagers;
+using Managers.LevelManagers;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using Zenject;
 
-public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
+public class UISceneManager : MonoBehaviour
 {
 	#region MEMBERS
 
@@ -12,6 +13,11 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 	[SerializeField]
 	private LevelEndPanelController centerPanel = null;
 
+	private IKeyboardManager _keyboardManager;
+	private IPlayerManager _playerManager;
+	private IGameMainManager _gameMainManager;
+	private LevelEventsCommunicator _levelEventsCommunicator;
+
 	#endregion
 
 	#region PROPERTIES
@@ -19,18 +25,27 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 	public StatisticsPanelController StatisticsPanel => statisticPanel;
 	private LevelEndPanelController CenterPanel => centerPanel;
 
-	private int KeyIdForOpenMenu {
+	private Guid KeyIdForOpenMenu {
 		get;
 		set;
-	} = 0;
+	}
 
 	#endregion
 
 	#region METHODS
 
+	[Inject]
+	public void InjectDependencies(IKeyboardManager keyboardManager, IPlayerManager playerManager, IGameMainManager gameMainManager, LevelEventsCommunicator levelEventsCommunicator)
+	{
+		_keyboardManager = keyboardManager;
+		_playerManager = playerManager;
+		_gameMainManager = gameMainManager;
+		_levelEventsCommunicator = levelEventsCommunicator;
+	}
+
 	public void RefreshUI()
 	{
-		StatisticsPanel.RefreshPanel(PlayerManager.Instance.PlayerStatisticsController);
+		StatisticsPanel.RefreshPanel(_playerManager.PlayerStatisticsController);
 	}
 
 	protected void Awake()
@@ -45,27 +60,16 @@ public class UISceneManager : BaseMonoBehaviourSingletonManager<UISceneManager>
 
     private void AttachEvents()
 	{
-		GameMainManager.Instance.OnGameOver += CenterPanel.ShowGameOver;
-		KeyIdForOpenMenu = KeyboardManager.Instance.AddKey(KeyCode.Escape, OpenLevelMenu);
-		LevelManager.Instance.OnLevelEnd += CenterPanel.ShowLevelEndPanel;
+		_gameMainManager.OnGameOver += CenterPanel.ShowGameOver;
+		KeyIdForOpenMenu = _keyboardManager.AddKey(KeyCode.Escape, OpenLevelMenu);
+		_levelEventsCommunicator.OnLevelEnd += CenterPanel.ShowLevelEndPanel;
 	}
 
 	public void DetachEvents()
 	{
-		if (GameMainManager.IsInstantiated == true)
-		{
-			GameMainManager.Instance.OnGameOver -= CenterPanel.ShowGameOver;
-		}
-
-		if (KeyboardManager.IsInstantiated == true)
-		{
-			KeyboardManager.Instance.RemoveKey(KeyIdForOpenMenu);
-		}
-
-		if (LevelManager.IsInstantiated == true)
-		{
-			LevelManager.Instance.OnLevelEnd -= CenterPanel.ShowLevelEndPanel;
-		}
+		_gameMainManager.OnGameOver -= CenterPanel.ShowGameOver;
+		_keyboardManager.RemoveKey(KeyIdForOpenMenu);
+		_levelEventsCommunicator.OnLevelEnd -= CenterPanel.ShowLevelEndPanel;
 	}
 
 	private void OpenLevelMenu()

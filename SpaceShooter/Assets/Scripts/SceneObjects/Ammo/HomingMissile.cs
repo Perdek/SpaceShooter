@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using static IBasePoolObject;
 
 public class HomingMissile : Bullet
 {
@@ -31,14 +31,14 @@ public class HomingMissile : Bullet
     {
         base.HandleObjectSpawn();
 
-        UpdateManager.Instance.OnUpdatePhysic += TrackOpponent;
+        _updateManager.OnUpdatePhysic += TrackOpponent;
     }
 
     public override void Deactivation()
     {
         base.Deactivation();
 
-        UpdateManager.Instance.OnUpdatePhysic -= TrackOpponent;
+        _updateManager.OnUpdatePhysic -= TrackOpponent;
     }
 
     private void TrackOpponent()

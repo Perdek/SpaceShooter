@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Managers.GameManagers;
 using UnityEngine;
-using UnityEngine.Events;
+using Zenject;
 
 public class WaitingRoomModel : Model
 {
@@ -11,24 +9,34 @@ public class WaitingRoomModel : Model
 	[SerializeField]
 	private ShopCostsInformation basicHealthCosts = default;
 
+	private IPlayerManager playerManager;
+	private IGameMainManager gameMainManager;
+
 	#endregion
 
 	#region PROPERTIES
 
 	private ShopCostsInformation BasicHealthCosts => basicHealthCosts;
 
-	#endregion
+    #endregion
 
-	#region METHODS
+    #region METHODS
+
+    [Inject]
+	public void InjectDependencies(IPlayerManager playerManager, IGameMainManager gameMainManager)
+    {
+		this.playerManager = playerManager;
+		this.gameMainManager = gameMainManager;
+    }
 
 	public PlayerStatisticsController GetPlayerStatistics()
 	{
-		return PlayerManager.Instance.PlayerStatisticsController;
+		return playerManager.PlayerStatisticsController;
 	}
 
 	public PlayerShootingController GetPlayerShootingController()
     {
-		return PlayerManager.Instance.PlayerShootingController;
+		return playerManager.PlayerShootingController;
     }
 
 	public void Save()
@@ -38,19 +46,19 @@ public class WaitingRoomModel : Model
 
 	public void Ready()
 	{
-		GameMainManager.Instance.StartNextLevel();
+		gameMainManager.StartNextLevel();
 	}
 
 	public void Exit()
 	{
-		GameMainManager.Instance.OpenMenu();
+		gameMainManager.OpenMenu();
 	}
 
 	public void UpgradeHP()
 	{
 		if (CanPlayerAffordUpgradingHP() == true)
 		{
-			PlayerManager.Instance.BuyHP(1, BasicHealthCosts.HpCost);
+			playerManager.BuyHP(1, BasicHealthCosts.HpCost);
 		}
 	}
 
@@ -58,18 +66,18 @@ public class WaitingRoomModel : Model
 	{
 		if (CanPlayerAffordUpgradingShield() == true)
 		{
-			PlayerManager.Instance.BuyShield(1, BasicHealthCosts.ShieldCost);
+			playerManager.BuyShield(1, BasicHealthCosts.ShieldCost);
 		}
 	}
 
 	public bool CanPlayerAffordUpgradingHP()
 	{
-		return PlayerManager.Instance.PlayerMainController.CanPlayerAffordCost(BasicHealthCosts.HpCost);
+		return playerManager.PlayerMainController.CanPlayerAffordCost(BasicHealthCosts.HpCost);
 	}
 
 	public bool CanPlayerAffordUpgradingShield()
 	{
-		return PlayerManager.Instance.PlayerMainController.CanPlayerAffordCost(BasicHealthCosts.ShieldCost);
+		return playerManager.PlayerMainController.CanPlayerAffordCost(BasicHealthCosts.ShieldCost);
 	}
 
 	public ShopCostsInformation GetBasicHealthCosts()

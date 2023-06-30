@@ -1,75 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
+using Managers.GameManagers;
+using Managers.LevelManagers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[System.Serializable]
+[Serializable]
 public class PlayerShootingController
 {
     #region FIELDS
 
-    public event Action<EnemyInformation> OnKillEnemy = delegate { };
+    [FormerlySerializedAs("bulletSpawnPointTransform")] [SerializeField] private Transform _bulletSpawnPointTransform = null;
+    [FormerlySerializedAs("weapons")] [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
 
-    [SerializeField]
-    private Transform bulletSpawnPointTransform = null;
-    [SerializeField]
-    private List<Weapon> weapons = new List<Weapon>();
+    private List<Guid> _keysIds = new List<Guid>();
+    private int _activeWeaponIndex;
+
+    private IKeyboardManager _keyboardManager;
+    private LevelEventsCommunicator _levelEventsCommunicator;
+    private IInputManager _inputManager;
 
     #endregion
 
     #region PROPERTIES
 
-    public Transform BulletSpawnPointTransform => bulletSpawnPointTransform;
-    public List<Weapon> Weapons => weapons;
-
-    public WeaponValue ActiveWeapon {
-        get;
-        private set;
-    }
-
-    private List<int> KeysIds {
-        get;
-        set;
-    } = new List<int>();
-
-    private int ActiveWeaponIndex {
-        get;
-        set;
-    } = 0;
+    public WeaponValue ActiveWeapon { get; private set; }
+    public List<Weapon> Weapons => _weapons;
 
     #endregion
 
     #region METHODS
 
+    public void InjectDependencies(IKeyboardManager keyboardManager, IUpdateManager updateManager, IPoolManager poolManager, LevelEventsCommunicator levelEventsCommunicator, IInputManager inputManager)
+    {
+        _keyboardManager = keyboardManager;
+        _levelEventsCommunicator = levelEventsCommunicator;
+        _inputManager = inputManager;
+
+        for (int i = 0; i < _weapons.Count; i++)
+        {
+            _weapons[i].InjectDependencies(updateManager, poolManager);
+        }
+    }
+
     public void Initialize()
     {
-        ChooseDefaultWeapon();
         InitializeWeapons();
+        ChooseDefaultWeapon();
     }
 
     public void AttachEventForUpdateWeapon(Action<int> onUpdate)
     {
-        for (int i = 0; i < Weapons.Count; i++)
+        for (int i = 0; i < _weapons.Count; i++)
         {
-            Weapons[i].OnUgradeWeapon += onUpdate;
+            _weapons[i].OnUpgradeWeapon += onUpdate;
         }
     }
 
     public void ClearWeaponsReload()
     {
-        for (int i = 0; i < Weapons.Count; i++)
+        for (int i = 0; i < _weapons.Count; i++)
         {
-            Weapons[i].ClearReload();
+            _weapons[i].ClearReload();
         }
     }
 
     public void ResetShooting()
     {
         InitializeKeys();
-    }
-
-    public void NotifyKillEnemy(EnemyInformation killedEnemyInformation)
-    {
-        OnKillEnemy(killedEnemyInformation);
     }
 
     public void Shoot()
@@ -79,34 +77,33 @@ public class PlayerShootingController
 
     private void InitializeKeys()
     {
-        LevelManager.Instance.OnLevelStart += AttachKeysForShooting;
-        LevelManager.Instance.OnLevelEnd += DetachKeysForShooting;
-        LevelManager.Instance.OnLevelEnd += DetachKeysForShooting;
+        _levelEventsCommunicator.OnLevelStart += AttachKeysForShooting;
+        _levelEventsCommunicator.OnLevelEnd += DetachKeysForShooting;
+        _levelEventsCommunicator.OnLevelEnd += DetachKeysForShooting;
     }
 
     private void InitializeWeapons()
     {
-        for (int i = 0; i < Weapons.Count; i++)
+        for (int i = 0; i < _weapons.Count; i++)
         {
-            Weapons[i].InitializeBulletTransform(BulletSpawnPointTransform);
-            Weapons[i].CachePlayerShootingController(this);
-            Weapons[i].InitializeWeapon();
+            _weapons[i].InitializeBulletTransform(_bulletSpawnPointTransform);
+            _weapons[i].InitializeWeapon();
         }
     }
 
     private void AttachKeysForShooting()
     {
-        KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.Space, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN, KeyInput.CheckingModeEnum.DISJUNCTION));
-        KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.E, NextWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
-        KeysIds.Add(KeyboardManager.Instance.AddKey(KeyCode.Q, PrevWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
+        _keysIds.Add(_keyboardManager.AddKey(_inputManager.KeyCodeShoot, Shoot, KeyInput.KeyStateEnum.KEY_PRESSED_DOWN, KeyInput.CheckingModeEnum.DISJUNCTION));
+        _keysIds.Add(_keyboardManager.AddKey(_inputManager.KeyCodeNextWeapon, NextWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
+        _keysIds.Add(_keyboardManager.AddKey(_inputManager.KeyCodePrevWeapon, PrevWeapon, KeyInput.KeyStateEnum.KEY_RELEASED, KeyInput.CheckingModeEnum.DISJUNCTION));
     }
 
     private void DetachKeysForShooting()
     {
-        for (int i = KeysIds.Count - 1; i >= 0; i--)
+        for (int i = _keysIds.Count - 1; i >= 0; i--)
         {
-            KeyboardManager.Instance.RemoveKey(KeysIds[i]);
-            KeysIds.RemoveAt(i);
+            _keyboardManager.RemoveKey(_keysIds[i]);
+            _keysIds.RemoveAt(i);
         }
     }
 
@@ -117,16 +114,15 @@ public class PlayerShootingController
 
         do
         {
-            nextWeaponIndex = Weapons.Count == nextWeaponIndex + 1 ? nextWeaponIndex = 0 : nextWeaponIndex + 1;
-            Weapon weaponProposition = Weapons[nextWeaponIndex];
+            nextWeaponIndex = _weapons.Count == nextWeaponIndex + 1 ? nextWeaponIndex = 0 : nextWeaponIndex + 1;
+            Weapon weaponProposition = _weapons[nextWeaponIndex];
 
-            if (weaponProposition.IsWeaponAvailable() == true || ActiveWeaponIndex == nextWeaponIndex)
+            if (weaponProposition.IsWeaponAvailable() == true || _activeWeaponIndex == nextWeaponIndex)
             {
                 nextWeaponFounded = true;
-                ActiveWeaponIndex = nextWeaponIndex;
+                _activeWeaponIndex = nextWeaponIndex;
                 ActiveWeapon.SetValue(weaponProposition);
             }
-
         } while (nextWeaponFounded == false);
     }
 
@@ -137,23 +133,22 @@ public class PlayerShootingController
 
         do
         {
-            prevWeaponIndex = prevWeaponIndex == 0 ? prevWeaponIndex = Weapons.Count - 1 : prevWeaponIndex - 1;
-            Weapon weaponProposition = Weapons[prevWeaponIndex];
+            prevWeaponIndex = prevWeaponIndex == 0 ? prevWeaponIndex = _weapons.Count - 1 : prevWeaponIndex - 1;
+            Weapon weaponProposition = _weapons[prevWeaponIndex];
 
-            if (weaponProposition.IsWeaponAvailable() == true || ActiveWeaponIndex == prevWeaponIndex)
+            if (weaponProposition.IsWeaponAvailable() == true || _activeWeaponIndex == prevWeaponIndex)
             {
                 prevWeaponFounded = true;
-                ActiveWeaponIndex = prevWeaponIndex;
+                _activeWeaponIndex = prevWeaponIndex;
                 ActiveWeapon.SetValue(weaponProposition);
             }
-
         } while (prevWeaponFounded == false);
     }
 
     private void ChooseDefaultWeapon()
     {
-        ActiveWeaponIndex = 0;
-        ActiveWeapon = new WeaponValue(Weapons[ActiveWeaponIndex]);
+        _activeWeaponIndex = 0;
+        ActiveWeapon = new WeaponValue(_weapons[_activeWeaponIndex]);
         ActiveWeapon.Value.WeaponLevel.AddValue(1);
     }
 

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Managers.GameManagers;
+using Zenject;
 
 public class TopLeftPanelModel : Model
 {
     #region MEMBERS
+
+    private IPlayerManager playerManager;
 
     #endregion
 
@@ -13,21 +13,27 @@ public class TopLeftPanelModel : Model
 
     #endregion
 
-    #region FUNCTIONS
+    #region METHODS
+
+    [Inject]
+    public void InjectDependencies(IPlayerManager playerManager)
+    {
+        this.playerManager = playerManager;
+    }
 
     public IntValue GetMoneyParameter()
     {
-        return PlayerManager.Instance.PlayerStatisticsController.MoneyPoints;
+        return playerManager.PlayerStatisticsController.MoneyPoints;
     }
 
     public IntValue GetScoreParameter()
     {
-        return PlayerManager.Instance.PlayerStatisticsController.ScorePoints;
+        return playerManager.PlayerStatisticsController.ScorePoints;
     }
 
     public WeaponValue GetWeaponParameter()
     {
-        return PlayerManager.Instance.PlayerShootingController.ActiveWeapon;
+        return playerManager.PlayerShootingController.ActiveWeapon;
     }
 
     #endregion

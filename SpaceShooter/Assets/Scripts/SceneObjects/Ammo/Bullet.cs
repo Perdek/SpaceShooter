@@ -1,9 +1,15 @@
 ﻿using UnityEngine;
 using System;
+using Zenject;
+using Managers.GameManagers;
+using SceneObjects.Ammo;
+using static IBasePoolObject;
 
 public class Bullet : BasePoolObject
 {
     #region FIELDS
+
+    private int id;
 
     public event Action<EnemyInformation> OnKillTarget = delegate { };
 
@@ -16,6 +22,9 @@ public class Bullet : BasePoolObject
     [SerializeField]
     private IdentificationFriendOrFoeEnum iff = IdentificationFriendOrFoeEnum.FOE;
 
+    protected IUpdateManager _updateManager;
+    protected KillingCommunicator _killingCommunicator;
+
     #endregion
 
     #region PROPERTIES
@@ -26,13 +35,30 @@ public class Bullet : BasePoolObject
 
     #endregion
 
+    #region UNITY_METHODS
+
+    protected virtual void OnTriggerEnter2D(Collider2D other)
+    {
+        HandleCollision(other);
+    }
+
+    #endregion
+
     #region METHODS
+
+    [Inject]
+    public void InjectDependencies(IUpdateManager newUpdateManager, KillingCommunicator killingCommunicator)
+    {
+        _updateManager = newUpdateManager;
+        _killingCommunicator = killingCommunicator;
+    }
 
     public override void HandleObjectSpawn()
     {
         if (State == PoolObjectStateEnum.WAITING_FOR_USE)
         {
-            UpdateManager.Instance.OnUpdatePhysic += Move;
+            _updateManager.OnUpdatePhysic += Move;
+            OnKillTarget += _killingCommunicator.NotifyOnKillEnemy;
         }
     }
 
@@ -40,32 +66,20 @@ public class Bullet : BasePoolObject
     {
         base.Deactivation();
         OnKillTarget = null;
-        UpdateManager.Instance.OnUpdatePhysic -= Move;
+
+        _updateManager.OnUpdatePhysic -= Move;
     }
 
     public void NotifyComfirmKill(EnemyInformation enemyInformation)
     {
-        if (this == null)
-        {
-            Debug.Log("THIS == null");
-        }
-
-        if (enemyInformation == null)
-        {
-            Debug.Log("enemyInformation == null");
-        }
-
         if (OnKillTarget == null)
         {
-            Debug.Log("OnKillTarget == null");
+            Debug.Log("OnKillTarget == null " + id);
         }
-
-        OnKillTarget(enemyInformation);
-    }
-
-    protected virtual void OnTriggerEnter2D(Collider2D other)
-    {
-        HandleCollision(other);
+        else
+        {
+            OnKillTarget(enemyInformation);
+        }
     }
 
     public void Move()

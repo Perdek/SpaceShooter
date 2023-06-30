@@ -1,85 +1,96 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Managers.GameManagers;
+using Managers.LevelManagers;
+using SceneObjects.Ammo;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Zenject;
 
 public class PlayerMainController : MonoBehaviour
 {
     #region FIELDS
 
-    [Header("Controllers")]
-    [SerializeField]
-    private PlayerMovementController playerMovementController = null;
-    [SerializeField]
-    private PlayerShootingController playerShootingController = null;
-    [SerializeField]
-    private PlayerColliderController playerColliderController = null;
-    [SerializeField]
-    private PlayerStatisticsController playerStatisticsController = null;
-    [SerializeField]
-    private PlayerVisualisationController playerVisualisationController = null;
+    [FormerlySerializedAs("playerMovementController")] [Header("Controllers")] [SerializeField] private PlayerMovementController _playerMovementController = null;
+
+    [FormerlySerializedAs("playerShootingController")] [SerializeField] private PlayerShootingController _playerShootingController = null;
+    [FormerlySerializedAs("playerColliderController")] [SerializeField] private PlayerColliderController _playerColliderController = null;
+    [FormerlySerializedAs("playerStatisticsController")] [SerializeField] private PlayerStatisticsController _playerStatisticsController = null;
+    [FormerlySerializedAs("playerVisualisationController")] [SerializeField] private PlayerVisualisationController _playerVisualisationController = null;
+
+    private IGameMainManager _gameMainManager;
+    private KillingCommunicator _killingCommunicator;
 
     #endregion
 
     #region PROPERTIES
 
-    public PlayerMovementController PlayerMovementController => playerMovementController;
-    public PlayerShootingController PlayerShootingController => playerShootingController;
-    public PlayerColliderController PlayerColliderController => playerColliderController;
-    public PlayerStatisticsController PlayerStatisticsController => playerStatisticsController;
-    public PlayerVisualisationController PlayerVisualisationController => playerVisualisationController;
+    public PlayerMovementController PlayerMovementController => _playerMovementController;
+    public PlayerShootingController PlayerShootingController => _playerShootingController;
+    public PlayerColliderController PlayerColliderController => _playerColliderController;
+    public PlayerStatisticsController PlayerStatisticsController => _playerStatisticsController;
+    public PlayerVisualisationController PlayerVisualisationController => _playerVisualisationController;
 
     #endregion
 
     #region METHODS
 
+    [Inject]
+    public void InjectDependencies(IGameMainManager gameMainManager, IUpdateManager updateManager,
+        IKeyboardManager keyboardManager, IInputManager inputManager, IPoolManager poolManager,
+        LevelEventsCommunicator levelEventsCommunicator, KillingCommunicator killingCommunicator)
+    {
+        _gameMainManager = gameMainManager;
+        _killingCommunicator = killingCommunicator;
+        _playerMovementController.InjectDependencies(updateManager, keyboardManager, gameMainManager, inputManager);
+        _playerShootingController.InjectDependencies(keyboardManager, updateManager, poolManager, levelEventsCommunicator, inputManager);
+    }
+
     public void Initialize()
     {
         AttachEvents();
-        PlayerMovementController.Initialize();
-        PlayerShootingController.Initialize();
+        _playerMovementController.Initialize();
+        _playerShootingController.Initialize();
     }
 
     public bool CanPlayerAffordCost(int value)
     {
-        return PlayerStatisticsController.CurrentMoneyPoints >= value;
+        return _playerStatisticsController.CurrentMoneyPoints >= value;
     }
 
     private void AttachEvents()
     {
-        GameMainManager.Instance.OnGameStart += AttachInterControllersEvents;
-        GameMainManager.Instance.OnGameStart += RefreshView;
-        GameMainManager.Instance.OnMainOpen += DetachInterControllersEvents;
-        GameMainManager.Instance.OnWaitingOpen += DetachInterControllersEvents;
-        PlayerStatisticsController.OnPlayerDead += GameMainManager.Instance.GameOver;
+        _gameMainManager.OnGameStart += AttachInterControllersEvents;
+        _gameMainManager.OnGameStart += RefreshView;
+        _gameMainManager.OnMainOpen += DetachInterControllersEvents;
+        _gameMainManager.OnWaitingOpen += DetachInterControllersEvents;
+        _playerStatisticsController.OnPlayerDead += _gameMainManager.GameOver;
 
-        PlayerShootingController.AttachEventForUpdateWeapon(PlayerStatisticsController.MoneyPoints.RemoveValue);
+        _playerShootingController.AttachEventForUpdateWeapon(_playerStatisticsController.MoneyPoints.RemoveValue);
     }
 
     private void RefreshView()
     {
-        if (PlayerStatisticsController.CurrentShieldPoints > 0)
+        if (_playerStatisticsController.CurrentShieldPoints > 0)
         {
-            PlayerVisualisationController.TurnOnForceShield();
+            _playerVisualisationController.TurnOnForceShield();
         }
 
-        PlayerShootingController.ClearWeaponsReload();
+        _playerShootingController.ClearWeaponsReload();
     }
 
     private void AttachInterControllersEvents()
     {
-        PlayerColliderController.OnDamageCollision += PlayerStatisticsController.HandleDamage;
-        PlayerShootingController.OnKillEnemy += PlayerStatisticsController.RewardForKill;
-        PlayerStatisticsController.OnTurnOnForceShield += PlayerVisualisationController.TurnOnForceShield;
-        PlayerStatisticsController.OnTurnOffForceShield += PlayerVisualisationController.TurnOffForceShield;
+        _playerColliderController.OnDamageCollision += _playerStatisticsController.HandleDamage;
+        _killingCommunicator.OnKillEnemy += _playerStatisticsController.RewardForKill;
+        _playerStatisticsController.OnTurnOnForceShield += _playerVisualisationController.TurnOnForceShield;
+        _playerStatisticsController.OnTurnOffForceShield += _playerVisualisationController.TurnOffForceShield;
     }
 
     private void DetachInterControllersEvents()
     {
-        PlayerColliderController.OnDamageCollision -= PlayerStatisticsController.HandleDamage;
-        PlayerShootingController.OnKillEnemy -= PlayerStatisticsController.RewardForKill;
-        PlayerStatisticsController.OnTurnOnForceShield -= PlayerVisualisationController.TurnOnForceShield;
-        PlayerStatisticsController.OnTurnOffForceShield -= PlayerVisualisationController.TurnOffForceShield;
+        _playerColliderController.OnDamageCollision -= _playerStatisticsController.HandleDamage;
+        _killingCommunicator.OnKillEnemy -= _playerStatisticsController.RewardForKill;
+        _playerStatisticsController.OnTurnOnForceShield -= _playerVisualisationController.TurnOnForceShield;
+        _playerStatisticsController.OnTurnOffForceShield -= _playerVisualisationController.TurnOffForceShield;
     }
 
     #endregion

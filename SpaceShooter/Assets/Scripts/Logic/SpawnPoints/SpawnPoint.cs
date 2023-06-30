@@ -1,81 +1,83 @@
-﻿using System;
+﻿using Managers.GameManagers;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Zenject;
 
 public class SpawnPoint : MonoBehaviour
 {
 	#region FIELDS
 
-	public event System.Action<BasePoolObject> OnSpawn = delegate { };
-	public event System.Action OnSpawnEnd = delegate { };
+	public event Action<IBasePoolObject> OnSpawn = delegate { };
+	public event Action OnSpawnEnd = delegate { };
 
-	[SerializeField]
-	private TagManager.TagsEnum poolObjectTag = TagManager.TagsEnum.PLAYER_BULLET_TAG;
+	[FormerlySerializedAs("poolObjectTag")] [SerializeField]
+	private SpawnableObjectsTagsEnum _poolObjectTag = SpawnableObjectsTagsEnum.PLAYER_BULLET_TAG;
 
-	[SerializeField]
-	private float firstSpawnDelayInSeconds = 0f;
+	[FormerlySerializedAs("firstSpawnDelayInSeconds")] [SerializeField]
+	private float _firstSpawnDelayInSeconds = 0f;
 
-	[SerializeField]
-	private float delayBetweenSpawnsInSeconds = 5f;
+	[FormerlySerializedAs("delayBetweenSpawnsInSeconds")] [SerializeField]
+	private float _delayBetweenSpawnsInSeconds = 5f;
 
-	[SerializeField]
-	private int spawnObjectsLimit = 1;
+	[FormerlySerializedAs("spawnObjectsLimit")] [SerializeField]
+	private int _spawnObjectsLimit = 1;
+
+	private IPoolManager _poolManager;
+	private IUpdateManager _updateManager;
+
+	private Timer _spawningTimer;
+	private int _currentSpawnedObjectNumber;
+	private readonly List<IBasePoolObject> _activeSpawnedObjects = new List<IBasePoolObject>();
 
 	#endregion
 
 	#region PROPERTIES
 
-	public TagManager.TagsEnum PoolObjectTag => poolObjectTag;
-	public float FirstSpawnDelayInSeconds => firstSpawnDelayInSeconds;
-	public float DelayBetweenSpawnsInSeconds => delayBetweenSpawnsInSeconds;
-	public int SpawnObjectsLimit => spawnObjectsLimit;
-
-	private Timer SpawningTimer {
-		get;
-		set;
-	} = null;
-
-	private int CurrentSpawnedObjectNumber {
-		get;
-		set;
-	} = 0;
-
-	private List<BasePoolObject> ActiveSpawnedObjects {
-		get;
-		set;
-	} = new List<BasePoolObject>();
+	public SpawnableObjectsTagsEnum PoolObjectTag => _poolObjectTag;
+	public float FirstSpawnDelayInSeconds => _firstSpawnDelayInSeconds;
+	public float DelayBetweenSpawnsInSeconds => _delayBetweenSpawnsInSeconds;
+	public int SpawnObjectsLimit => _spawnObjectsLimit;
 
 	#endregion
 
-	#region METHODS
+    #region METHODS
+
+    [Inject]
+	public void InjectDependencies(IPoolManager poolManager, IUpdateManager updateManager)
+    {
+		this._poolManager = poolManager;
+		this._updateManager = updateManager;
+    }
 
 	public void StartSpawn()
 	{
-		SpawningTimer = new Timer(FirstSpawnDelayInSeconds, DelayBetweenSpawnsInSeconds, Spawn, true);
-		SpawningTimer.StartCounting();
+		_spawningTimer = new Timer(_updateManager, FirstSpawnDelayInSeconds, DelayBetweenSpawnsInSeconds, Spawn, true);
+		_spawningTimer.StartCounting();
 	}
 
 	public void Spawn()
 	{
-		BasePoolObject basePoolObject = PoolManager.Instance.GetPoolObject(PoolObjectTag, this.transform.position, this.transform.rotation);
+		IBasePoolObject basePoolObject = _poolManager.GetPoolObject(PoolObjectTag, this.transform.position, this.transform.rotation);
         basePoolObject.OnDeactivation += DeactiveSpawnedObject;
-		CurrentSpawnedObjectNumber++;
-		ActiveSpawnedObjects.Add(basePoolObject);
+		_currentSpawnedObjectNumber++;
+		_activeSpawnedObjects.Add(basePoolObject);
 		OnSpawn(basePoolObject);
 		HandleSpawnEnd();
 	}
 
     public void Reset()
 	{
-		SpawningTimer.EndCounting();
+		_spawningTimer.EndCounting();
 		DeactivateSpawnedObjects();
 	}
 
 	private void DeactivateSpawnedObjects()
     {
-        for (int i = ActiveSpawnedObjects.Count - 1; i >= 0; i--)
+        for (int i = _activeSpawnedObjects.Count - 1; i >= 0; i--)
         {
-			ActiveSpawnedObjects[i].Deactivation();
+			_activeSpawnedObjects[i].Deactivation();
 		}
     }
 
@@ -83,20 +85,20 @@ public class SpawnPoint : MonoBehaviour
 	{
 		if (CheckSpawnEnd() == true)
 		{
-			SpawningTimer.EndCounting();
+			_spawningTimer.EndCounting();
 			OnSpawnEnd();
 		}
 	}
 
 	private bool CheckSpawnEnd()
 	{
-		return CurrentSpawnedObjectNumber == SpawnObjectsLimit;
+		return _currentSpawnedObjectNumber == SpawnObjectsLimit;
 	}
 
 	private void DeactiveSpawnedObject(BasePoolObject obj)
 	{
 		obj.OnDeactivation -= DeactiveSpawnedObject;
-		ActiveSpawnedObjects.Remove(obj);
+		_activeSpawnedObjects.Remove(obj);
 	}
 
 	#endregion

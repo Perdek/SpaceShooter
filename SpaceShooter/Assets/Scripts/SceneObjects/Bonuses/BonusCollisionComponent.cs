@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using System;
 using UnityEngine;
 
-namespace Assets.Scripts.SceneObjects.Bonuses
+namespace SceneObjects.Bonuses
 {
     public class BonusCollisionComponent : MonoBehaviour
     {
         #region FIELDS
+
+        public event Action OnHit = delegate { };
 
         #endregion
 
@@ -14,6 +16,29 @@ namespace Assets.Scripts.SceneObjects.Bonuses
         #endregion
 
         #region METHODS
+
+        public void HandleCollision(Collider2D other)
+        {
+            Bullet bullet = other.GetComponent<Bullet>();
+
+            if (bullet != null)
+            {
+                OnHit();
+                return;
+            }
+
+            if (other.GetComponent<SceneBottonCollider>() != null)
+            {
+                OnHit();
+            }
+
+            PlayerColliderController playerCollider = other.GetComponentInChildren<PlayerColliderController>();
+
+            if (playerCollider != null)
+            {
+                OnHit();
+            }
+        }
 
         #endregion
 

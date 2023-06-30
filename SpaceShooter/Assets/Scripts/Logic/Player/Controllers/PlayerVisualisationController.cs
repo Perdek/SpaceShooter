@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class PlayerVisualisationController
 {
     #region FIELDS
 
-    [SerializeField] private ParticleSystem forceShieldParticleSystem = default;
+    [FormerlySerializedAs("forceShieldParticleSystem")] [SerializeField] private ParticleSystem _forceShieldParticleSystem = default;
 
     #endregion
 
     #region PROPERTIES
-
-    private ParticleSystem ForceShieldParticleSystem => forceShieldParticleSystem;
 
     #endregion
 
@@ -19,12 +18,12 @@ public class PlayerVisualisationController
 
     public void TurnOnForceShield()
     {
-        ForceShieldParticleSystem.gameObject.SetActive(true);
+        _forceShieldParticleSystem.gameObject.SetActive(true);
     }
 
     public void TurnOffForceShield()
     {
-        ForceShieldParticleSystem.gameObject.SetActive(false);
+        _forceShieldParticleSystem.gameObject.SetActive(false);
     }
 
     #endregion

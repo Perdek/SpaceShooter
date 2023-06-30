@@ -1,316 +1,299 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using Managers.GameManagers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[System.Serializable]
+[Serializable]
 public class PlayerMovementController
 {
-	#region FIELDS
+    #region FIELDS
 
-	private const float MIN_SPEED_TO_SET = 0;
-	private const float MAX_SPEED_TO_SET = 100;
+    private const float MIN_SPEED_TO_SET = 0;
+    private const float MAX_SPEED_TO_SET = 100;
 
-	[Header("Movement")]
-	[SerializeField, Range(MIN_SPEED_TO_SET, MAX_SPEED_TO_SET)]
-	private float maxSpeed = 1;
-	[SerializeField]
-	private float accelerationFactory = 1;
-	[SerializeField]
-	private float brakingFactory = 1;
-	[SerializeField]
-	private Rigidbody2D playerRigidBody2D = null;
+    [FormerlySerializedAs("maxSpeed")] [Header("Movement")] [SerializeField, Range(MIN_SPEED_TO_SET, MAX_SPEED_TO_SET)]
+    private float _maxSpeed = 1;
 
-	private MovingStateEnum state = MovingStateEnum.IDLE;
+    [FormerlySerializedAs("accelerationFactory")] [SerializeField] private float _accelerationFactory = 1;
+    [FormerlySerializedAs("brakingFactory")] [SerializeField] private float _brakingFactory = 1;
+    [FormerlySerializedAs("playerRigidBody2D")] [SerializeField] private Rigidbody2D _playerRigidBody2D = null;
 
-	#endregion
+    private MovingStateEnum _state = MovingStateEnum.IDLE;
+    private List<Guid> _keysIds  = new List<Guid>();
 
-	#region PROPERTIES
+    private IUpdateManager _updateManager;
+    private IKeyboardManager _keyboardManager;
+    private IGameMainManager _gameMainManager;
+    private IInputManager _inputManager;
 
-	private Rigidbody2D PlayerRigidBody2D => playerRigidBody2D;
+    #endregion
 
-	private float AccelerationFactory {
-		get => accelerationFactory;
-		set => accelerationFactory = value;
-	}
+    #region PROPERTIES
 
-	private float BrakingFactory {
-		get => brakingFactory;
-		set => brakingFactory = value;
-	}
+    #endregion
 
-    private float MaxSpeed {
-		get => maxSpeed;
-		set => maxSpeed = value;
-	}
+    #region METHODS
 
-	private MovingStateEnum State {
-		get => state;
-		set => state = value;
-	}
+    public void InjectDependencies(IUpdateManager updateManager, IKeyboardManager keyboardManager, IGameMainManager gameMainManager, IInputManager inputManager)
+    {
+        _updateManager = updateManager;
+        _keyboardManager = keyboardManager;
+        _gameMainManager = gameMainManager;
+        _inputManager = inputManager;
+    }
 
-	private List<int> KeysIds {
-		get;
-		set;
-	} = new List<int>();
+    public void Initialize()
+    {
+        InitializeKeys();
+        InitializeUpdate();
+    }
 
-	#endregion
+    public void ResetPosition()
+    {
+        _playerRigidBody2D.transform.position = Vector3.zero;
+    }
 
-	#region METHODS
+    public void MoveUp()
+    {
+        _playerRigidBody2D.AddForce(Vector2.up * _accelerationFactory);
+    }
 
-	public void Initialize()
-	{
-		InitializeKeys();
-		InitializeUpdate();
-	}
+    public void MoveDown()
+    {
+        _playerRigidBody2D.AddForce(Vector2.down * _accelerationFactory);
+    }
 
-	public void ResetPosition()
-	{
-		PlayerRigidBody2D.transform.position = Vector3.zero;
-	}
+    public void MoveRight()
+    {
+        _playerRigidBody2D.AddForce(Vector2.right * _accelerationFactory);
+    }
 
-	public void MoveUp()
-	{
-		PlayerRigidBody2D.AddForce(Vector2.up * AccelerationFactory);
-	}
+    public void MoveLeft()
+    {
+        _playerRigidBody2D.AddForce(Vector2.left * _accelerationFactory);
+    }
 
-	public void MoveDown()
-	{
-		PlayerRigidBody2D.AddForce(Vector2.down * AccelerationFactory);
-	}
+    public void MoveUpRight()
+    {
+        _playerRigidBody2D.AddForce(new Vector2(1, 1) * _accelerationFactory);
+    }
 
-	public void MoveRight()
-	{
-		PlayerRigidBody2D.AddForce(Vector2.right * AccelerationFactory);
-	}
+    public void MoveUpLeft()
+    {
+        _playerRigidBody2D.AddForce(new Vector2(-1, 1) * _accelerationFactory);
+    }
 
-	public void MoveLeft()
-	{
-		PlayerRigidBody2D.AddForce(Vector2.left * AccelerationFactory);
-	}
+    public void MoveDownLeft()
+    {
+        _playerRigidBody2D.AddForce(new Vector2(-1, -1) * _accelerationFactory);
+    }
 
-	public void MoveUpRight()
-	{
-		PlayerRigidBody2D.AddForce(new Vector2(1, 1) * AccelerationFactory);
-	}
+    public void MoveDownRight()
+    {
+        _playerRigidBody2D.AddForce(new Vector2(1, -1) * _accelerationFactory);
+    }
 
-	public void MoveUpLeft()
-	{
-		PlayerRigidBody2D.AddForce(new Vector2(-1, 1) * AccelerationFactory);
-	}
+    public void Brake()
+    {
+        _playerRigidBody2D.AddForce(-_brakingFactory * _playerRigidBody2D.velocity);
+    }
 
-	public void MoveDownLeft()
-	{
-		PlayerRigidBody2D.AddForce(new Vector2(-1, -1) * AccelerationFactory);
-	}
+    public void LimitVelocity()
+    {
+        Vector3 normalizedVelocity = _playerRigidBody2D.velocity.normalized;
+        Vector3 brakeVelocity = normalizedVelocity * _maxSpeed; // make the brake Vector3 value
 
-	public void MoveDownRight()
-	{
-		PlayerRigidBody2D.AddForce(new Vector2(1, -1) * AccelerationFactory);
-	}
+        _playerRigidBody2D.velocity = brakeVelocity; // apply opposing brake force
+    }
 
-	public void Brake()
-	{
-		PlayerRigidBody2D.AddForce(-BrakingFactory * PlayerRigidBody2D.velocity);
-	}
+    private void HandleVelocityLimit()
+    {
+        if (_state != MovingStateEnum.BREAKING && _playerRigidBody2D.velocity.magnitude > _maxSpeed)
+        {
+            LimitVelocity();
+        }
+    }
 
-	public void LimitVelocity()
-	{
-		Vector3 normalizedVelocity = PlayerRigidBody2D.velocity.normalized;
-		Vector3 brakeVelocity = normalizedVelocity * MaxSpeed;  // make the brake Vector3 value
+    private void InitializeKeys()
+    {
+        _gameMainManager.OnGameStart += AttachKeysForMovement;
+        _gameMainManager.OnWaitingOpen += DetachKeysForMovement;
+        _gameMainManager.OnMainOpen += DetachKeysForMovement;
+    }
 
-		PlayerRigidBody2D.velocity = brakeVelocity;  // apply opposing brake force
-	}
+    private void AttachKeysForMovement()
+    {
+        _keysIds.Add(_keyboardManager.AddKey(GetKeyCodeMoveUp(), SetMoveUp));
+        _keysIds.Add(_keyboardManager.AddKey(GetKeyCodeMoveDown(), SetMoveDown));
+        _keysIds.Add(_keyboardManager.AddKey(GetKeyCodeMoveLeft(), SetMoveLeft));
+        _keysIds.Add(_keyboardManager.AddKey(GetKeyCodeMoveRight(), SetMoveRight));
+        _keysIds.Add(_keyboardManager.AddKey(GetKeysCodeMoveUpRight(), SetMoveUpRight));
+        _keysIds.Add(_keyboardManager.AddKey(GetKeysCodeMoveUpLeft(), SetMoveUpLeft));
+        _keysIds.Add(_keyboardManager.AddKey(GetKeysCodeMoveDownRight(), SetMoveDownRight));
+        _keysIds.Add(_keyboardManager.AddKey(GetKeysCodeMoveDownLeft(), SetMoveDownLeft));
+        _keysIds.Add(_keyboardManager.AddKey(GetKeysCodeMovement(), SetBreak, KeyInput.KeyStateEnum.KEY_HOLD,
+            KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum.KEY_HAS_NOT_OCCUR));
+    }
 
-	private void HandleVelocityLimit()
-	{
-		if (State != MovingStateEnum.BREAKING && PlayerRigidBody2D.velocity.magnitude > MaxSpeed)
-		{
-			LimitVelocity();
-		}
-	}
+    private void DetachKeysForMovement()
+    {
+        for (int i = _keysIds.Count - 1; i >= 0; i--)
+        {
+            _keyboardManager.RemoveKey(_keysIds[i]);
+            _keysIds.RemoveAt(i);
+        }
+    }
 
-	private void InitializeKeys()
-	{
-		GameMainManager.Instance.OnGameStart += AttachKeysForMovement;
-		GameMainManager.Instance.OnWaitingOpen += DetachKeysForMovement;
-		GameMainManager.Instance.OnMainOpen += DetachKeysForMovement;
-	}
+    private void InitializeUpdate()
+    {
+        _updateManager.OnDataChange += HandleState;
+    }
 
-	private void AttachKeysForMovement()
-	{
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveUp(), SetMoveUp));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveDown(), SetMoveDown));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveLeft(), SetMoveLeft));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeyCodeMoveRight(), SetMoveRight));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveUpRight(), SetMoveUpRight));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveUpLeft(), SetMoveUpLeft));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveDownRight(), SetMoveDownRight));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMoveDownLeft(), SetMoveDownLeft));
-		KeysIds.Add(KeyboardManager.Instance.AddKey(GetKeysCodeMovement(), SetBreak, KeyInput.KeyStateEnum.KEY_HOLD, KeyInput.CheckingModeEnum.CONJUNCTION, KeyInput.OccurrenceModeEnum.KEY_HAS_NOT_OCCUR));
-	}
+    private void SetMoveUp()
+    {
+        _state = MovingStateEnum.MOVING_UP;
+    }
 
-	private void DetachKeysForMovement()
-	{
-		for (int i = KeysIds.Count - 1; i >= 0; i--)
-		{
-			KeyboardManager.Instance.RemoveKey(KeysIds[i]);
-			KeysIds.RemoveAt(i);
-		}
-	}
+    private void SetMoveDown()
+    {
+        _state = MovingStateEnum.MOVING_DOWN;
+    }
 
-	private void InitializeUpdate()
-	{
-		UpdateManager.Instance.OnDataChange += HandleState;
-	}
+    private void SetMoveLeft()
+    {
+        _state = MovingStateEnum.MOVING_LEFT;
+    }
 
-	private void SetState(MovingStateEnum newState)
-	{
-		State = newState;
-	}
+    private void SetMoveRight()
+    {
+        _state = MovingStateEnum.MOVING_RIGHT;
+    }
 
-	private void SetMoveUp()
-	{
-		SetState(MovingStateEnum.MOVING_UP);
-	}
+    private void SetMoveUpLeft()
+    {
+        _state = MovingStateEnum.MOVING_UP_LEFT;
+    }
 
-	private void SetMoveDown()
-	{
-		SetState(MovingStateEnum.MOVING_DOWN);
-	}
-	private void SetMoveLeft()
-	{
-		SetState(MovingStateEnum.MOVING_LEFT);
-	}
+    private void SetMoveUpRight()
+    {
+        _state = MovingStateEnum.MOVING_UP_RIGHT;
+    }
 
-	private void SetMoveRight()
-	{
-		SetState(MovingStateEnum.MOVING_RIGHT);
-	}
+    private void SetMoveDownLeft()
+    {
+        _state = MovingStateEnum.MOVING_DOWN_LEFT;
+    }
 
-	private void SetMoveUpLeft()
-	{
-		SetState(MovingStateEnum.MOVING_UP_LEFT);
-	}
+    private void SetMoveDownRight()
+    {
+        _state = MovingStateEnum.MOVING_DOWN_RIGHT;
+    }
 
-	private void SetMoveUpRight()
-	{
-		SetState(MovingStateEnum.MOVING_UP_RIGHT);
-	}
+    private void SetBreak()
+    {
+        _state = MovingStateEnum.BREAKING;
+    }
 
-	private void SetMoveDownLeft()
-	{
-		SetState(MovingStateEnum.MOVING_DOWN_LEFT);
-	}
+    private void HandleState()
+    {
+        switch (_state)
+        {
+            case MovingStateEnum.MOVING_DOWN:
+                MoveDown();
+                break;
+            case MovingStateEnum.MOVING_UP:
+                MoveUp();
+                break;
+            case MovingStateEnum.MOVING_RIGHT:
+                MoveRight();
+                break;
+            case MovingStateEnum.MOVING_LEFT:
+                MoveLeft();
+                break;
+            case MovingStateEnum.MOVING_UP_LEFT:
+                MoveUpLeft();
+                break;
+            case MovingStateEnum.MOVING_UP_RIGHT:
+                MoveUpRight();
+                break;
+            case MovingStateEnum.MOVING_DOWN_RIGHT:
+                MoveDownRight();
+                break;
+            case MovingStateEnum.MOVING_DOWN_LEFT:
+                MoveDownLeft();
+                break;
+            case MovingStateEnum.BREAKING:
+                Brake();
+                break;
+        }
 
-	private void SetMoveDownRight()
-	{
-		SetState(MovingStateEnum.MOVING_DOWN_RIGHT);
-	}
+        HandleVelocityLimit();
+    }
 
-	private void SetBreak()
-	{
-		SetState(MovingStateEnum.BREAKING);
-	}
+    private KeyCode GetKeyCodeMoveUp()
+    {
+        return _inputManager.KeyCodeMoveUp;
+    }
 
-	private void HandleState()
-	{
-		switch (State)
-		{
-			case MovingStateEnum.MOVING_DOWN:
-				MoveDown();
-				break;
-			case MovingStateEnum.MOVING_UP:
-				MoveUp();
-				break;
-			case MovingStateEnum.MOVING_RIGHT:
-				MoveRight();
-				break;
-			case MovingStateEnum.MOVING_LEFT:
-				MoveLeft();
-				break;
-			case MovingStateEnum.MOVING_UP_LEFT:
-				MoveUpLeft();
-				break;
-			case MovingStateEnum.MOVING_UP_RIGHT:
-				MoveUpRight();
-				break;
-			case MovingStateEnum.MOVING_DOWN_RIGHT:
-				MoveDownRight();
-				break;
-			case MovingStateEnum.MOVING_DOWN_LEFT:
-				MoveDownLeft();
-				break;
-			case MovingStateEnum.BREAKING:
-				Brake();
-				break;
-		}
+    private KeyCode GetKeyCodeMoveDown()
+    {
+        return _inputManager.KeyCodeMoveDown;
+    }
 
-		HandleVelocityLimit();
-	}
+    private KeyCode GetKeyCodeMoveLeft()
+    {
+        return _inputManager.KeyCodeMoveLeft;
+    }
 
-	private KeyCode GetKeyCodeMoveUp()
-	{
-		return InputManager.Instance.KeyCodeMoveUp;
-	}
+    private KeyCode GetKeyCodeMoveRight()
+    {
+        return _inputManager.KeyCodeMoveRight;
+    }
 
-	private KeyCode GetKeyCodeMoveDown()
-	{
-		return InputManager.Instance.KeyCodeMoveDown;
-	}
+    private List<KeyCode> GetKeysCodeMoveUpRight()
+    {
+        return new List<KeyCode>() { GetKeyCodeMoveUp(), GetKeyCodeMoveRight() };
+    }
 
-	private KeyCode GetKeyCodeMoveLeft()
-	{
-		return InputManager.Instance.KeyCodeMoveLeft;
-	}
+    private List<KeyCode> GetKeysCodeMoveUpLeft()
+    {
+        return new List<KeyCode>() { GetKeyCodeMoveUp(), GetKeyCodeMoveLeft() };
+    }
 
-	private KeyCode GetKeyCodeMoveRight()
-	{
-		return InputManager.Instance.KeyCodeMoveRight;
-	}
+    private List<KeyCode> GetKeysCodeMoveDownRight()
+    {
+        return new List<KeyCode>() { GetKeyCodeMoveDown(), GetKeyCodeMoveRight() };
+    }
 
-	private List<KeyCode> GetKeysCodeMoveUpRight()
-	{
-		return new List<KeyCode>() { GetKeyCodeMoveUp(), GetKeyCodeMoveRight() };
-	}
+    private List<KeyCode> GetKeysCodeMoveDownLeft()
+    {
+        return new List<KeyCode>() { GetKeyCodeMoveDown(), GetKeyCodeMoveLeft() };
+    }
 
-	private List<KeyCode> GetKeysCodeMoveUpLeft()
-	{
-		return new List<KeyCode>() { GetKeyCodeMoveUp(), GetKeyCodeMoveLeft() };
-	}
+    private List<KeyCode> GetKeysCodeMovement()
+    {
+        return new List<KeyCode>()
+            { GetKeyCodeMoveDown(), GetKeyCodeMoveUp(), GetKeyCodeMoveLeft(), GetKeyCodeMoveRight() };
+    }
 
-	private List<KeyCode> GetKeysCodeMoveDownRight()
-	{
-		return new List<KeyCode>() { GetKeyCodeMoveDown(), GetKeyCodeMoveRight() };
-	}
+    #endregion
 
-	private List<KeyCode> GetKeysCodeMoveDownLeft()
-	{
-		return new List<KeyCode>() { GetKeyCodeMoveDown(), GetKeyCodeMoveLeft() };
-	}
+    #region ENUMS
 
-	private List<KeyCode> GetKeysCodeMovement()
-	{
-		return new List<KeyCode>() { GetKeyCodeMoveDown(), GetKeyCodeMoveUp(), GetKeyCodeMoveLeft(), GetKeyCodeMoveRight() };
-	}
+    public enum MovingStateEnum
+    {
+        IDLE,
+        BREAKING,
+        MOVING_UP,
+        MOVING_UP_LEFT,
+        MOVING_UP_RIGHT,
+        MOVING_LEFT,
+        MOVING_RIGHT,
+        MOVING_DOWN,
+        MOVING_DOWN_LEFT,
+        MOVING_DOWN_RIGHT,
+    }
 
-	#endregion
-
-	#region ENUMS
-
-	public enum MovingStateEnum
-	{
-		IDLE,
-		BREAKING,
-		MOVING_UP,
-		MOVING_UP_LEFT,
-		MOVING_UP_RIGHT,
-		MOVING_LEFT,
-		MOVING_RIGHT,
-		MOVING_DOWN,
-		MOVING_DOWN_LEFT,
-		MOVING_DOWN_RIGHT,
-	}
-
-	#endregion
+    #endregion
 }

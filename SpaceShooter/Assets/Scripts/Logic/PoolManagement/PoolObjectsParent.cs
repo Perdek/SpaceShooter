@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Zenject;
 
 public class PoolObjectsParent : MonoBehaviour
 {
@@ -26,7 +25,12 @@ public class PoolObjectsParent : MonoBehaviour
 
 	#endregion
 
-	#region ENUMS
+	#region FACTORY
+
+	public class Factory : PlaceholderFactory<Object, Transform, PoolObjectsParent>
+	{
+
+	}
 
 	#endregion
 }

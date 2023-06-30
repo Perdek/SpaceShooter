@@ -1,31 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "New Enemy Information", menuName = "Enemy Information")]
 public class EnemyInformation : ScriptableObject
 {
-	#region FIELDS
+    #region FIELDS
 
-	[SerializeField]
-	private int scorePointsOnDestroy = 1;
-	[SerializeField]
-	private int moneyBonusOnDestroy = 1;
+    [FormerlySerializedAs("scorePointsOnDestroy")] [SerializeField] private int _scorePointsOnDestroy = 1;
+    [FormerlySerializedAs("moneyBonusOnDestroy")] [SerializeField] private int _moneyBonusOnDestroy = 1;
 
-	#endregion
+    #endregion
 
-	#region PROPERTIES
+    #region PROPERTIES
 
-	public int ScorePointsOnDestroy => scorePointsOnDestroy;
-	public int MoneyBonusOnDestroy => moneyBonusOnDestroy;
+    public int ScorePointsOnDestroy => _scorePointsOnDestroy;
+    public int MoneyBonusOnDestroy => _moneyBonusOnDestroy;
 
-	#endregion
+    #endregion
 
-	#region METHODS
+    #region METHODS
 
-	#endregion
+    #endregion
 
-	#region ENUMS
+    #region ENUMS
 
-	#endregion
+    #endregion
 }

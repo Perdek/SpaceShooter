@@ -1,65 +1,47 @@
 ﻿using System;
+using Managers.GameManagers;
 using UnityEngine;
 
-[System.Serializable]
 public class Timer
 {
 	#region FIELDS
 
-	public event System.Action OnCountingEnd = delegate { };
+	public event Action OnCountingEnd = delegate { };
+	    
+	private readonly IUpdateManager _updateManager;
+
+	private readonly bool _repeatable;
+	private readonly float _targetTime;
+	private float _currentTime;
+	private float _firstDelay;
 
 	#endregion
 
 	#region PROPERTIES
+	
+    #endregion
 
-	private bool Repeatable {
-		get;
-		set;
-	} = false;
+    #region METHODS
 
-	private float CurrentTime {
-		get;
-		set;
-	} = 0;
-
-	private float TargetTime {
-		get;
-		set;
-	} = 1f;
-
-	private float FirstDelay {
-		get;
-		set;
-	} = 0f;
-
-	#endregion
-
-	#region METHODS
-
-	public Timer(float newFirstDelay, float newTargetTime, Action methodToInvokeOnCountingEnd, bool isRepeatable = false)
+	public Timer(IUpdateManager updateManager, float newFirstDelay, float newTargetTime, Action methodToInvokeOnCountingEnd, bool isRepeatable = false)
 	{
-		FirstDelay = newFirstDelay;
-		TargetTime = newTargetTime;
+		_updateManager = updateManager;
+		_firstDelay = newFirstDelay;
+		_targetTime = newTargetTime;
 		OnCountingEnd = methodToInvokeOnCountingEnd;
-		Repeatable = isRepeatable;
+		_repeatable = isRepeatable;
 	}
 
 	public void StartCounting()
 	{
 		ResetCounter();
 
-		if (UpdateManager.Instance != null)
-        {
-			UpdateManager.Instance.OnDataChange += Counting;
-		}
+		_updateManager.OnDataChange += Counting;
 	}
 
 	public void EndCounting()
 	{
-		if (UpdateManager.Instance != null)
-        {
-			UpdateManager.Instance.OnDataChange -= Counting;
-		}
+		_updateManager.OnDataChange -= Counting;
 	}
 
 	private void Counting()
@@ -70,19 +52,19 @@ public class Timer
 
 	private void UpdateTimer()
 	{
-		CurrentTime += Time.deltaTime;
+		_currentTime += Time.deltaTime;
 	}
 
 	private void ResetCounter()
 	{
-		CurrentTime = 0;
+		_currentTime = 0;
 	}
 
 	private void CheckCountingEnd()
 	{
-		if (CurrentTime >= TargetTime)
+		if (_currentTime >= _targetTime)
 		{
-			if (Repeatable == false)
+			if (_repeatable == false)
 			{
 				EndCounting();
 			}

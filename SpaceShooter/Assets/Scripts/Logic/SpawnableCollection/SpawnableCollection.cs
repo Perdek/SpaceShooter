@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 public abstract class SpawnableCollection<T, U> where T : ISpawnableElement<U> where U : class
 {
@@ -8,6 +9,8 @@ public abstract class SpawnableCollection<T, U> where T : ISpawnableElement<U> w
 
     [SerializeField] protected Transform _elementsParent = default;
     [SerializeField] protected T _spawnablePrefab = default;
+
+    private DiContainer _container;
 
     #endregion
 
@@ -25,6 +28,11 @@ public abstract class SpawnableCollection<T, U> where T : ISpawnableElement<U> w
 
     #region METHODS
 
+    public void InjectDependencies(DiContainer diContainer)
+    {
+        _container = diContainer;
+    }
+
     public void RefreshSection(List<U> content)
     {
         ClearSection();
@@ -41,7 +49,7 @@ public abstract class SpawnableCollection<T, U> where T : ISpawnableElement<U> w
 
     public virtual T AddElement(U contentValue)
     {
-        GameObject newElementGameObject = GameObject.Instantiate(_spawnablePrefab.GetGameObject(), _elementsParent);
+        GameObject newElementGameObject = _container.InstantiatePrefab(_spawnablePrefab.GetGameObject(), _elementsParent);
 
         T newElement = newElementGameObject.GetComponent<T>();
         newElement.ValueReference = contentValue;

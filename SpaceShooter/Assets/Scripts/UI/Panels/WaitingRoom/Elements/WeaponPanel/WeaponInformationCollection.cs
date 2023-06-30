@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace UI.WaitingRoom
 {
@@ -16,6 +17,11 @@ namespace UI.WaitingRoom
         #endregion
 
         #region METHODS
+
+        public void InjectDependencies(DiContainer diContainer)
+        {
+            base.InjectDependencies(diContainer);
+        }
 
         #endregion
     }

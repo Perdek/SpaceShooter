@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
-using System.IO;
 
 public class MVCCreator : EditorWindow {
 
@@ -60,24 +58,13 @@ public class MVCCreator : EditorWindow {
 		"}"
 	};
 
+	private static string _path;
+	private string _mvcName;
+	private static MVCCreator _creator;
+
 	#endregion
 	
 	#region PROPERTIES
-	
-	private string MVCName {
-		get;
-		set;
-	}
-
-	private static MVCCreator Creator {
-		get;
-		set;
-	}
-
-	private static string Path {
-		get;
-		set;
-	}
 
 	#endregion
 
@@ -86,14 +73,14 @@ public class MVCCreator : EditorWindow {
 	[MenuItem("Assets/Create/MVC/Create C# MVC Scripts", false, 200)]
 	public static void OpenMVCCreatorWindow ()
 	{
-		if (Creator != null)
+		if (_creator != null)
 		{
-			Creator.Close();
+			_creator.Close();
 		}
 
-		Creator = new MVCCreator();
-		Creator.position = new Rect(Vector2.zero, Vector2.zero);
-		Creator.Show();
+		_creator = new MVCCreator();
+		_creator.position = new Rect(Vector2.zero, Vector2.zero);
+		_creator.Show();
 
 		DesignateCreationPath();
 	}
@@ -107,29 +94,29 @@ public class MVCCreator : EditorWindow {
 			return;
 		}
 
-		Path = System.IO.Path.GetFullPath(assetPath);
+		_path = System.IO.Path.GetFullPath(assetPath);
 	}
 
 	private void OnGUI ()
 	{
 		DesignateCreationPath();
 
-		EditorGUILayout.LabelField(string.Format("Current Creation Path: {0}", Path));
-		MVCName = EditorGUILayout.TextField(MVC_NAME, MVCName);
+		EditorGUILayout.LabelField(string.Format("Current Creation Path: {0}", _path));
+		_mvcName = EditorGUILayout.TextField(MVC_NAME, _mvcName);
 
 		if (GUILayout.Button("Create simple MVC") == true)
 		{
-			CreateMVCScripts(MVCName);
+			CreateMVCScripts(_mvcName);
 		}
 
 		if (GUILayout.Button("Create Menu Tab GUI MVC") == true)
 		{
-			CreateMVCScripts(MVCName, BASE_MENU_TAB_GUI_PREFIX);
+			CreateMVCScripts(_mvcName, BASE_MENU_TAB_GUI_PREFIX);
 		}
 
 		if (GUILayout.Button("Create Pop Up MVC") == true)
 		{
-			CreateMVCScripts(MVCName + BASE_POPUP_PREFIX, BASE_POPUP_PREFIX);
+			CreateMVCScripts(_mvcName + BASE_POPUP_PREFIX, BASE_POPUP_PREFIX);
 		}
 
 		if (GUILayout.Button("Close") == true)
@@ -164,13 +151,13 @@ public class MVCCreator : EditorWindow {
 
 	private void CreateScriptFile(string[] scriptTemplate , string mvcName, string mvcPrefix, string mvcTypeName, bool useVieModelTemplate = false)
 	{
-		if (string.IsNullOrEmpty(Path) == true || string.IsNullOrEmpty(mvcName) == true)
+		if (string.IsNullOrEmpty(_path) == true || string.IsNullOrEmpty(mvcName) == true)
 		{
 			return;
 		}
 
 		string fileName = string.Format("{0}{1}.cs", mvcName, mvcTypeName);
-		string filePath = string.Format("{0}/{1}", Path, fileName);
+		string filePath = string.Format("{0}/{1}", _path, fileName);
 
 		using (FileStream newScriptFileStream = File.Create(filePath))
 		{

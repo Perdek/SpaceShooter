@@ -1,31 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "New Shop Costs Information", menuName = "Shop Costs Information")]
 public class ShopCostsInformation : ScriptableObject
 {
-	#region FIELDS
+    #region FIELDS
 
-	[SerializeField]
-	private int hpCost = 10;
-	[SerializeField]
-	private int shieldCost = 20;
+    [FormerlySerializedAs("hpCost")] [SerializeField] private int _hpCost = 10;
+    [FormerlySerializedAs("shieldCost")] [SerializeField] private int _shieldCost = 20;
 
-	#endregion
+    #endregion
 
-	#region PROPERTIES
+    #region PROPERTIES
 
-	public int HpCost => hpCost;
-	public int ShieldCost => shieldCost;
+    public int HpCost => _hpCost;
+    public int ShieldCost => _shieldCost;
 
-	#endregion
+    #endregion
 
-	#region METHODS
+    #region METHODS
 
-	#endregion
+    #endregion
 
-	#region ENUMS
+    #region ENUMS
 
-	#endregion
+    #endregion
 }

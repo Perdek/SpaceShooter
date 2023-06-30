@@ -1,7 +1,9 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
+using static IBasePoolObject;
 
-public abstract class BasePoolObject : MonoBehaviour
+public abstract class BasePoolObject : MonoBehaviour, IBasePoolObject
 {
 	#region FIELDS
 
@@ -18,11 +20,13 @@ public abstract class BasePoolObject : MonoBehaviour
 		private set;
 	}
 
-	#endregion
+    public GameObject GetGameObject => gameObject;
 
-	#region METHODS
+    #endregion
 
-	public void SetState(PoolObjectStateEnum newState)
+    #region METHODS
+
+    public void SetState(PoolObjectStateEnum newState)
 	{
 		State = newState;
 		OnStateChange(State);
@@ -44,11 +48,14 @@ public abstract class BasePoolObject : MonoBehaviour
 
 	#region ENUMS
 
-	public enum PoolObjectStateEnum
-	{
-		WAITING_FOR_USE,
-		IN_USE
-	}
+    #endregion
 
-	#endregion
+    #region INNER_CLASS
+
+	public class Factory : PlaceholderFactory<BasePoolObject>
+    {
+
+    }
+
+    #endregion
 }

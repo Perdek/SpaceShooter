@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public interface ISpawnableCollection<U, T> where U : ISpawnableElement<T>
 {

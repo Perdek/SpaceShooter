@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Managers.GameManagers;
 using UnityEngine;
 
 [System.Serializable]
@@ -16,6 +14,8 @@ public class AsteroidMovementComponent
 	private Rigidbody2D rigidbody2DComponent = null;
 	[SerializeField]
 	private float directionLotteryRange = 0.2f;
+
+	private IUpdateManager updateManager;
 
 	#endregion
 
@@ -41,14 +41,19 @@ public class AsteroidMovementComponent
 
 	#region METHODS
 
+	public void InjectDependencies(IUpdateManager newUpdateManager)
+	{
+		updateManager = newUpdateManager;
+	}
+
 	public void AttachEvents()
 	{
-		UpdateManager.Instance.OnUpdatePhysic += Move;
+		updateManager.OnUpdatePhysic += Move;
 	}
 
 	public void DetachEvents()
 	{
-		UpdateManager.Instance.OnUpdatePhysic -= Move;
+		updateManager.OnUpdatePhysic -= Move;
 	}
 
 	public void Initialize()

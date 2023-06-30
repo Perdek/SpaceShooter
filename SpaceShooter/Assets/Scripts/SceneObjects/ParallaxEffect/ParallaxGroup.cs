@@ -20,6 +20,12 @@ public class ParallaxGroup : MonoBehaviour
 
     private float CachedMaxYPositionForParallaxElements { get; set; }
 
+    public ParallaxElement ParallaxElement {
+        get => default;
+        set {
+        }
+    }
+
     #endregion
 
     #region METHODS

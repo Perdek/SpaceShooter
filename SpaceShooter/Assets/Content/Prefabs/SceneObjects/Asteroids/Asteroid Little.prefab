@@ -100,6 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyInformation: {fileID: 11400000, guid: b0e93257d8477574196f4a51674e2830, type: 2}
+  collisionComponent:
+    collider: {fileID: 7408553487247332741}
   movementComponent:
     speedFactory: 2
     speedLotteryRangeFactor: 2
@@ -112,7 +114,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7388286075589769819}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1

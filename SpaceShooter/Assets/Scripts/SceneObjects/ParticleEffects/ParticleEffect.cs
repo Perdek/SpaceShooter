@@ -1,31 +1,28 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using Managers.GameManagers;
+using UnityEngine;
+using UnityEngine.Serialization;
+using Zenject;
 
 public class ParticleEffect : BasePoolObject
 {
     #region MEMBERS
 
-    [SerializeField]
-    private float lifeTime = 1.0f;
-    [SerializeField]
-    private ParticleSystem particleSystemReference = null;
+    [FormerlySerializedAs("lifeTime")] [SerializeField]
+    private float _lifeTime = 1.0f;
+    [FormerlySerializedAs("particleSystemReference")] [SerializeField]
+    private ParticleSystem _particleSystemReference = null;
+
+    private IUpdateManager _updateManager;
+
+    private Timer _lifeTimer;
 
     #endregion
 
     #region PROPERTIES
 
-    private ParticleSystem ParticleSystemReference => particleSystemReference;
-    private float LifeTime => lifeTime;
-
-    private Timer LifeTimer {
-        get;
-        set;
-    } = null;
-
     #endregion
 
-    #region FUNCTIONS
+    #region UNITY_METHODS
 
     protected virtual void Awake()
     {
@@ -37,6 +34,16 @@ public class ParticleEffect : BasePoolObject
         DetachEvents();
     }
 
+    #endregion
+
+    #region METHODS
+
+    [Inject]
+    public void InjectDependencies(IUpdateManager updateManager)
+    {
+        _updateManager = updateManager;
+    }
+
     private void AttachEvents()
     {
         OnHandleObjectSpawn += HandleLifeTime;
@@ -46,16 +53,16 @@ public class ParticleEffect : BasePoolObject
     {
         OnHandleObjectSpawn -= HandleLifeTime;
 
-        if (LifeTimer != null)
+        if (_lifeTimer != null)
         {
-            LifeTimer.EndCounting();
+            _lifeTimer.EndCounting();
         }
     }
 
     private void HandleLifeTime()
     {
-        LifeTimer = new Timer(0, LifeTime, Deactivation);
-        LifeTimer.StartCounting();
+        _lifeTimer = new Timer(_updateManager, 0, _lifeTime, Deactivation);
+        _lifeTimer.StartCounting();
     }
 
     #endregion

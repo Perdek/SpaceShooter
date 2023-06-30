@@ -1,37 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class Pool
 {
 	#region FIELDS
 
-	[SerializeField]
-	private TagManager.TagsEnum tag = TagManager.TagsEnum.PLAYER_BULLET_TAG;
-	[SerializeField]
-	private int size = 0;
-	[SerializeField]
-	private BasePoolObject poolPrefab = null;
+	[FormerlySerializedAs("tag")] [SerializeField]
+	private SpawnableObjectsTagsEnum _tag = SpawnableObjectsTagsEnum.PLAYER_BULLET_TAG;
+	[FormerlySerializedAs("size")] [SerializeField]
+	private int _size = 0;
+	[FormerlySerializedAs("poolPrefab")] [SerializeField]
+	private BasePoolObject _poolPrefab = null;
 
 	#endregion
 
 	#region PROPERTIES
 
-	public TagManager.TagsEnum Tag {
-		get => tag;
-		private set => tag = value;
-	}
-
-	public int Size {
-		get => size;
-		private set => size = value;
-	}
-
-	public BasePoolObject PoolPrefab {
-		get => poolPrefab;
-		private set => poolPrefab = value;
-	}
+	public SpawnableObjectsTagsEnum Tag => _tag;
+	public int Size => _size;
+	public BasePoolObject PoolPrefab => _poolPrefab;
 
 	#endregion
 

@@ -1,4 +1,8 @@
 ﻿using UnityEngine;
+using System.Collections;
+using Zenject;
+using Managers.GameManagers;
+using Managers.LevelManagers;
 
 public class Asteroid : Enemy
 {
@@ -12,36 +16,41 @@ public class Asteroid : Enemy
     private AsteroidViewComponent viewComponent = null;
 
     private bool isBreakable = true;
+    private IPoolManager poolManager;
 
     #endregion
 
     #region PROPERTIES
 
-    private AsteroidCollisionComponent CollisionComponent => collisionComponent;
-    private AsteroidMovementComponent MovementComponent => movementComponent;
-    private AsteroidViewComponent ViewComponent => viewComponent;
-
     #endregion
 
     #region METHODS
 
+    [Inject]
+    public void InjectDependencies(IPoolManager poolManager, IUpdateManager updateManager, LevelEventsCommunicator levelEventsCommunicator)
+    {
+        viewComponent.InjectDependencies(poolManager, levelEventsCommunicator);
+        movementComponent.InjectDependencies(updateManager);
+        this.poolManager = poolManager;
+    }
+
     public void AttachEvents()
     {
-        CollisionComponent.OnHit += Deactivation;
+        collisionComponent.OnHit += Deactivation;
 
         if (isBreakable == true)
         {
-            CollisionComponent.OnKillByPlayer += BreakAsteroid;
+            collisionComponent.OnKillByPlayer += HandleKillByPlayer;
         }
 
-        MovementComponent.AttachEvents();
+        movementComponent.AttachEvents();
     }
 
     public void DetachEvents()
     {
-        CollisionComponent.OnHit -= Deactivation;
+        collisionComponent.OnHit -= Deactivation;
 
-        MovementComponent.DetachEvents();
+        movementComponent.DetachEvents();
     }
 
     public override void HandleObjectSpawn()
@@ -50,6 +59,13 @@ public class Asteroid : Enemy
 
         AttachEvents();
         Initialize();
+        StartCoroutine(ActivateCollider());
+    }
+
+    private IEnumerator ActivateCollider()
+    {
+        yield return new WaitForSeconds(1f);
+        collisionComponent.ActivateCollider();
     }
 
     public override void Deactivation()
@@ -58,6 +74,7 @@ public class Asteroid : Enemy
 
         Terminate();
         DetachEvents();
+        collisionComponent.DeactivateCollider();
     }
 
     public void SetIsBreakable(bool newValue)
@@ -66,26 +83,40 @@ public class Asteroid : Enemy
 
         if (isBreakable == false)
         {
-            CollisionComponent.OnKillByPlayer -= BreakAsteroid;
+            collisionComponent.OnKillByPlayer -= HandleKillByPlayer;
         }
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
-        CollisionComponent.HandleCollision(other);
+        collisionComponent.HandleCollision(other);
     }
 
     private void Initialize()
     {
-        MovementComponent.Initialize();
-        ViewComponent.SetAsteroidTranform(this.transform);
-        CollisionComponent.SetAsteroidInformation(EnemyInformation);
+        movementComponent.Initialize();
+        viewComponent.SetAsteroidTransform(this.transform);
+        collisionComponent.SetAsteroidInformation(EnemyInformation);
         isBreakable = true;
     }
 
     private void Terminate()
     {
-        ViewComponent.Explosion();
+        viewComponent.Explosion();
+    }
+
+    private void HandleKillByPlayer()
+    {
+        SpawnBonus();
+        BreakAsteroid();
+    }
+
+    private void SpawnBonus()
+    {
+        if (isBreakable == false)
+        {
+            poolManager.GetPoolObject(SpawnableObjectsTagsEnum.HP_BONUS, this.transform.position, this.transform.rotation);
+        }
     }
 
     private void BreakAsteroid()
@@ -100,7 +131,7 @@ public class Asteroid : Enemy
 
     private void SpawnOneLittleAsteroid()
     {
-        BasePoolObject basePoolObject = PoolManager.Instance.GetPoolObject(TagManager.TagsEnum.LITTLE_ASTEROID_TAG, this.transform.position, this.transform.rotation);
+        IBasePoolObject basePoolObject = poolManager.GetPoolObject(SpawnableObjectsTagsEnum.LITTLE_ASTEROID_TAG, this.transform.position, this.transform.rotation);
         Asteroid littleAsteroid = basePoolObject as Asteroid;
         littleAsteroid.SetIsBreakable(false);
     }

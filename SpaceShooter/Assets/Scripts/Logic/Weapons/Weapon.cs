@@ -1,54 +1,59 @@
 ﻿using System;
+using Managers.GameManagers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[System.Serializable]
+[Serializable]
 public class Weapon
 {
     #region FIELDS
 
-    public event Action<int> OnUgradeWeapon = delegate { };
+    public event Action<int> OnUpgradeWeapon = delegate { };
 
-    [SerializeField]
-    private TagManager.TagsEnum bulletTag = TagManager.TagsEnum.PLAYER_BULLET_TAG;
-    [SerializeField]
-    private WeaponInformation weaponInformation = null;
+    [FormerlySerializedAs("bulletTag")] [SerializeField]
+    private SpawnableObjectsTagsEnum _bulletTag = SpawnableObjectsTagsEnum.PLAYER_BULLET_TAG;
+    [FormerlySerializedAs("weaponInformation")] [SerializeField]
+    private WeaponInformation _weaponInformation = null;
+    
+    private IPoolManager _poolManager;
+    private IUpdateManager _updateManager;
+
+    private Transform _bulletSpawnPoint;
+    private Timer _reloadingMagazineTimer;
+    private Timer _boltReloadCycleTimer;
+    private BoolValue _isBoltReloadCycle = new BoolValue(false);
 
     #endregion
 
     #region PROPERTIES
 
-    public WeaponInformation WeaponInformation => weaponInformation;
+    public WeaponInformation WeaponInformation => _weaponInformation;
     public BoolValue IsReloadingMagazine { get; private set; } = new BoolValue(false);
     public IntValue BulletLeftInMagazine { get; private set; } = new IntValue();
     public IntValue WeaponLevel { get; set; } = new IntValue(0);
-    private Transform BulletSpawnPoint { get; set; }
-    private Timer ReloadingMagazineTimer { get; set; }
-    private Timer BoltReloadCycleTimer { get; set; }
-    private BoolValue IsBoltReloadCycle { get; set; } = new BoolValue(false);
-
-
-    private PlayerShootingController CachedPlayerShootingController {
-        get;
-        set;
-    }
 
     #endregion
 
     #region METHODS
 
+    public void InjectDependencies(IUpdateManager updateManager, IPoolManager poolManager)
+    {
+        _poolManager = poolManager;
+        _updateManager = updateManager;
+    }
+
     public int GetCurrentUpgradingCostCurve() => (int)WeaponInformation.UpgradingCostCurve.Evaluate(WeaponLevel.Value);
 
     public void InitializeBulletTransform(Transform bulletSpawnPointTransform)
     {
-        BulletSpawnPoint = bulletSpawnPointTransform;
+        _bulletSpawnPoint = bulletSpawnPointTransform;
     }
 
     public void InitializeWeapon()
     {
         BulletLeftInMagazine.SetValue((int)WeaponInformation.MagazineCapacityCurve.Evaluate(WeaponLevel.Value));
-
-        ReloadingMagazineTimer = new Timer(0, GetCurrentReloadingTimeInSeconds(), FinishReloading);
-        BoltReloadCycleTimer = new Timer(0, GetCurrentTimeInSecondBetweenShoots(), FinishBoltCycle);
+        _reloadingMagazineTimer = new Timer(_updateManager, 0, GetCurrentReloadingTimeInSeconds(), FinishReloading);
+        _boltReloadCycleTimer = new Timer(_updateManager, 0, GetCurrentTimeInSecondBetweenShoots(), FinishBoltCycle);
     }
 
     public bool IsLastLevel()
@@ -56,25 +61,20 @@ public class Weapon
         return WeaponLevel.Value == Constants.MAX_WEAPONS_LEVEL;
     }
 
-    public void CachePlayerShootingController(PlayerShootingController playerShootingController)
-    {
-        CachedPlayerShootingController = playerShootingController;
-    }
-
     public void ClearReload()
     {
         BulletLeftInMagazine.SetValue(GetCurrentMagazineCapacity());
 
-        ReloadingMagazineTimer?.EndCounting();
-        BoltReloadCycleTimer?.EndCounting();
+        _reloadingMagazineTimer?.EndCounting();
+        _boltReloadCycleTimer?.EndCounting();
 
         IsReloadingMagazine.SetValue(false);
-        IsBoltReloadCycle.SetValue(false);
+        _isBoltReloadCycle.SetValue(false);
     }
 
     public void UpgradeWeapon()
     {
-        OnUgradeWeapon(GetCurrentUpgradingCostCurve());
+        OnUpgradeWeapon(GetCurrentUpgradingCostCurve());
         WeaponLevel.AddValue(1);
     }
 
@@ -85,20 +85,20 @@ public class Weapon
 
     public void Shoot()
     {
-        if (IsReloadingMagazine.Value == false && IsBoltReloadCycle.Value == false)
+        if (IsReloadingMagazine.Value == false && _isBoltReloadCycle.Value == false)
         {
             EjectBullet();
             BulletLeftInMagazine.RemoveValue(1);
 
             if (BulletLeftInMagazine.Value == 0)
             {
-                ReloadingMagazineTimer.StartCounting();
+                _reloadingMagazineTimer.StartCounting();
                 IsReloadingMagazine.SetValue(true);
             }
             else
             {
-                BoltReloadCycleTimer.StartCounting();
-                IsBoltReloadCycle.SetValue(true);
+                _boltReloadCycleTimer.StartCounting();
+                _isBoltReloadCycle.SetValue(true);
             }
         }
     }
@@ -110,7 +110,7 @@ public class Weapon
 
     private void FinishBoltCycle()
     {
-        IsBoltReloadCycle.SetValue(false);
+        _isBoltReloadCycle.SetValue(false);
     }
 
     private void FinishReloading()
@@ -121,14 +121,9 @@ public class Weapon
 
     private void EjectBullet()
     {
-        if (PoolManager.Instance != null)
-        {
-            BasePoolObject poolObject = PoolManager.Instance.GetPoolObject(bulletTag, BulletSpawnPoint.position, BulletSpawnPoint.rotation);
+        IBasePoolObject poolObject = _poolManager.GetPoolObject(_bulletTag, _bulletSpawnPoint.position, _bulletSpawnPoint.rotation);
 
-            Bullet bullet = poolObject as Bullet;
-
-            bullet.OnKillTarget += CachedPlayerShootingController.NotifyKillEnemy;
-        }
+        Bullet bullet = poolObject as Bullet;
     }
 
     private int GetCurrentReloadingTimeInSeconds() => (int)WeaponInformation.ReloadingTimeInSecondsCurve.Evaluate(WeaponLevel.Value);
