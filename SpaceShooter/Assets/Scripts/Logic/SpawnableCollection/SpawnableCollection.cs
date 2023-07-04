@@ -37,6 +37,8 @@ public abstract class SpawnableCollection<T, U> where T : ISpawnableElement<U> w
     {
         ClearSection();
         FillSection(content);
+
+        CountTrackCollection<int> testCountrackCollection = new CountTrackCollection<int>();
     }
 
     public void FillSection(List<U> content)

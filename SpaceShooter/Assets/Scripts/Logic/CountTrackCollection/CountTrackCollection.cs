@@ -81,9 +81,7 @@ public class CountTrackCollection<T>
     {
         for (int i = Count - 1; i >= 0; i--)
         {
-            T element = Collection[i];
             RemoveAt(i);
-            OnRemoveElement(element);
         }
     }
 

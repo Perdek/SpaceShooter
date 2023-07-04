@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -7,10 +8,10 @@ namespace Managers.GameManagers
     {
         #region FIELDS
 
-        public event System.Action OnUpdateInputInformation = delegate { };
-        public event System.Action OnDataChange = delegate { };
-        public event System.Action OnUpdatePhysic = delegate { };
-        public event System.Action OnUpdateView = delegate { };
+        public event Action OnUpdateInputInformation = delegate { };
+        public event Action OnDataChange = delegate { };
+        public event Action OnUpdatePhysic = delegate { };
+        public event Action OnUpdateView = delegate { };
 
         #endregion
 
